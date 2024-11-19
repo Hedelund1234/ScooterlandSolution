@@ -21,4 +21,4 @@ namespace Scooterland.Server.DataAccess
 			=> optionsBuilder.UseSqlServer(ConnectionHandler.GetConnectionStringEF());
 	}
 }
-}
+
