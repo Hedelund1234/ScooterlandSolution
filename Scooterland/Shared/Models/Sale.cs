@@ -11,13 +11,13 @@ namespace Scooterland.Shared.Models
 	{
 		public int SaleId { get; set; }
 		public int CustomerId { get; set; }
-		Customer Customer { get; set; }
+		public Customer Customer { get; set; }
 		public int EmployeeId { get; set; }
-		Employee Employee { get; set; }
+		public Employee Employee { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public decimal Payment { get; set; }
-		List<SalesLineItem> SalesLineItem { get; set; }
+		public List<SalesLineItem> SalesLineItem { get; set; } = new List<SalesLineItem>();
 		
 
 	}

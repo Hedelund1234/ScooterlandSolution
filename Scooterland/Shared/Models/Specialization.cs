@@ -7,6 +7,6 @@ namespace Scooterland.Shared.Models
 		public int SpecializationId { get; set; }
 		[MaxLength(30)]
 		public string Brand { get; set; }
-		List<Employee> Employees { get; set; }
+		public List<Employee> Employees { get; set; } = new List<Employee>();
 	}
 }

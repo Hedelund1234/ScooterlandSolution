@@ -3,7 +3,7 @@ using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.DataAccess
 {
-	public class ScooterlandDbContext:DbContext
+	public class ScooterlandDbContext : DbContext
 	{
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Employee> Employees { get; set; }

@@ -13,6 +13,6 @@ namespace Scooterland.Shared.Models
 		public string Phonenumber { get; set; }
 		[MaxLength(150)]
 		public string Address { get; set; }
-		List<Sale> Sales { get; set; }
+		public List<Sale> Sales { get; set; } = new List<Sale>();
 	}
 }

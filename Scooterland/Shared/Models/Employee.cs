@@ -14,7 +14,7 @@ namespace Scooterland.Shared.Models
 		public string Name { get; set; }
 		[MaxLength(30)]
 		public string Role { get; set; }
-		List<Specialization> Specializations { get; set; }
-		List<Sale> Sale { get; set; }
+		public List<Specialization> Specializations { get; set; } = new List<Specialization>();
+		public List<Sale> Sale { get; set; } = new List<Sale>();
 	}
 }

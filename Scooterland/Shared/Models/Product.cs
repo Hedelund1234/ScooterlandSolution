@@ -15,6 +15,6 @@ namespace Scooterland.Shared.Models
 		[MaxLength(30)]
 		public string Type { get; set; }
 		public decimal Price { get; set; }
-		List<SalesLineItem> SalesLineItems { get; set; }
+		public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
 	}
 }
