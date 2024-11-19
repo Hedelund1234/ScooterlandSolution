@@ -8,6 +8,10 @@ namespace Scooterland.Shared.Models
 {
 	public class SalesLineItem
 	{
-
+		public int SalesLineItemId { get; set; }
+		public int SaleId { get; set; }
+		public int ProductId { get; set; }
+		public int Quantity { get; set; }
+		public decimal Discount { get; set; }
 	}
 }
