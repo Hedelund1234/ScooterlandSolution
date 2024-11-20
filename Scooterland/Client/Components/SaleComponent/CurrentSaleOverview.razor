@@ -26,9 +26,9 @@ else
 
 		<div class="product-price">
 			<div class="quantity-control">
-				<button class="quantity-btn">-</button>
+				<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
 				<input class="quantity-input" value="@item.Quantity" />
-				<button class="quantity-btn">+</button>
+				<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
 			</div>
 			<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
 		</div>
@@ -37,7 +37,7 @@ else
 
 <div class="total-price-bottom">
 	<span class="total-price-margin"> Total price: </span>
-	<span> @TotalPrice(); </span>
+	<span> @TotalPrice() </span>
 </div>
 
 
@@ -57,6 +57,15 @@ else
 	SalesLineItem s2 = new SalesLineItem { SalesLineItemId = 2, SaleId = 2, ProductId = 2, Quantity = 1, Discount = 0, Product = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M } };
 	SalesLineItem s3 = new SalesLineItem { SalesLineItemId = 3, SaleId = 3, ProductId = 3, Quantity = 3, Discount = 0, Product = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M } };
 
+	public void OnMinusClicked(SalesLineItem salesLineItem)
+	{
+		salesLineItem.Quantity--;
+	}
+
+	public void OnPlusClicked(SalesLineItem salesLineItem)
+	{
+		salesLineItem.Quantity++;
+	}
 	public decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
