@@ -1,5 +1,4 @@
 ﻿@using Scooterland.Shared.Models
-
 @if (products == null)
 {
 	<p><em>Loading...</em></p>
@@ -35,11 +34,13 @@ else
 
 	Product p1 = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250 };
 	Product p2 = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M };
+	Product p3 = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M };
 
 	protected override async Task OnInitializedAsync()
 	{
 		products.Add(p1);
 		products.Add(p2);
+		products.Add(p3);
 	}
 
 }
