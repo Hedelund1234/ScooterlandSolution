@@ -7,7 +7,12 @@
 }
 else
 {
-	@*Show customer*@
+	<div>
+		<span class="product-mrp">Kundenavn:</span>
+		<span class="customer-name">Hans</span>
+		<span class="product-mrp">KundeId:</span>
+		<span class="product-mrp">1</span>
+	</div>
 }
 
 @foreach (var item in salesLineItems)
@@ -19,17 +24,24 @@ else
 		</div>
 
 
-		
-			<div class="product-price">
-				<div class="quantity-control">
-					<button class="quantity-btn">-</button>
-					<input class="quantity-input" value="2" />
-					<button class="quantity-btn">+</button>
-				</div>
-				<span class="price-discount">Total price: $40.00</span>
+
+		<div class="product-price">
+			<div class="quantity-control">
+				<button class="quantity-btn">-</button>
+				<input class="quantity-input" value="2" />
+				<button class="quantity-btn">+</button>
 			</div>
+			<span class="price-discount">Price: $40.00</span>
+		</div>
 	</div>
 }
+
+<div class="total-price-bottom">
+	<span class="total-price-margin"> Total price: </span>
+	<span> $80.00 @*@En eller anden metode som kan udregne total pris på alle salesLineItems i et Sale*@ </span>
+</div>
+
+
 
 
 
@@ -47,6 +59,7 @@ else
 	Customer c1 = new Customer { Name = "Hans", Phonenumber = "23232323" };
 
 	SalesLineItem s1 = new SalesLineItem { SalesLineItemId = 1, SaleId = 1, ProductId = 1, Quantity = 1, Discount = 0 };
+	SalesLineItem s2 = new SalesLineItem { SalesLineItemId = 2, SaleId = 2, ProductId = 2, Quantity = 1, Discount = 0 };
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -54,6 +67,7 @@ else
 		products.Add(p2);
 		products.Add(p3);
 		salesLineItems.Add(s1);
+		salesLineItems.Add(s2);
 	}
 
 }

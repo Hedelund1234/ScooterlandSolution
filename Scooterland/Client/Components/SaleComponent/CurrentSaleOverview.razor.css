@@ -1,4 +1,19 @@
-﻿.product-card {
+﻿.total-price-margin {
+    margin-right: 9rem;
+}
+
+.customer-name {
+    margin-right: 9rem;
+    font-size: 14px;
+    color: #888;
+}
+
+.total-price-bottom {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.product-card {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 15px;
@@ -29,7 +44,7 @@
 .product-price {
     font-size: 16px;
     font-weight: bold;
-    color: #f36c6c; /* Discount color */
+    color: black; /* Discount color */
     display: flex; /* Brug flexbox til at arrangere børnene horisontalt */
     align-items: center; /* Vertikal centrering af indhold */
 }
@@ -38,17 +53,18 @@
     display: flex;
     align-items: center;
     text-align: center;
-    gap: 5px;
-    margin-right: 20px; /* Lidt afstand mellem kontrolboks og totalpris */
+    gap: 0px;
+    margin-right: 7rem; /* Lidt afstand mellem kontrolboks og totalpris */
 }
 
 .quantity-btn {
     background-color: #f36c6c;
+    width: 2rem;
     border: none;
     color: white;
     font-size: 18px;
     padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
