@@ -3,15 +3,14 @@
 @if (c1 == null)
 {
 	<p><em>Ingen kunde tilføjet...</em></p>
-
 }
 else
 {
 	<div>
 		<span class="product-mrp">Kundenavn:</span>
-		<span class="customer-name">Hans</span>
+		<span class="customer-name">@c1.Name</span>
 		<span class="product-mrp">KundeId:</span>
-		<span class="product-mrp">1</span>
+		<span class="product-mrp">@c1.CustomerId</span>
 	</div>
 }
 
@@ -19,8 +18,8 @@ else
 {
 	<div class="product-card">
 		<div class="product-info">
-			<p class="product-name">@* @item.Product.Name *@ Hest</p>
-			<p class="product-mrp">@*@item.Product.Price*@$20.00</p>
+			<p class="product-name">@item.Product.Name</p>
+			<p class="product-mrp">@item.Product.Price</p>
 		</div>
 
 
@@ -28,17 +27,17 @@ else
 		<div class="product-price">
 			<div class="quantity-control">
 				<button class="quantity-btn">-</button>
-				<input class="quantity-input" value="2" />
+				<input class="quantity-input" value="@item.Quantity" />
 				<button class="quantity-btn">+</button>
 			</div>
-			<span class="price-discount">Price: $40.00</span>
+			<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
 		</div>
 	</div>
 }
 
 <div class="total-price-bottom">
 	<span class="total-price-margin"> Total price: </span>
-	<span> $80.00 @*@En eller anden metode som kan udregne total pris på alle salesLineItems i et Sale*@ </span>
+	<span> @TotalPrice(); </span>
 </div>
 
 
@@ -52,22 +51,33 @@ else
 	private List<Product> products = new List<Product>();
 	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
 
-	Product p1 = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250 };
-	Product p2 = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M };
-	Product p3 = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M };
+	Customer c1 = new Customer { Name = "Hans", Phonenumber = "23232323", CustomerId = 1 };
 
-	Customer c1 = new Customer { Name = "Hans", Phonenumber = "23232323" };
+	SalesLineItem s1 = new SalesLineItem { SalesLineItemId = 1, SaleId = 1, ProductId = 1, Quantity = 4, Discount = 0, Product = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250.00M } };
+	SalesLineItem s2 = new SalesLineItem { SalesLineItemId = 2, SaleId = 2, ProductId = 2, Quantity = 1, Discount = 0, Product = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M } };
+	SalesLineItem s3 = new SalesLineItem { SalesLineItemId = 3, SaleId = 3, ProductId = 3, Quantity = 3, Discount = 0, Product = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M } };
 
-	SalesLineItem s1 = new SalesLineItem { SalesLineItemId = 1, SaleId = 1, ProductId = 1, Quantity = 1, Discount = 0 };
-	SalesLineItem s2 = new SalesLineItem { SalesLineItemId = 2, SaleId = 2, ProductId = 2, Quantity = 1, Discount = 0 };
+	public decimal TotalPrice()
+	{
+		decimal totalPrice = 0;
+		foreach (var item in salesLineItems)
+		{
+			totalPrice += item.Product.Price * item.Quantity;
+		}
+		return totalPrice;
+	}
+
+	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
+	{
+		decimal totalPrice = 0;
+		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
+	}
 
 	protected override async Task OnInitializedAsync()
 	{
-		products.Add(p1);
-		products.Add(p2);
-		products.Add(p3);
 		salesLineItems.Add(s1);
 		salesLineItems.Add(s2);
+		salesLineItems.Add(s3);
 	}
 
 }
