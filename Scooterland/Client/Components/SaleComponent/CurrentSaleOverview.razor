@@ -1,46 +1,59 @@
 ﻿@using Scooterland.Shared.Models
-@if (products == null)
+
+@if (c1 == null)
 {
-	<p><em>Loading...</em></p>
+	<p><em>Ingen kunde tilføjet...</em></p>
+
 }
 else
 {
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Product Id</th>
-				<th>Name</th>
-				<th>Type</th>
-				<th>Price</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in products)
-			{
-				<tr>
-					<td>@item.ProductId</td>
-					<td>@item.Name</td>
-					<td>@item.Type</td>
-					<td>@item.Price</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	@*Show customer*@
+}
+
+@foreach (var item in salesLineItems)
+{
+	<div class="product-card">
+		<div class="product-info">
+			<p class="product-name">@* @item.Product.Name *@ Hest</p>
+			<p class="product-mrp">@*@item.Product.Price*@$20.00</p>
+		</div>
+
+
+		
+			<div class="product-price">
+				<div class="quantity-control">
+					<button class="quantity-btn">-</button>
+					<input class="quantity-input" value="2" />
+					<button class="quantity-btn">+</button>
+				</div>
+				<span class="price-discount">Total price: $40.00</span>
+			</div>
+	</div>
 }
 
 
+
+
+
 @code {
+
 	private List<Product> products = new List<Product>();
+	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
 
 	Product p1 = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250 };
 	Product p2 = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M };
 	Product p3 = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M };
+
+	Customer c1 = new Customer { Name = "Hans", Phonenumber = "23232323" };
+
+	SalesLineItem s1 = new SalesLineItem { SalesLineItemId = 1, SaleId = 1, ProductId = 1, Quantity = 1, Discount = 0 };
 
 	protected override async Task OnInitializedAsync()
 	{
 		products.Add(p1);
 		products.Add(p2);
 		products.Add(p3);
+		salesLineItems.Add(s1);
 	}
 
 }
