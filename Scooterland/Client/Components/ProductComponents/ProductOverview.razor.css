@@ -1,8 +1,11 @@
 ﻿.search-bar {
     width: 100%;
-    border-radius: 4px;
-    border-block: solid;
-    border-block-color: gray;
+    border-radius: 7px;
+    border-right-style: none;
+    border-left-style: none;
+    border: none;
+    border-block-color: lightgray;
+    background-color: lightgray;
 }
 
 .table {
