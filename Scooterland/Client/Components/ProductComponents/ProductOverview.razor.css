@@ -32,4 +32,6 @@
         background-color: #e0e0e0; /* Lys grå farve ved hover */
         cursor: pointer; /* Skift cursor til hånd */
         transform: scale(1.05); /* Forstørrer hele rækken lidt ved hover */
+        border: 3px solid #007bff; /* Tilføjer en blå kant ved hover */
     }
+
