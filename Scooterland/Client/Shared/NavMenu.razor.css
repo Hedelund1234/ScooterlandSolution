@@ -1,68 +1,80 @@
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
+/* Topbar styling */
 .top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+    background-color: #333;
+    padding: 10px;
+    display: flex;
+    align-items: center;
 }
 
-.navbar-brand {
-    font-size: 1.1rem;
-}
-
-.oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
-}
-
-.nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
-}
-
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
-
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
-
-.nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
+.navbar-icon {
+    text-decoration: none;
+    font-size: 2rem;
     color: white;
+    margin-right: 15px;
 }
 
-.nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
+.top-nav-bar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.top-nav-bar li {
+    position: relative;
+}
+
+.top-nav-bar a {
     color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s;
 }
 
-@media (min-width: 641px) {
-    .navbar-toggler {
-        display: none;
+    .top-nav-bar a:hover {
+        background-color: #575757;
     }
 
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
+/* Dropdown-menu styling med vertical alignment */
+.dropdown-menu {
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    padding: 0;
+    margin: 0;
+    visibility: hidden; /* Gør menuen usynlig */
+    opacity: 0; /* Gør den også visuelt usynlig */
+    transition: visibility 0s, opacity 0.3s ease-in-out; /* Glidende overgang */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex; /* Brug flexbox */
+    flex-direction: column; /* Retning: lodret */
+    width: 200px; /* Sæt en passende bredde */
+    border-radius: 10px;
+}
+
+    .dropdown-menu li {
+        width: 100%; /* Hver listepunkt fylder hele bredden */
+        padding: 5px 10px;
     }
-    
-    .nav-scrollable {
-        /* Allow sidebar to scroll for tall menus */
-        height: calc(100vh - 3.5rem);
-        overflow-y: auto;
+
+    .dropdown-menu a {
+        color: white;
+        text-decoration: none;
+        display: block; /* Sørg for at fylde hele bredden */
+        padding: 10px 15px;
     }
+
+        .dropdown-menu a:hover {
+            background-color: #444;
+        }
+
+/* Vis dropdown-menu ved hover */
+.dropdown:hover .dropdown-menu {
+    visibility: visible; /* Gør menuen synlig */
+    opacity: 0.8; /* Gør den visuelt synlig */
+    gap: 1px;
 }

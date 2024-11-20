@@ -1,39 +1,43 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Scooterland</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿<div class="top-row">
+	@*Ikonet*@
+	<a href="/" class="navbar-icon position-absolute start-1">🛵</a> @* ikon med link til homepage | start-1 sørger for at ikon er næsten helt til venstre *@
+
+	@*Navigation*@
+	<nav class="top-nav-bar mx-auto">
+		@* mx-auto sørger for at alle elementer er i midten af siden*@
+		<ul>
+			<li><a href="/">Hjem</a></li>
+			<li class="dropdown">
+				@*dropdown css klasse *@
+				<a href="/secretary">Kontordame (Karen)</a> @*Overordnet menu-element*@
+				<ul class="dropdown-menu">@*dropdown css klasse *@
+					<li><a href="/secretary/hr">Opret ordre</a></li>@*dropdown element*@
+					<li><a href="/secretary/finance">Opret kunde</a></li>@*dropdown element*@
+				</ul>
+			</li>
+			<li class="dropdown">@*dropdown css klasse *@
+				<a href="/foreman">Værkføre (Henning)</a>@*Overordnet menu-element*@
+				<ul class="dropdown-menu">@*dropdown css klasse *@
+					<li><a href="/foreman/hr">Oversigt over mekanikere</a></li>@*dropdown element*@
+					<li><a href="/foreman/finance">Kalender</a></li>@*dropdown element*@
+				</ul>
+			</li>
+			<li class="dropdown">@*dropdown css klasse *@
+				<a href="/mechanic">Mekaniker</a>@*Overordnet menu-element*@
+				<ul class="dropdown-menu">@*dropdown css klasse *@
+					<li><a href="/mechanic/hr">Ordre</a></li>@*dropdown element*@
+					<li><a href="/mechanic/finance">Alle ordre</a></li>@*dropdown element*@
+					<li><a href="/mechanic/it">Kalender</a></li>@*dropdown element*@
+				</ul>
+			</li>
+			<li class="dropdown">@*dropdown css klasse *@
+				<a href="/administration">Administration</a>@*Overordnet menu-element*@
+				<ul class="dropdown-menu">@*dropdown css klasse *@
+					<li><a href="/administration/hr">HR</a></li>@*dropdown element*@
+					<li><a href="/administration/finance">Økonomi</a></li>@*dropdown element*@
+					<li><a href="/administration/it">IT</a></li>@*dropdown element*@
+				</ul>
+			</li>
+		</ul>
+	</nav>
 </div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
