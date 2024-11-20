@@ -1,5 +1,13 @@
 ﻿@using Scooterland.Shared.Models
 
+
+
+<label for="navn">Produkt navn:</label>
+<input id="navn" type="text" @bind="navn" />
+
+<tr/>
+
+
 @if (products == null)
 {
 	<p><em>Loading...</em></p>
@@ -31,6 +39,7 @@ else
 
 
 @code {
+	private string navn;
 	private List<Product> products = new List<Product>();
 
 	Product p1 = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250 };
