@@ -18,7 +18,13 @@ namespace Scooterland.Shared.Models
 		public DateTime EndDate { get; set; }
 		public decimal Payment { get; set; }
 		public List<SalesLineItem> SalesLineItem { get; set; } = new List<SalesLineItem>();
-		
 
-	}
+		//Tom contructor til EF
+		public Sale()
+        {
+            
+        }
+
+
+    }
 }

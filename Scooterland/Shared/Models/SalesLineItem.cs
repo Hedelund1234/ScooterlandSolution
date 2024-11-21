@@ -15,5 +15,11 @@ namespace Scooterland.Shared.Models
 		public Product Product { get; set; }
 		public int Quantity { get; set; }
 		public decimal Discount { get; set; }
+
+		//Tom contructor til EF
+		public SalesLineItem()
+		{
+
+		}
 	}
 }

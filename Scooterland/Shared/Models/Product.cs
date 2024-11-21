@@ -16,5 +16,11 @@ namespace Scooterland.Shared.Models
 		public string Type { get; set; }
 		public decimal Price { get; set; }
 		public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
-	}
+
+		//Tom contructor til EF
+		public Product()
+        {
+            
+        }
+    }
 }

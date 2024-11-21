@@ -16,5 +16,11 @@ namespace Scooterland.Shared.Models
 		public string Role { get; set; }
 		public List<Specialization> Specializations { get; set; } = new List<Specialization>();
 		public List<Sale> Sale { get; set; } = new List<Sale>();
-	}
+
+		//Tom contructor til EF
+		public Employee()
+        {
+            
+        }
+    }
 }

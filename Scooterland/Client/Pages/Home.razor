@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Client.Modules.ProductModules
 @using Scooterland.Client.Modules.SaleModules
+@using Scooterland.Client.Modules.EmployeeModules
 @page "/"
 
 <h3>Home</h3>
@@ -13,6 +14,9 @@
     <!-- Anden komponent (fylder 1/3 af bredden) -->
     <div class="one-third-width">
         <CurrentSaleOverview />        
+    </div>
+    <div class="one-third-width">
+        <EmployeeOverview />
     </div>
 </div>
 

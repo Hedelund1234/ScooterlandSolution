@@ -14,5 +14,11 @@ namespace Scooterland.Shared.Models
 		[MaxLength(150)]
 		public string Address { get; set; }
 		public List<Sale> Sales { get; set; } = new List<Sale>();
-	}
+
+		//Tom contructor til EF
+		public Customer()
+        {
+            
+        }
+    }
 }

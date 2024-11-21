@@ -1,0 +1,60 @@
+﻿@using Scooterland.Shared.Models
+
+
+
+@* <label for="navn">Produkt navn:</label> *@
+<div class="search-container">
+	<i class="search-icon">🔍</i>
+	<input class="search-bar" placeholder="Søg efter medarbejder" id="navn" type="text" @bind="navn" />
+</div>
+<br>
+<br />
+<tr />
+
+
+@if (employees == null || employees.Count == 0)
+{
+	<p><em>Ingen medarbejdere fundet.</em></p>
+}
+else
+{
+	<div class="table-container">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Navn</th>
+				<th>Rolle</th>				
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in employees)
+			{
+				<tr>
+					<td>@item.EmployeeId</td>
+					<td>@item.Name</td>
+					<td>@item.Role</td>					
+				</tr>
+			}
+		</tbody>
+	</table>
+	</div>
+}
+
+
+@code {
+	private string navn;
+	private List<Employee> employees = new List<Employee>();
+
+	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas", Role = "Værkfører"};
+	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik", Role = "Konturmus"};
+	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte", Role = "Mekaniker" };
+
+	protected override async Task OnInitializedAsync()
+	{
+		employees.Add(e1);
+		employees.Add(e2);
+		employees.Add(e3);
+	}
+
+}
