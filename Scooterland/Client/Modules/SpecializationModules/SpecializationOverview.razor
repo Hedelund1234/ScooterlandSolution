@@ -1,0 +1,56 @@
+﻿@using Scooterland.Shared.Models
+
+
+
+<input class="search-bar" placeholder="Søg efter brands" id="navn" type="text" @bind="brand" />
+<br>
+<br />
+<tr />
+
+
+@if (specializations == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>SpecializationId</th>
+				<th>Brand</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in specializations)
+			{
+				<tr>
+					<td>@item.SpecializationId</td>
+					<td>@item.Brand</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	private string brand;
+	private List<Specialization> specializations = new List<Specialization>();
+
+	Specialization s1 = new Specialization { SpecializationId = 1, Brand = "Beta" };
+	Specialization s2 = new Specialization { SpecializationId = 2, Brand = "Italjet" };
+	Specialization s3 = new Specialization { SpecializationId = 3, Brand = "Govecs" };
+	Specialization s4 = new Specialization { SpecializationId = 4, Brand = "Solo" };
+	Specialization s5 = new Specialization { SpecializationId = 5, Brand = "Lifan" };
+
+	protected override async Task OnInitializedAsync()
+	{
+		specializations.Add(s1);
+		specializations.Add(s2);
+		specializations.Add(s3);
+		specializations.Add(s4);
+		specializations.Add(s5);
+	}
+
+}
