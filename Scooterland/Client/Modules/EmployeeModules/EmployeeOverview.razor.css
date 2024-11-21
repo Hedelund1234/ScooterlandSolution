@@ -59,6 +59,7 @@
 
 .search-container {
     position: relative; /* Establishes a positioning context for the `.search-icon` to align itself within this container */
+    margin-bottom: 25px;    /*SPace between searchbar and our table data*/
 }
 
 
@@ -72,7 +73,7 @@
     left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
     transform: translateY(-50%); /* Vertically centers the icon by shifting it up by half its own height */
     font-size: 16px; /* Sets the size of the icon */
-    color: gray; /* Sets the color of the icon */
+    
 }
 
 
