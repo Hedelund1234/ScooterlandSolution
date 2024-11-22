@@ -40,9 +40,7 @@
 
     /*Hover effekten*/
     .table tbody tr:hover {
-        background-color: #e0e0e0; /* Lys grå farve ved hover */
         cursor: pointer; /* Skift cursor til hånd */
-        transform: scale(1.05); /* Forstørrer hele rækken lidt ved hover */
-        border: 2px solid #007bff; /* Tilføjer en blå kant ved hover */
+        border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
     }
 

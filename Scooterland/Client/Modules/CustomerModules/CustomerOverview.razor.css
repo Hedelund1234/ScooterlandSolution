@@ -9,7 +9,7 @@
     padding: 7px;
 }
     .search-bar:focus {
-        background-color: lightgray; /* Background changes to white, makes it clearer that it's in focus*/
+        background-color: white; /* Background changes to white, makes it clearer that it's in focus*/
         outline: none; /*Needed for box-shadow*/
         box-shadow: 0px 0px 7px black; /* Subtle black glow - [horizontal-offset] [vertical-offset] [blur-radius] */
     }
