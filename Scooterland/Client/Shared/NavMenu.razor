@@ -16,12 +16,19 @@
 					<li><a href="/sales/current-sales">Igangværende ordre</a></li>@*dropdown element*@
 				</ul>
 			</li>
-			<li class="dropdown">@*dropdown css klasse *@
-				<a href="/administration">Administration</a>@*Overordnet menu-element*@
-				<ul class="dropdown-menu">@*dropdown css klasse *@
-					<li><a href="/administration/customers">Kunder</a></li>@*dropdown element*@
-					<li><a href="/administration/products">Produkter</a></li>@*dropdown element*@
-					<li><a href="/administration/employees">Ansatte</a></li>@*dropdown element*@
+			<li class="dropdown">
+				<a href="/administration">Administration</a>
+				<ul class="dropdown-menu">
+					<li><a href="/administration/customers">Kunder</a></li>
+					<li><a href="/administration/products">Produkter</a></li>
+					<li class="dropdown">
+						<a href="/administration/employees">Ansatte</a>
+						<!-- New nested dropdown menu under Ansatte -->
+						<ul class="dropdown-menu right-dropdown">
+							<li><a href="/administration/employees/create-employee">Opret Ny Ansat</a></li>
+							<!-- Add more future options here -->
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
