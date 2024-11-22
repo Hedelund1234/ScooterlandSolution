@@ -6,36 +6,22 @@
 	<nav class="top-nav-bar mx-auto">
 		@* mx-auto sørger for at alle elementer er i midten af siden*@
 		<ul>
-			<li><a href="/">Hjem</a></li>
+			<li><a href="/">Forside</a></li>
 			<li class="dropdown">
 				@*dropdown css klasse *@
-				<a href="/secretary">Kontordame (Karen)</a> @*Overordnet menu-element*@
+				<a href="/sales">Ordre</a> @*Overordnet menu-element*@
 				<ul class="dropdown-menu">@*dropdown css klasse *@
-					<li><a href="/secretary/hr">Opret ordre</a></li>@*dropdown element*@
-					<li><a href="/secretary/finance">Opret kunde</a></li>@*dropdown element*@
-				</ul>
-			</li>
-			<li class="dropdown">@*dropdown css klasse *@
-				<a href="/foreman">Værkføre (Henning)</a>@*Overordnet menu-element*@
-				<ul class="dropdown-menu">@*dropdown css klasse *@
-					<li><a href="/foreman/hr">Oversigt over mekanikere</a></li>@*dropdown element*@
-					<li><a href="/foreman/finance">Kalender</a></li>@*dropdown element*@
-				</ul>
-			</li>
-			<li class="dropdown">@*dropdown css klasse *@
-				<a href="/mechanic">Mekaniker</a>@*Overordnet menu-element*@
-				<ul class="dropdown-menu">@*dropdown css klasse *@
-					<li><a href="/mechanic/hr">Ordre</a></li>@*dropdown element*@
-					<li><a href="/mechanic/finance">Alle ordre</a></li>@*dropdown element*@
-					<li><a href="/mechanic/it">Kalender</a></li>@*dropdown element*@
+					<li><a href="/sales/create-sale">Opret ordre</a></li>@*dropdown element*@
+					<li><a href="/sales/all-sales">Alle ordre</a></li>@*dropdown element*@
+					<li><a href="/sales/current-sales">Igangværende ordre</a></li>@*dropdown element*@
 				</ul>
 			</li>
 			<li class="dropdown">@*dropdown css klasse *@
 				<a href="/administration">Administration</a>@*Overordnet menu-element*@
 				<ul class="dropdown-menu">@*dropdown css klasse *@
-					<li><a href="/administration/hr">HR</a></li>@*dropdown element*@
-					<li><a href="/administration/finance">Økonomi</a></li>@*dropdown element*@
-					<li><a href="/administration/it">IT</a></li>@*dropdown element*@
+					<li><a href="/administration/customers">Kunder</a></li>@*dropdown element*@
+					<li><a href="/administration/products">Produkter</a></li>@*dropdown element*@
+					<li><a href="/administration/employees">Ansatte</a></li>@*dropdown element*@
 				</ul>
 			</li>
 		</ul>
