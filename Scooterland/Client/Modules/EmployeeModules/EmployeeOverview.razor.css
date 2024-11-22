@@ -73,7 +73,7 @@
     left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
     transform: translateY(-50%); /* Vertically centers the icon by shifting it up*/
     font-size: 16px; /* Sets the size of the icon */
-    color: darkred; /* Change the color of the icon */
+    color: grey; /* Change the color of the icon */
     
 }
 
