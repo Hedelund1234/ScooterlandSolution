@@ -1,8 +1,4 @@
-﻿.table-container {
-    overflow-x: auto; /* Enables horizontal scrolling */
-}
-
-.search-bar {
+﻿.search-bar {
     width: 100%;
     border-radius: 7px;
     border-right-style: none;
@@ -10,15 +6,29 @@
     border: none;
     border-block-color: lightgray;
     background-color: lightgray;
-    padding:8px; /* Little bit bigger searchbar, maybe??*/
+    padding: 8px;
+    padding-left: 30px;
 }
 
-    /*Searchbar when clicked*/
-    .search-bar:focus {
-        background-color: white; /* Background changes to white, makes it clearer that it's in focus*/
-        outline: none;  /*Needed for box-shadow*/
-        box-shadow: 0px 0px 5px #007bff; /* Subtle blue glow - [horizontal-offset] [vertical-offset] [blur-radius] */
-    }
+.search-container {
+    position: relative; /* Establishes a positioning context for the `.search-icon` to align itself within this container */
+    margin-bottom: 25px; /*SPace between searchbar and our table data*/
+}
+
+.search-icon {
+    position: absolute; /* Positions the icon relative to the nearest positioned ancestor (the `search-container`) */
+    top: 50%; /* Moves the icon halfway down the height of the `search-container` */
+    left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
+    transform: translateY(-50%); /* Vertically centers the icon by shifting it up*/
+    font-size: 16px; /* Sets the size of the icon */
+    color: gray; /* Change the color of the icon */
+}
+
+.search-bar:focus {
+    background-color: white; /* Background changes to white, makes it clearer that it's in focus*/
+    outline: none; /*Needed for box-shadow*/
+    box-shadow: 0px 0px 7px black; /* Subtle black glow - [horizontal-offset] [vertical-offset] [blur-radius] */
+}
 
 .table {
     width: 100%;
@@ -37,7 +47,7 @@
     }
 
     .table td {
-        border: 2px solid #ddd;
+        border: 1px solid #ddd;
         transition: background-color 0.3s ease, transform 0.2s ease; /* Gør hover-effekten mere flydende */
     }
 
@@ -46,35 +56,11 @@
     }
 
     .table tbody tr:nth-child(even) td {
-        background-color: lightgray; /* Lys grå for lige rækker */
+        background-color: #f2f2f2; /* Lys grå for lige rækker */
     }
 
     /*Hover effekten*/
     .table tbody tr:hover {
-        background-color: #e0e0e0; /* Lys grå farve ved hover. Synes dog ikke den gør en forskel */
         cursor: pointer; /* Skift cursor til hånd */
-        transform: scale(1.02); /* Forstørrer hele rækken lidt ved hover */
-        border: 1px solid #ff0000; /* Tilføjer en blå kant ved hover */
+        border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
     }
-
-.search-container {
-    position: relative; /* Establishes a positioning context for the `.search-icon` to align itself within this container */
-    margin-bottom: 25px;    /*SPace between searchbar and our table data*/
-}
-
-
-.search-bar {
-    padding-left: 30px; /* Adjust padding to accommodate icon */
-}
-
-.search-icon {
-    position: absolute; /* Positions the icon relative to the nearest positioned ancestor (the `search-container`) */
-    top: 50%; /* Moves the icon halfway down the height of the `search-container` */
-    left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
-    transform: translateY(-50%); /* Vertically centers the icon by shifting it up*/
-    font-size: 16px; /* Sets the size of the icon */
-    color: gray; /* Change the color of the icon */
-    
-}
-
-

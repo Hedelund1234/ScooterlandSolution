@@ -2,16 +2,16 @@
 
 
 
-@* <label for="navn">Produkt navn:</label> *@
-<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="navn" />
-<br>
-<br/>
-<tr/>
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="navn" />
+</div>
+
 
 
 @if (products == null)
 {
-	<p><em>Loading...</em></p>
+	<p><em>Ingen produkter fundet.</em></p>
 }
 else
 {
