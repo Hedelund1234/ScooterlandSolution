@@ -19,6 +19,10 @@ namespace Scooterland.Shared.Models
 		public decimal Payment { get; set; }
 		public List<SalesLineItem> SalesLineItem { get; set; } = new List<SalesLineItem>();
 
+		public int SpecializationId { get; set; }
+		public Specialization Specialization { get; set; }
+
+
 		//Tom contructor til EF
 		public Sale()
         {
