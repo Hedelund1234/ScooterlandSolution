@@ -1,0 +1,52 @@
+﻿@using Scooterland.Shared.Models
+
+<input class="search-bar" placeholder="Søg efter kunde" id="navn" type="text" />
+<br>
+<br />
+<tr />
+
+
+@if (customers == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Kunde Id</th>
+				<th>Navn</th>
+				<th>Email</th>
+				<th>Telefonnummer</th>
+				<th>Adresse</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in customers)
+			{
+				<tr>
+					<td>@item.CustomerId</td>
+					<td>@item.Name</td>
+					<td>@item.Email</td>
+					<td>@item.Phonenumber</td>
+					<td>@item.Address</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+
+	private List<Customer> customers = new List<Customer>();
+
+	Customer c1 = new Customer { CustomerId = 1, Name = "Hans Peter", Email = "hanspeter@gmail.com", Phonenumber = "73738829", Address = "Jens Juels Gade 42" };
+	Customer c2 = new Customer { CustomerId = 2, Name = "Ole Hansen", Email = "olehansen@gmail.com", Phonenumber = "47388291", Address = "H.C. Andersens Boulevard 3" };
+
+	protected override async Task OnInitializedAsync()
+	{
+		customers.Add(c1);
+		customers.Add(c2);
+	}
+}
