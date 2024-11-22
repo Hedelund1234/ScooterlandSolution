@@ -2,34 +2,6 @@
 
 <h3>ProductCreate</h3>
 
-@* <div>
-	<label for="productId">Id:</label>
-	<input id="productId" type="number" @bind="productId" />
-</div>
-
-<div>
-	<label for="name">Navn:</label>
-	<input id="name" type="text" @bind="name" />
-</div>
-
-<div>
-	<label for="type">Type:</label>
-	<input id="type" type="text" @bind="type" />
-</div>
-
-<div>
-	<label for="type">Type:</label>
-	<input id="type" type="text" @bind="type" />
-</div>
-
-<div>
-	<label for="price">Navn:</label>
-	<input id="price" type="number" @bind="price" />
-</div>
-
-<button @onclick="Tilfoej" style="border: medium; background-color: brown;">Tilføj</button>
- *@
-
 
 <EditForm Model="@ProductModel"
           OnValidSubmit="@HandleValidSubmit"
@@ -40,14 +12,17 @@
     <div class="col-md-6 mb-3">
         <label for="Name">Navn</label>
         <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Name)" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="Type">Type</label>
         <InputText id="Type" @bind-Value="ProductModel.Type" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Type)" />
     </div>
     <div class="col-md-2 mb-3">
         <label for="Price">Pris</label>
         <InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Price)" />
     </div>
 
     <div class="col-12 mb-3">
@@ -66,7 +41,7 @@
 
     private void HandleValidSubmit()
     {
-        
+
     }
     private void HandleInvalidSubmit()
     {
