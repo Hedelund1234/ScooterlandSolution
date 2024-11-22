@@ -2,9 +2,10 @@
 
 
 
-@* <label for="navn">Produkt navn:</label> *@
+
 <div class="search-container">
-	<i class="search-icon">🔍</i>
+	@*<i> tag is widely used for icons. Remember: Sign up at fontawesome.com to use font 5 awesome icons, like fa fa-search (search icon)*@
+	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar" placeholder="Søg efter medarbejder" id="navn" type="text" @bind="navn" />
 </div>
 
@@ -44,9 +45,9 @@ else
 	private string navn;
 	private List<Employee> employees = new List<Employee>();
 
-	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas", Role = "Værkfører"};
-	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik", Role = "Konturmus"};
-	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte", Role = "Mekaniker" };
+	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas Bech", Role = "Værkfører"};
+	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik Bech", Role = "Konturmus"};
+	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte Bech", Role = "Mekaniker" };
 
 	protected override async Task OnInitializedAsync()
 	{
