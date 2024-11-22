@@ -198,12 +198,7 @@ namespace Scooterland.Server.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("SpecializationId1")
-                        .HasColumnType("int");
-
                     b.HasKey("SpecializationId");
-
-                    b.HasIndex("SpecializationId1");
 
                     b.ToTable("Specializations");
                 });
@@ -238,7 +233,7 @@ namespace Scooterland.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("Scooterland.Shared.Models.Specialization", "Specialization")
-                        .WithMany()
+                        .WithMany("Sales")
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -269,13 +264,6 @@ namespace Scooterland.Server.Migrations
                     b.Navigation("Sale");
                 });
 
-            modelBuilder.Entity("Scooterland.Shared.Models.Specialization", b =>
-                {
-                    b.HasOne("Scooterland.Shared.Models.Specialization", null)
-                        .WithMany("Specializations")
-                        .HasForeignKey("SpecializationId1");
-                });
-
             modelBuilder.Entity("Scooterland.Shared.Models.Customer", b =>
                 {
                     b.Navigation("Sales");
@@ -298,7 +286,7 @@ namespace Scooterland.Server.Migrations
 
             modelBuilder.Entity("Scooterland.Shared.Models.Specialization", b =>
                 {
-                    b.Navigation("Specializations");
+                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }
