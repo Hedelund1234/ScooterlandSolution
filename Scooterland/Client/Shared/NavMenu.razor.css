@@ -1,98 +1,97 @@
 /* Topbar styling */
 .top-row {
-    background-color: #333;
-    padding: 10px;
-    display: flex;
-    align-items: center;
+    background-color: #333; /* Sets a dark gray background color for the top row */
+    padding: 10px; /* Adds spacing inside the top row */
+    display: flex; /* Aligns items horizontally */
+    align-items: center; /* Vertically centers the content */
 }
 
 .navbar-icon {
-    text-decoration: none;
-    font-size: 2rem;
-    color: white;
-    margin-right: 15px;
+    text-decoration: none; /* Removes underline from the icon link */
+    font-size: 2rem; /* Sets the icon size to 2 rem units */
+    color: white; /* Colors the icon white */
+    margin-right: 15px; /* Adds space to the right of the icon */
 }
 
 .top-nav-bar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
+    list-style: none; /* Removes bullet points from the list */
+    margin: 0; /* Removes default margin around the list */
+    padding: 0; /* Removes default padding around the list */
+    display: flex; /* Aligns list items horizontally */
+    gap: 20px; /* Adds space between list items */
 }
 
 .top-nav-bar li {
-    position: relative;
+    position: relative; /* Allows positioning of child dropdown menus */
 }
 
 .top-nav-bar a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    display: block;
-    transition: background-color 0.3s;
+    color: white; /* Sets link text color to white */
+    text-decoration: none; /* Removes underline from links */
+    padding: 10px 15px; /* Adds spacing inside each link */
+    display: block; /* Ensures the link takes up the full width of the list item */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
     .top-nav-bar a:hover {
-        background-color: #575757;
+        background-color: #575757; /* Changes background color when hovered */
     }
 
 /* Dropdown-menu styling with vertical alignment */
 .dropdown-menu {
-    list-style: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #333;
-    padding: 0;
-    margin: 0;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    border-radius: 10px;
+    list-style: none; /* Removes bullet points from the dropdown */
+    position: absolute; /* Positions dropdown relative to its parent */
+    top: 100%; /* Aligns the dropdown below the parent item */
+    left: 0; /* Aligns the dropdown with the left edge of the parent */
+    background-color: #333; /* Sets dropdown background to dark gray */
+    padding: 0; /* Removes default padding around the menu */
+    margin: 0; /* Removes default margin around the menu */
+    visibility: hidden; /* Hides the dropdown by default */
+    opacity: 0; /* Makes the dropdown invisible */
+    transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth fade-in/out */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+    display: flex; /* Uses flexbox for vertical alignment */
+    flex-direction: column; /* Aligns dropdown items vertically */
+    width: 200px; /* Sets the dropdown width */
+    border-radius: 10px; /* Rounds the corners of the dropdown */
 }
 
     .dropdown-menu li {
-        width: 100%;
-        padding: 5px 10px;
+        width: 100%; /* Ensures each item spans the full width of the dropdown */
+        padding: 5px 10px; /* Adds spacing inside dropdown items */
     }
 
     .dropdown-menu a {
-        color: white;
-        text-decoration: none;
-        display: block;
-        padding: 10px 15px;
+        color: white; /* Sets dropdown link color to white */
+        text-decoration: none; /* Removes underline from dropdown links */
+        display: block; /* Ensures links fill the width of the dropdown */
+        padding: 10px 15px; /* Adds spacing inside dropdown links */
     }
 
         .dropdown-menu a:hover {
-            background-color: #444;
+            background-color: #444; /* Changes background color when a dropdown item is hovered */
         }
 
 /* Show dropdown-menu on hover for top-level dropdown */
 .dropdown:hover > .dropdown-menu {
-    visibility: visible;
-    opacity: 0.8;
-    gap: 1px;
+    visibility: visible; /* Makes the dropdown visible on hover */
+    opacity: 1; /* Opacity of dropdown */
+    gap: 1px; /* Adds slight spacing for better visual clarity */
 }
 
 /* Nested dropdown menu for Ansatte */
 .right-dropdown {
-    left: 100%; /* Position the new dropdown to the right */
-    top: 0; /* Align with the parent menu */
+    left: 100%; /* Moves the entire element to the right, starting at the right edge of its parent */
+    top: 0; /* Aligns the nested dropdown */
 }
 
 /* Only show the right-dropdown when hovering directly over Ansatte */
 .dropdown > .dropdown-menu > .dropdown:hover .right-dropdown {
-    visibility: visible;
-    opacity: 1;
+    visibility: visible; /* Makes the nested dropdown visible on hover */
+    opacity: 100%; /* Fades in the nested dropdown */
 }
 
 /* Ensure other dropdowns stay hidden */
 .dropdown-menu .right-dropdown {
-    visibility: hidden;
-    opacity: 0;
+    visibility: hidden; /* Hides nested dropdown by default */   
 }
