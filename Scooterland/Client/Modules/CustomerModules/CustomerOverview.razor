@@ -1,9 +1,11 @@
 ﻿@using Scooterland.Shared.Models
 
-<input class="search-bar" placeholder="Søg efter kunde" id="navn" type="text" />
-<br>
-<br />
-<tr />
+
+<div class="search-container">
+	@*<i> tag is widely used for icons. Remember: Sign up at fontawesome.com to use font 5 awesome icons, like fa fa-search (search icon)*@
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" placeholder="Søg efter kunde" id="navn" type="text" />
+</div>
 
 
 @if (customers == null)

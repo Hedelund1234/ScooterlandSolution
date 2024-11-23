@@ -1,0 +1,50 @@
+﻿@using Scooterland.Shared.Models
+
+<h3>ProductCreate</h3>
+
+
+<EditForm Model="@ProductModel"
+          OnValidSubmit="@HandleValidSubmit"
+          OnInvalidSubmit="@HandleInvalidSubmit"
+          class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Name">Navn</label>
+        <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Name)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Type">Type</label>
+        <InputText id="Type" @bind-Value="ProductModel.Type" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Type)" />
+    </div>
+    <div class="col-md-2 mb-3">
+        <label for="Price">Pris</label>
+        <InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Price)" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
+
+</EditForm>
+
+@code {
+    private int productId;
+    private string name;
+    private string type;
+    private decimal price;
+    Product ProductModel = new Product();
+
+
+    private void HandleValidSubmit()
+    {
+
+    }
+    private void HandleInvalidSubmit()
+    {
+
+    }
+}
