@@ -47,7 +47,7 @@
     padding: 0; /* Removes default padding around the menu */
     margin: 0; /* Removes default margin around the menu */
     visibility: hidden; /* Hides the dropdown by default */
-    opacity: 0; /* Makes the dropdown invisible */
+    /*opacity: 0;*/ /* Makes the dropdown invisible                                     Den er udødvendig*/
     transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth fade-in/out */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
     display: flex; /* Uses flexbox for vertical alignment */
@@ -59,6 +59,12 @@
     .dropdown-menu li {
         width: 100%; /* Ensures each item spans the full width of the dropdown */
         padding: 5px 10px; /* Adds spacing inside dropdown items */
+    }
+
+    .dropdown-menu i {
+        margin-left: 75px; /* Tilføjer afstand mellem tekst og ikon */
+        opacity: 0.3;
+        font-size: small;
     }
 
     .dropdown-menu a {
@@ -83,6 +89,7 @@
 .right-dropdown {
     left: 100%; /* Moves the entire element to the right, starting at the right edge of its parent */
     top: 0; /* Aligns the nested dropdown */
+    font-size: 15px;
 }
 
 /* Only show the right-dropdown when hovering directly over Ansatte */
