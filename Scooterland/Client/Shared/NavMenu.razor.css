@@ -88,7 +88,7 @@
 /* Only show the right-dropdown when hovering directly over Ansatte */
 .dropdown > .dropdown-menu > .dropdown:hover .right-dropdown {
     visibility: visible; /* Makes the nested dropdown visible on hover */
-    opacity: 100%; /* Fades in the nested dropdown */
+    opacity: 1; /* Fades in the nested dropdown */
 }
 
 /* Ensure other dropdowns stay hidden */
