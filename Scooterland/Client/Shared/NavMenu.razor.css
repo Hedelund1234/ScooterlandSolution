@@ -46,8 +46,8 @@
     background-color: #333; /* Sets dropdown background to dark gray */
     padding: 0; /* Removes default padding around the menu */
     margin: 0; /* Removes default margin around the menu */
-    visibility: hidden; /* Hides the dropdown by default */   
-    transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth fade-in/out */
+    visibility: hidden; /* Hides the dropdown by default */
+    opacity: 0.9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
     display: flex; /* Uses flexbox for vertical alignment */
     flex-direction: column; /* Aligns dropdown items vertically */
@@ -62,7 +62,6 @@
 
     .dropdown-menu i {
         margin-left: 75px; /* Tilføjer afstand mellem tekst og ikon */
-        opacity: 0.3;      /* Gør den lidt lækker at se på*/
         font-size: small;
     }
 
@@ -81,7 +80,6 @@
 .dropdown:hover > .dropdown-menu {
     visibility: visible; /* Makes the dropdown visible on hover */
     gap: 1px; /* Adds slight spacing for better visual clarity */
-    opacity:0.9;
 }
 
 /* Nested dropdown menu for Ansatte */
@@ -89,13 +87,12 @@
     left: 100%; /* Moves the entire element to the right, starting at the right edge of its parent */
     top: 0; /* Aligns the nested dropdown */
     font-size: 15px;
-    opacity:0.9;
+    opacity:0.95;
 }
 
 /* Only show the right-dropdown when hovering directly over Ansatte */
 .dropdown > .dropdown-menu > .dropdown:hover .right-dropdown {
     visibility: visible; /* Makes the nested dropdown visible on hover */
-    opacity: 0.9; /* Fades in the nested dropdown */
 }
 
 /* Ensure other dropdowns stay hidden */
