@@ -1,7 +1,7 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.ProductServices
 
-<h3>ProductCreate</h3>
+<h3>Create Product</h3>
 
 
 <EditForm Model="@ProductModel"
@@ -39,11 +39,6 @@
 
     private int ErrorCode { get; set; } = 0;
 
-
-    private int productId;
-    private string name;
-    private string type;
-    private decimal price;
     Product ProductModel = new Product();
 
 
@@ -51,7 +46,7 @@
     {
         ErrorCode = await Service.AddProduct(ProductModel);
 
-        Console.WriteLine("Shopping item added: return code: " + ErrorCode);
+        Console.WriteLine("Product added: return code: " + ErrorCode);
     }
     private void HandleInvalidSubmit()
     {
