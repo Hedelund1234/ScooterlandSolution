@@ -11,11 +11,9 @@ namespace Scooterland.Shared.Models
 	public class Product
 	{
 		public int ProductId { get; set; }
-		[MaxLength(70)]
-		[StringLength(70, ErrorMessage ="Navnet må maksimalt være 70 anslag lang!")]
+		[MaxLength(70, ErrorMessage = "Navnet må maksimalt være 70 anslag lang!")]
 		public string Name { get; set; }
-		[MaxLength(30)]
-		[StringLength(30, ErrorMessage ="Type må maksimalt være 30 anslag lang!")]
+		[MaxLength(30, ErrorMessage = "Type må maksimalt være 30 anslag lang!")]
 		public string Type { get; set; }
 		[Range(minimum:0,maximum:System.Int32.MaxValue, ErrorMessage = "Prisen skal være positiv!")]
 		public decimal Price { get; set; }
