@@ -1,0 +1,66 @@
+﻿.search-bar {
+    width: 100%;
+    border-radius: 7px;
+    border-right-style: none;
+    border-left-style: none;
+    border: none;
+    border-block-color: lightgray;
+    background-color: lightgray;
+    padding: 8px;
+    padding-left: 30px;
+}
+
+.search-container {
+    position: relative; /* Establishes a positioning context for the `.search-icon` to align itself within this container */
+    margin-bottom: 25px; /*SPace between searchbar and our table data*/
+}
+
+.search-icon {
+    position: absolute; /* Positions the icon relative to the nearest positioned ancestor (the `search-container`) */
+    top: 50%; /* Moves the icon halfway down the height of the `search-container` */
+    left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
+    transform: translateY(-50%); /* Vertically centers the icon by shifting it up*/
+    font-size: 16px; /* Sets the size of the icon */
+    color: gray; /* Change the color of the icon */
+}
+
+.search-bar:focus {
+    background-color: white; /* Background changes to white, makes it clearer that it's in focus*/
+    outline: none; /*Needed for box-shadow*/
+    box-shadow: 0px 0px 7px black; /* Subtle black glow - [horizontal-offset] [vertical-offset] [blur-radius] */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table th, .table td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: lightgray;
+        font-weight: bold;
+        border: 1px solid #ddd;
+    }
+
+    .table td {
+        border: 1px solid #ddd;
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Gør hover-effekten mere flydende */
+    }
+
+    .table tbody tr:nth-child(odd) td {
+        background-color: white; /* Hvid for ulige rækker */
+    }
+
+    .table tbody tr:nth-child(even) td {
+        background-color: #f2f2f2; /* Lys grå for lige rækker */
+    }
+
+    /*Hover effekten*/
+    .table tbody tr:hover {
+        cursor: pointer; /* Skift cursor til hånd */
+        border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
+    }
