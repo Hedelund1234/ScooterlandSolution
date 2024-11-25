@@ -33,7 +33,21 @@ else
 					<td>@item.Name</td>
 					<td>@item.Type</td>
 					<td>@item.Price</td>
+					<button class="btn btn-primary" @onclick="() => UpdateProduct(item.ProductId)">✏️ Rediger</button>
 				</tr>
+				@if (EditingProductId == item.ProductId)
+				{
+					<tr>
+						<td colspan="3">
+							<div class="edit-section">
+								<label>Navn: <input @bind="item.Name" /></label>
+								<label>Pris: <input type="number" @bind="item.Price" /></label>
+								<button class="btn btn-success" @onclick="SaveEdit">Gem</button>
+								<button class="btn btn-danger" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					</tr>
+				}
 			}
 		</tbody>
 	</table>
@@ -50,6 +64,30 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private int? EditingProductId = null;
+
+	public void UpdateProduct(int productId)
+	{
+		EditingProductId = productId;
+	}
+
+	private void StartEditing(int productId)
+	{
+		
+	}
+
+	private void SaveEdit()
+	{
+		// Gem ændringerne (f.eks. opdater listen eller lav en API-opkald)
+		EditingProductId = null;
+	}
+
+	private void CancelEdit()
+	{
+		// Fortryd redigering
+		EditingProductId = null;
 	}
 
 }

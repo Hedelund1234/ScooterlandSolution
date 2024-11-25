@@ -47,7 +47,7 @@
     padding: 0; /* Removes default padding around the menu */
     margin: 0; /* Removes default margin around the menu */
     visibility: hidden; /* Hides the dropdown by default */
-    /*opacity: 0;*/ /* Makes the dropdown invisible                                     Den er udødvendig*/
+    opacity: 0.9; /* Makes the dropdown invisible                                     Den er udødvendig*/
     transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth fade-in/out */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
     display: flex; /* Uses flexbox for vertical alignment */
@@ -81,7 +81,6 @@
 /* Show dropdown-menu on hover for top-level dropdown */
 .dropdown:hover > .dropdown-menu {
     visibility: visible; /* Makes the dropdown visible on hover */
-    opacity: 1; /* Opacity of dropdown */
     gap: 1px; /* Adds slight spacing for better visual clarity */
 }
 
@@ -95,7 +94,7 @@
 /* Only show the right-dropdown when hovering directly over Ansatte */
 .dropdown > .dropdown-menu > .dropdown:hover .right-dropdown {
     visibility: visible; /* Makes the nested dropdown visible on hover */
-    opacity: 100%; /* Fades in the nested dropdown */
+    opacity: 0.9; /* Fades in the nested dropdown */
 }
 
 /* Ensure other dropdowns stay hidden */
