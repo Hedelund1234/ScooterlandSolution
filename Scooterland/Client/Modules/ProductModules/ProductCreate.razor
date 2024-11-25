@@ -1,4 +1,5 @@
 ﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.ProductServices
 
 <h3>ProductCreate</h3>
 
@@ -32,6 +33,11 @@
 </EditForm>
 
 @code {
+
+    [Inject]
+    public IProductService Service { get; set; }
+    private int ErrorCode { get; set; } = 0;
+
     private int productId;
     private string name;
     private string type;
@@ -39,8 +45,11 @@
     Product ProductModel = new Product();
 
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
+        ErrorCode = await Service.AddProduct(ProductModel);
+
+        Console.WriteLine("Shopping product added: return code: " + ErrorCode);
 
     }
     private void HandleInvalidSubmit()
