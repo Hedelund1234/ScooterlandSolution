@@ -5,7 +5,7 @@
 
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="navn" />
+	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
 </div>
 
 
@@ -19,20 +19,39 @@ else
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Product Id</th>
+				<th>Id</th>
 				<th>Name</th>
 				<th>Type</th>
 				<th>Price</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in products)
 			{
 				<tr>
-					<td>@item.ProductId</td>
-					<td>@item.Name</td>
-					<td>@item.Type</td>
-					<td>@item.Price</td>
+					@if (editingProductId == item.ProductId)
+					{
+						<td>@item.ProductId</td>
+						<td><input type="text" @bind="item.Name" /></td>
+						<td><input type="text" @bind="item.Type" /></td>
+						<td><input type="number" @bind="item.Price" /></td>
+						<td>
+							<button class="btn btn-success" @onclick="() => SaveProduct(item)">Gem</button>
+							<button class="btn btn-secondary" @onclick="CancelEdit">Annuller</button>
+						</td>
+					}
+					else
+					{
+						<td>@item.ProductId</td>
+						<td>@item.Name</td>
+						<td>@item.Type</td>
+						<td>@item.Price</td>
+						<td>
+							<button class="btn btn-primary" @onclick="() => EditProduct(item.ProductId)">Rediger</button>
+							<button class="btn btn-danger" @onclick="() => DeleteProduct(item.ProductId)">Slet</button>
+						</td>
+					}
 				</tr>
 			}
 		</tbody>
@@ -41,14 +60,38 @@ else
 
 
 @code {
-	private string navn;
+	private string nameSearch;
 	private List<Product> products = new List<Product>();
+	private int? editingProductId = null;
 
 	[Inject]
 	public IProductService Service { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
+		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private void EditProduct(int productId)
+	{
+		editingProductId = productId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveProduct(Product product)
+	{
+		await Service.UpdateProduct(product); // Opdater produktet i databasen
+		editingProductId = null; // Afslut redigering
+		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingProductId = null; // Annuller redigering
+	}
+
+	private async Task DeleteProduct(int productId)
+	{
+		await Service.DeleteProduct(productId);
 		products = (await Service.GetAllProducts()).ToList();
 	}
 }

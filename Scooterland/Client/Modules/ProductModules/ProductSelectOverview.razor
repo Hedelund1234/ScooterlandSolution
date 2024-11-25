@@ -1,0 +1,63 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.ProductServices;
+
+
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
+</div>
+
+
+
+@if (products == null)
+{
+	<p><em>Ingen produkter fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Price</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in products)
+			{
+				<tr>
+						<td>@item.ProductId</td>
+						<td>@item.Name</td>
+						<td>@item.Type</td>
+						<td>@item.Price</td>
+						<td>
+							<button class="btn btn-primary" @onclick="() => SelectProduct(item)">Vælg</button>
+						</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	private string nameSearch;
+	private List<Product> products = new List<Product>();
+
+	[Inject]
+	public IProductService Service { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private void SelectProduct(Product product)
+	{
+		
+	}
+}
