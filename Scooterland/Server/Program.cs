@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using Scooterland.Server.Repositories.CustomerRepository;
 using Scooterland.Server.Repositories.ProductRepository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IProductRepository, ProductRepositoryEF>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepositoryEF>();
 
 var app = builder.Build();
 

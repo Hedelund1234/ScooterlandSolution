@@ -20,5 +20,9 @@ namespace Scooterland.Shared.Models
         {
             
         }
+        public Customer(int id)
+        {
+			this.CustomerId = id;
+        }
     }
 }
