@@ -58,8 +58,12 @@ else
 								}
 								else
 								{
-									<button class="edit-button" @onclick="() => StartEditingEmployee(item.EmployeeId)">✏️</button>
-									<button class="edit-button" @onclick="() => DeleteEmployee(item)">🗑️</button>
+									<button class="edit-button" @onclick="() => StartEditingEmployee(item.EmployeeId)">
+										<i class="fa-solid fa-pencil"></i>
+									</button>
+									<button class="edit-button" @onclick="() => DeleteEmployee(item)">
+										<i class="fa-regular fa-trash-can"></i>
+									</button>
 								}
 							</div>
 						</td>
