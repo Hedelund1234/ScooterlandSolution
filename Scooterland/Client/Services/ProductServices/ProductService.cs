@@ -9,11 +9,8 @@ namespace Scooterland.Client.Services.ProductServices
 
 
         public ProductService(HttpClient httpClient)
-
         {
-
             this.httpClient = httpClient;
-
         }
 
         public Task<Product[]?> GetAllProducts()
