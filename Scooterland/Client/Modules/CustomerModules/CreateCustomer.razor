@@ -1,17 +1,59 @@
 ﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.CustomerServices
 
 
-<h1>Eksisterende kunde</h1>
-<input class="search-bar" placeholder="Søg efter email" type="text"/>
-<br/>
-<input class="search-bar" placeholder="Søg efter telefonnummer" type="number"/>
+<h1>Customer create</h1>
 
-<h1>Kunde oplysninger</h1>
+<EditForm Model="@CustomerModel"
+          OnValidSubmit="@HandleValidSubmit"
+          OnInvalidSubmit="@HandleInvalidSubmit"
+          class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Name">Navn</label>
+        <InputText id="Name" @bind-Value="CustomerModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Name)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Email">Email</label>
+        <InputText id="Email" @bind-Value="CustomerModel.Email" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Email)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Phonenumber">Telefon nummer</label>
+        <InputText id="Phonenumber" @bind-Value="CustomerModel.Phonenumber" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Phonenumber)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Address">Adresse</label>
+        <InputText id="Address" @bind-Value="CustomerModel.Address" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Address)" />
+    </div>
 
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
 
-
+</EditForm>
 
 
 @code {
+    [Inject]
+    public ICustomerService Service { get; set; }
 
+    private int ErrorCode { get; set; } = 0;
+
+    Customer CustomerModel = new Customer();
+
+    private async Task HandleValidSubmit()
+    {
+        ErrorCode = await Service.AddCustomer(CustomerModel);
+
+        Console.WriteLine("Customer added: return code: " + ErrorCode);
+    }
+    private void HandleInvalidSubmit()
+    {
+        
+    }
 }
