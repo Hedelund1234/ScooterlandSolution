@@ -17,26 +17,56 @@
 }
 else
 {
-	<div class="table-container">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Navn</th>
-				<th>Rolle</th>				
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in employees)
-			{
+	<div>
+		<table class="table">
+			<thead>
 				<tr>
-					<td>@item.EmployeeId</td>
-					<td>@item.Name</td>
-					<td>@item.Role</td>					
+					<th>Id</th>
+					<th>Navn</th>
+					<th>Rolle</th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				@foreach (var item in employees)
+                {
+                    <tr>
+                        <td>@item.EmployeeId</td>
+						<td class="cell">
+                            @if (EditingEmployeeId == item.EmployeeId)
+                            {
+                                <input class="cell-input" @bind="item.Name" />
+                            }
+                            else
+                            {
+								<span>@item.Name</span>
+                            }
+                        </td>
+						<td class="cell">
+							@if (EditingEmployeeId == item.EmployeeId)
+							{
+								<input class="cell-input" @bind="item.Role" />
+							}
+							else
+							{
+								<span>@item.Role</span>
+							}
+							<div class="button-container">
+								@if (EditingEmployeeId == item.EmployeeId)
+								{
+									<button class="btn btn-save" @onclick="SaveEdit">Gem</button>
+									<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+								}
+								else
+								{
+									<button class="edit-button" @onclick="() => StartEditingEmployee(item.EmployeeId)">✏️</button>
+									<button class="edit-button" @onclick="() => DeleteEmployee(item)">🗑️</button>
+								}
+							</div>
+						</td>
+                    </tr>
+                }
+			</tbody>
+		</table>
 	</div>
 }
 
@@ -46,7 +76,7 @@ else
 	private List<Employee> employees = new List<Employee>();
 
 	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas Bech", Role = "Værkfører"};
-	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik Bech", Role = "Konturmus"};
+	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik Bech", Role = "Konturmus" };
 	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte Bech", Role = "Mekaniker" };
 
 	protected override async Task OnInitializedAsync()
@@ -54,6 +84,31 @@ else
 		employees.Add(e1);
 		employees.Add(e2);
 		employees.Add(e3);
+	}
+
+	//-----------------------------------------------------------------------------------------
+
+	private int? EditingEmployeeId = null;
+
+
+	private void StartEditingEmployee(int employeeId)
+	{
+		EditingEmployeeId = employeeId;
+	}
+
+	private void CancelEdit()
+	{
+		EditingEmployeeId = null;
+	}
+
+	private void SaveEdit()
+	{
+		EditingEmployeeId = null;
+	}
+
+	private void DeleteEmployee(Employee employee)
+	{
+		employees.Remove(employee);
 	}
 
 }

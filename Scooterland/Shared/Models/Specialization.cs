@@ -15,5 +15,9 @@ namespace Scooterland.Shared.Models
         {
             
         }
-    }
+		public Specialization(int id)
+		{
+			this.SpecializationId = id;
+		}
+	}
 }
