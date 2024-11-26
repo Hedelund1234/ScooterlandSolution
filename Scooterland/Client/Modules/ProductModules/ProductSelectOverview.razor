@@ -20,23 +20,20 @@ else
 		<thead>
 			<tr>
 				<th>Id</th>
-				<th>Name</th>
+				<th>Navn</th>
 				<th>Type</th>
-				<th>Price</th>
-				<th>Actions</th>
+				<th>Pris</th>
+
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in products)
 			{
-				<tr>
-						<td>@item.ProductId</td>
-						<td>@item.Name</td>
-						<td>@item.Type</td>
-						<td>@item.Price</td>
-						<td>
-							<button class="btn btn-primary" @onclick="() => SelectProduct(item)">Vælg</button>
-						</td>
+				<tr @onclick="() => AddProduct(item)">
+					<td class="cell">@item.ProductId</td>
+					<td class="cell">@item.Name</td>
+					<td class="cell">@item.Type</td>	
+					<td class="cell">@item.Price</td>
 				</tr>
 			}
 		</tbody>
@@ -47,6 +44,7 @@ else
 @code {
 	private string nameSearch;
 	private List<Product> products = new List<Product>();
+	private int? editingProductId = null;
 
 	[Inject]
 	public IProductService Service { get; set; }
@@ -56,8 +54,10 @@ else
 		products = (await Service.GetAllProducts()).ToList();
 	}
 
-	private void SelectProduct(Product product)
+
+	private async Task AddProduct(Product product)
 	{
-		
+
 	}
+
 }

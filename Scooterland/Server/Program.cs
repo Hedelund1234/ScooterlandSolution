@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using Scooterland.Client.Services.EmployeeServices;
 using Scooterland.Server.Repositories.CustomerRepository;
 using Scooterland.Server.Repositories.ProductRepository;
-
+using Scooterland.Server.Repositories.EmployeeRepository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +11,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IProductRepository, ProductRepositoryEF>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepositoryEF>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryEF>();
+
 
 var app = builder.Build();
 
