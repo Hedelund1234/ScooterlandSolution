@@ -3,6 +3,7 @@ using Scooterland.Client.Services.EmployeeServices;
 using Scooterland.Server.Repositories.CustomerRepository;
 using Scooterland.Server.Repositories.ProductRepository;
 using Scooterland.Server.Repositories.EmployeeRepository;
+using Scooterland.Server.Repositories.SaleRepository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +13,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IProductRepository, ProductRepositoryEF>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepositoryEF>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryEF>();
+builder.Services.AddScoped<ISaleRepository, SaleRepositoryEF>();
 
 
 var app = builder.Build();
