@@ -5,6 +5,8 @@ using Scooterland.Client.Services.CustomerServices;
 using Scooterland.Client.Services.ProductServices;
 using Scooterland.Client.Services.EmployeeServices;
 using Scooterland.Client.Services.SaleServices;
+using Scooterland.Client.Services.SpecializationServices;
+using Scooterland.Client.Services.SalesLineItemServices;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,6 +30,16 @@ builder.Services.AddHttpClient<IEmployeeService, EmployeeService>(client =>
 });
 
 builder.Services.AddHttpClient<ISaleService, SaleService>(client =>
+{
+    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+});
+
+builder.Services.AddHttpClient<ISpecializationService, SpecializationService>(client =>
+{
+    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+});
+
+builder.Services.AddHttpClient<ISalesLineItemService, SalesLineItemService>(client =>
 {
     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 });

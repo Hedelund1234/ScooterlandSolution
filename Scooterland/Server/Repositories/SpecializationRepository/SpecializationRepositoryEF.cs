@@ -18,8 +18,7 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 				return true;
 			}
 			return false;
-
-		}
+        }
 
 		public bool DeleteSpecialization(int id)
 		{

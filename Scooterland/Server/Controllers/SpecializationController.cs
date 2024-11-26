@@ -7,7 +7,7 @@ using System.Net;
 namespace Scooterland.Server.Controllers
 {
 	[ApiController]
-	[Route("api/pecializationapi")]
+	[Route("api/specializationapi")]
 	public class SpecializationController : ControllerBase
 	{
 		private readonly ISpecializationRepository Repository = new SpecializationRepositoryEF();
@@ -54,7 +54,7 @@ namespace Scooterland.Server.Controllers
 		{
 			Console.WriteLine("Add specialization called: " + specialization.ToString());
 			Repository.AddSpecialization(specialization);
-		}
+        }
 
 
 

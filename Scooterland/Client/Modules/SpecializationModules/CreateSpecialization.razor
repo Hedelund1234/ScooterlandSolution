@@ -1,0 +1,45 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.SpecializationServices
+
+<h3>Create Specialization</h3>
+
+
+<EditForm Model="@SpecializationModel"
+          OnValidSubmit="@HandleValidSubmit"
+          OnInvalidSubmit="@HandleInvalidSubmit"
+          class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Brand">Brand navn</label>
+        <InputText id="Brand" @bind-Value="SpecializationModel.Brand" class="form-control" />
+        <ValidationMessage For="@(() => SpecializationModel.Brand)" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
+
+</EditForm>
+
+@code {
+
+    [Inject]
+    public ISpecializationService Service { get; set; }
+
+    private int ErrorCode { get; set; } = 0;
+
+    Specialization SpecializationModel = new Specialization();
+
+
+    private async Task HandleValidSubmit()
+    {
+        ErrorCode = await Service.AddSpecialization(SpecializationModel);
+
+        Console.WriteLine("Specialization added: return code: " + ErrorCode);
+    }
+    private void HandleInvalidSubmit()
+    {
+
+    }
+}
