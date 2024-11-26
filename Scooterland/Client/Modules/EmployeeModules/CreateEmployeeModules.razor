@@ -1,28 +1,54 @@
-﻿@page "/administration/employees/create-employee"
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.EmployeeServices
+@page "/administration/employees/create-employee"
 
 <h3>Opret Ny Ansat</h3>
 
 
 
-<form>
-    <!-- Name input -->
-    <div class="form-group">
-        <label for="name">Navn</label>
-        <input id="name" class="form-control" type="text" placeholder="Navn" />
+<EditForm Model="@EmployeeModel"
+          OnValidSubmit="@HandleValidSubmit"
+          OnInvalidSubmit="@HandleInvalidSubmit"
+          class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Name">Navn</label>
+        <InputText id="Name" @bind-Value="EmployeeModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => EmployeeModel.Name)" />
+    </div>    
+    <div class="col-md-2 mb-3">
+        <label for="Role">Role</label>
+        <InputText id="Role" @bind-Value="EmployeeModel.Role" class="form-control" />
+        <ValidationMessage For="@(() => EmployeeModel.Role)" />
     </div>
 
-    <!-- Role input -->
-    <div class="form-group">
-        <label for="role">Rolle</label>
-        <input id="role" class="form-control" type="text" placeholder="Rolle" />
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
     </div>
 
-    <!-- Submit button (does nothing) -->
-    <button type="button" class="btn btn-primary">Opret</button>
-</form>
+</EditForm>
 
 
 
 @code {
+    [Inject]
+    public IEmployeeService Service { get; set; }
+
+    private int ErrorCode { get; set; } = 0;
+
+    Employee EmployeeModel = new Employee();
+
+
+    private async Task HandleValidSubmit()
+    {
+        ErrorCode = await Service.AddEmployee(EmployeeModel);
+
+        Console.WriteLine("Employee added: return code: " + ErrorCode);
+    }
+    private void HandleInvalidSubmit()
+    {
+
+    }
 
 }
