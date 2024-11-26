@@ -8,6 +8,12 @@
 	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
 </div>
 
+<div class="search-button-container">
+	<button class="btn-dark" @onclick="SearchProducts">Søg</button>
+	<button class="btn-dark" @onclick="ClearProducts">Ryd</button>
+</div>
+
+
 
 
 @if (products == null)
@@ -27,7 +33,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in products)
+			@foreach (var item in filteredProducts)
 			{
 				<tr>
 					<td class="cell">@item.ProductId</td>
@@ -50,8 +56,8 @@ else
 						<td class="cell">
 							@item.Price
 							<div class="button-container">
-							<button class="edit-button" @onclick="() => EditProduct(item.ProductId)"><i class="fa-solid fa-pencil"></i></button>
-							<button class="edit-button" @onclick="() => DeleteProduct(item.ProductId)"><i class="fa-regular fa-trash-can"></i></button>
+								<button class="edit-button" @onclick="() => EditProduct(item.ProductId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteProduct(item.ProductId)"><i class="fa-regular fa-trash-can"></i></button>
 							</div>
 						</td>
 					}
@@ -64,7 +70,8 @@ else
 
 @code {
 	private string nameSearch;
-	private List<Product> products = new List<Product>();
+	private List<Product> products = new List<Product>(); 
+	private List<Product> filteredProducts = new List<Product>();
 	private int? editingProductId = null;
 
 	[Inject]
@@ -73,6 +80,7 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		products = (await Service.GetAllProducts()).ToList();
+		filteredProducts = products;
 	}
 
 	private void EditProduct(int productId)
@@ -96,5 +104,30 @@ else
 	{
 		await Service.DeleteProduct(productId);
 		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private void SearchProducts()
+	{
+		FilterProducts();
+		StateHasChanged();
+	}
+
+	private void ClearProducts()
+	{
+		filteredProducts = products;
+		nameSearch = "";
+		StateHasChanged();
+	}
+
+	private void FilterProducts()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredProducts = products; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredProducts = products.Where(p => p.Name.Contains(nameSearch)).ToList();
+		}
 	}
 }
