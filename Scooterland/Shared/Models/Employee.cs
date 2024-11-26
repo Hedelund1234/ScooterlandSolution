@@ -22,5 +22,10 @@ namespace Scooterland.Shared.Models
         {
             
         }
-    }
+
+		public Employee(int id)
+		{
+			this.EmployeeId = id;
+		}
+	}
 }
