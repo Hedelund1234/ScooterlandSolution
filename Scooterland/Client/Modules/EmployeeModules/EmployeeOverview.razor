@@ -1,113 +1,132 @@
 ﻿@using Scooterland.Shared.Models
-
+@using Scooterland.Client.Services.EmployeeServices;
 
 
 
 <div class="search-container">
-	@*<i> tag is widely used for icons. Remember: Sign up at fontawesome.com to use font 5 awesome icons, like fa fa-search (search icon)*@
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter medarbejder" id="navn" type="text" @bind="navn" />
+	<input class="search-bar" placeholder="Søg efter medarbejder" id="navn" type="text" @bind="nameSearch" />
+</div>
+
+<div class="search-button-container">
+	<button class="btn-dark" @onclick="SearchEmployees">Søg</button>
+	<button class="btn-dark" @onclick="ClearEmployees">Ryd</button>
 </div>
 
 
 
-@if (employees == null || employees.Count == 0)
+
+@if (filteredEmployees == null)
 {
-	<p><em>Ingen medarbejdere fundet.</em></p>
+	<p><em>Ingen produkter fundet.</em></p>
 }
 else
 {
-	<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Navn</th>
-					<th>Rolle</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in employees)
-				{
-					<tr>
-						<td class="cell">@item.EmployeeId</td>
-							@if (EditingEmployeeId == item.EmployeeId)
-							{
-							<td class="cell">
-								<input class="cell-input" @bind="item.Name" />
-							</td>
-							<td class="cell">
-								<input class="cell-input" @bind="item.Role" />
-								<div class="button-container">
-									<button class="btn btn-save" @onclick="SaveEdit">Gem</button>
-									<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
-								</div>
-							</td>
-							}
-							else
-							{
-							<td class="cell">
-								<span>@item.Name</span>
-							</td>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Navn</th>
+				<th>Role</th>				
 
-							<td class="cell">
-								<span>@item.Role</span>
-								<div class="button-container">
-									<button class="edit-button" @onclick="() => StartEditingEmployee(item.EmployeeId)">
-										<i class="fa-solid fa-pencil"></i>
-									</button>
-									<button class="edit-button" @onclick="() => DeleteEmployee(item)">
-										<i class="fa-regular fa-trash-can"></i>
-									</button>
-								</div>
-							</td>
-							}
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredEmployees)
+			{
+				<tr>
+					<td class="cell">@item.EmployeeId</td>
+					@if (editingEmployeeId == item.EmployeeId)
+					{
+						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+						@* <td class="cell"><input class="cell-input" @bind="item.Role" /></td> *@
+						<td class="cell">
+							<input class="cell-input" @bind="item.Role" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveEmployee(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">@item.Name</td>
+						@* <td class="cell">@item.Role</td> *@
+						<td class="cell">
+							@item.Role
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditEmployee(item.EmployeeId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteEmployee(item.EmployeeId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
 }
 
 
 @code {
-	private string navn;
+	private string nameSearch;
 	private List<Employee> employees = new List<Employee>();
+	private List<Employee> filteredEmployees = new List<Employee>();
+	private int? editingEmployeeId = null;
 
-	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas Bech", Role = "Værkfører" };
-	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik Bech", Role = "Konturmus" };
-	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte Bech", Role = "Mekaniker" };
+	[Inject]
+	public IEmployeeService Service { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		employees.Add(e1);
-		employees.Add(e2);
-		employees.Add(e3);
+		employees = (await Service.GetAllEmployees()).ToList();
+		filteredEmployees = employees;
 	}
 
-	//-----------------------------------------------------------------------------------------
-
-	private int? EditingEmployeeId = null;
-
-
-	private void StartEditingEmployee(int employeeId)
+	private void EditEmployee(int employeeId)
 	{
-		EditingEmployeeId = employeeId;
+		editingEmployeeId = employeeId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveEmployee(Employee employee)
+	{
+		await Service.UpdateEmployee(employee); // Opdater produktet i databasen
+		editingEmployeeId = null; // Afslut redigering
+		employees = (await Service.GetAllEmployees()).ToList();
 	}
 
 	private void CancelEdit()
 	{
-		EditingEmployeeId = null;
+		editingEmployeeId = null; // Annuller redigering
 	}
 
-	private void SaveEdit()
+	private async Task DeleteEmployee(int employeeId)
 	{
-		EditingEmployeeId = null;
+		await Service.DeleteEmployee(employeeId);
+		employees = (await Service.GetAllEmployees()).ToList();
 	}
 
-	private void DeleteEmployee(Employee employee)
+	private void SearchEmployees()
 	{
-		employees.Remove(employee);
+		FilterEmployees();
+		StateHasChanged();
 	}
 
+	private void ClearEmployees()
+	{
+		filteredEmployees = employees;
+		nameSearch = "";
+		StateHasChanged();
+	}
+
+	private void FilterEmployees()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredEmployees = employees; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredEmployees = employees.Where(p => p.Name.Contains(nameSearch)).ToList();
+		}
+	}
 }
