@@ -3,7 +3,7 @@ using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.SalesLineItemRepository
 {
-	public class SalesLineItemRepositoryEF
+	public class SalesLineItemRepositoryEF : ISalesLineItemRepository
 	{
 		public bool AddSalesLineItem(SalesLineItem salesLineItem)
 		{

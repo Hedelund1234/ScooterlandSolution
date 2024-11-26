@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Scooterland.Server.Repositories.ProductRepository;
+﻿using Microsoft.AspNetCore.Mvc;
 using Scooterland.Server.Repositories.SalesLineItemRepository;
 using Scooterland.Shared.Models;
 using System.Net;
 
+
 namespace Scooterland.Server.Controllers
 {
-	[Route("api/saleslineitemapi")]
 	[ApiController]
+	[Route("api/saleslineitemapi")]
 	public class SalesLineItemController : ControllerBase
 	{
 		private readonly ISalesLineItemRepository Repository = new SalesLineItemRepositoryEF();
@@ -38,7 +37,7 @@ namespace Scooterland.Server.Controllers
 			bool deleted = Repository.DeleteSalesLineItem(id);
 			if (deleted)
 			{
-				Console.WriteLine("Server: SalesLineItem deleted succces");
+				Console.WriteLine("Server: SalesLineItem deleted success");
 				int code = (int)HttpStatusCode.OK;
 				return new StatusCodeResult(code);
 			}
@@ -72,7 +71,7 @@ namespace Scooterland.Server.Controllers
 			bool updated = Repository.UpdateSalesLineItem(salesLineItem);
 			if (updated)
 			{
-				Console.WriteLine("Server: SalesLineItem updated succces");
+				Console.WriteLine("Server: SalesLineItem updated success");
 				int code = (int)HttpStatusCode.OK;
 				return new StatusCodeResult(code);
 			}
