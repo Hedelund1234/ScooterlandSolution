@@ -2,10 +2,17 @@
 @using Scooterland.Client.Services.EmployeeServices;
 
 
-
+@* Søgefelt-container, der inkluderer et ikon og et input-felt *@
+@* - Ikonet angiver søgefunktionen visuelt *@
+@* - Input-feltet er bundet til 'nameSearch' via @bind og reagerer på 'oninput'-event *@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter medarbejder" id="navn" type="text" @bind="nameSearch" />
+	<input class="search-bar"
+		   placeholder="Søg efter medarbejder"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
 
 <div class="search-button-container">
@@ -68,10 +75,21 @@ else
 
 
 @code {
-	private string nameSearch;
+	// private string nameSearch;
 	private List<Employee> employees = new List<Employee>();
 	private List<Employee> filteredEmployees = new List<Employee>();
 	private int? editingEmployeeId = null;
+
+	private string nameSearch	//Bundet til input-feltet for søgning
+	{
+		get => _nameSearch;	//Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;	//Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterEmployees();		//Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+	private string _nameSearch;	//Private felt som gemmer værdien af inputtet fra søgningen
 
 	[Inject]
 	public IEmployeeService Service { get; set; }
@@ -81,6 +99,8 @@ else
 		employees = (await Service.GetAllEmployees()).ToList();
 		filteredEmployees = employees;
 	}
+
+
 
 	private void EditEmployee(int employeeId)
 	{
