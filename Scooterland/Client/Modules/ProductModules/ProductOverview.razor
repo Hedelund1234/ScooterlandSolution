@@ -104,6 +104,8 @@ else
 	{
 		await Service.DeleteProduct(productId);
 		products = (await Service.GetAllProducts()).ToList();
+		filteredProducts = products;
+		StateHasChanged();
 	}
 
 	private void SearchProducts()
