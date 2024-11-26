@@ -20,36 +20,39 @@ else
 		<thead>
 			<tr>
 				<th>Id</th>
-				<th>Name</th>
+				<th>Navn</th>
 				<th>Type</th>
-				<th>Price</th>
-				<th>Actions</th>
+				<th>Pris</th>
+
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in products)
 			{
 				<tr>
+					<td class="cell">@item.ProductId</td>
 					@if (editingProductId == item.ProductId)
 					{
-						<td>@item.ProductId</td>
-						<td><input type="text" @bind="item.Name" /></td>
-						<td><input type="text" @bind="item.Type" /></td>
-						<td><input type="number" @bind="item.Price" /></td>
-						<td>
-							<button class="btn btn-success" @onclick="() => SaveProduct(item)">Gem</button>
-							<button class="btn btn-secondary" @onclick="CancelEdit">Annuller</button>
+						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Type" /></td>
+						<td class="cell">
+							<input class="cell-input" @bind="item.Price" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveProduct(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
 						</td>
 					}
 					else
 					{
-						<td>@item.ProductId</td>
-						<td>@item.Name</td>
-						<td>@item.Type</td>
-						<td>@item.Price</td>
-						<td>
-							<button class="btn btn-primary" @onclick="() => EditProduct(item.ProductId)">Rediger</button>
-							<button class="btn btn-danger" @onclick="() => DeleteProduct(item.ProductId)">Slet</button>
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Type</td>
+						<td class="cell">
+							@item.Price
+							<div class="button-container">
+							<button class="edit-button" @onclick="() => EditProduct(item.ProductId)"><i class="fa-solid fa-pencil"></i></button>
+							<button class="edit-button" @onclick="() => DeleteProduct(item.ProductId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
 						</td>
 					}
 				</tr>

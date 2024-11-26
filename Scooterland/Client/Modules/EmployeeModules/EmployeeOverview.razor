@@ -28,47 +28,42 @@ else
 			</thead>
 			<tbody>
 				@foreach (var item in employees)
-                {
-                    <tr>
-                        <td class="cell">@item.EmployeeId</td>
-						<td class="cell">
-                            @if (EditingEmployeeId == item.EmployeeId)
-                            {
-                                <input class="cell-input" @bind="item.Name" />
-                            }
-                            else
-                            {
-								<span>@item.Name</span>
-                            }
-                        </td>
-						<td class="cell">
+				{
+					<tr>
+						<td class="cell">@item.EmployeeId</td>
 							@if (EditingEmployeeId == item.EmployeeId)
 							{
+							<td class="cell">
+								<input class="cell-input" @bind="item.Name" />
+							</td>
+							<td class="cell">
 								<input class="cell-input" @bind="item.Role" />
+								<div class="button-container">
+									<button class="btn btn-save" @onclick="SaveEdit">Gem</button>
+									<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+								</div>
+							</td>
 							}
 							else
 							{
+							<td class="cell">
+								<span>@item.Name</span>
+							</td>
+
+							<td class="cell">
 								<span>@item.Role</span>
-							}
-							<div class="button-container">
-								@if (EditingEmployeeId == item.EmployeeId)
-								{
-									<button class="btn btn-save" @onclick="SaveEdit">Gem</button>
-									<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
-								}
-								else
-								{
+								<div class="button-container">
 									<button class="edit-button" @onclick="() => StartEditingEmployee(item.EmployeeId)">
 										<i class="fa-solid fa-pencil"></i>
 									</button>
 									<button class="edit-button" @onclick="() => DeleteEmployee(item)">
 										<i class="fa-regular fa-trash-can"></i>
 									</button>
-								}
-							</div>
-						</td>
-                    </tr>
-                }
+								</div>
+							</td>
+							}
+					</tr>
+				}
 			</tbody>
 		</table>
 	</div>
@@ -79,7 +74,7 @@ else
 	private string navn;
 	private List<Employee> employees = new List<Employee>();
 
-	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas Bech", Role = "Værkfører"};
+	Employee e1 = new Employee { EmployeeId = 1, Name = "Nikolas Bech", Role = "Værkfører" };
 	Employee e2 = new Employee { EmployeeId = 2, Name = "Frederik Bech", Role = "Konturmus" };
 	Employee e3 = new Employee { EmployeeId = 3, Name = "Hjalte Bech", Role = "Mekaniker" };
 
