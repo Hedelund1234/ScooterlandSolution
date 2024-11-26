@@ -21,5 +21,9 @@ namespace Scooterland.Shared.Models
 		{
 
 		}
+		public SalesLineItem(int id)
+		{
+			this.SalesLineItemId = id;
+		}
 	}
 }
