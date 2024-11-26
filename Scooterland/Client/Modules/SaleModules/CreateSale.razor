@@ -1,4 +1,6 @@
 ﻿@using Scooterland.Client.Modules.CustomerModules;
+@using Scooterland.Client.Services.CustomerServices;
+@using Scooterland.Shared.Models;
 @inject NavigationManager Navigation
 
 <h3>CreateSale</h3>
@@ -7,14 +9,14 @@
 	<div class="main-search">
 		Kunde email
 	</div>
-	<input placeholder="Indtast email" />
+	<input placeholder="Indtast email" @bind="emailSearch"/>
 	<div class="main-search">
 		Kunde telefonnummer
 	</div>
-	<input placeholder="Indtast telefonnummer"/>
+	<input placeholder="Indtast telefonnummer" @bind="phoneNumSearch" @bind:event="oninput" />
 </div>
 
-<CreateCustomer />
+<CreateCustomer CustomerModel="@selectedCustomer" />
 
 <div class="flex-box">
 	<button class="btn btn-primary" @onclick="GoToNextPage">
@@ -23,6 +25,49 @@
 </div>
 
 @code {
+	private List<Customer> customers = new List<Customer>();
+	private List<Customer> filteredCustomer = new List<Customer>();
+	private Customer selectedCustomer = new Customer();
+
+	[Inject]
+	public ICustomerService Service { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		customers = (await Service.GetAllCustomers()).ToList();
+	}
+	private string emailSearch;
+	private string phoneNumSearch   //Bundet til input-feltet for søgning
+	{
+		get => _phoneNumSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_phoneNumSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
+			foreach (var customer in customers)
+			{
+				if (customer.Phonenumber == _phoneNumSearch)
+				{
+					emailSearch = customer.Email;
+					selectedCustomer = customer; // Opdaterer CustomerModel i CreateCustomer
+				}
+			}
+		}
+	}
+	private string _phoneNumSearch;
+
+	private void FilterEmployees()
+	{
+		if (string.IsNullOrWhiteSpace(phoneNumSearch))
+		{
+			filteredCustomer = customers; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredCustomer = customers.Where(c => c.Phonenumber.Contains(phoneNumSearch)).ToList();
+		}
+	}
+
 	private void GoToNextPage()
 	{
 		Navigation.NavigateTo("/sales/current-sale");
