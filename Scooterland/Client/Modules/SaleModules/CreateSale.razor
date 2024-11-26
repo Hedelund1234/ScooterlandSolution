@@ -1,0 +1,30 @@
+﻿@using Scooterland.Client.Modules.CustomerModules;
+@inject NavigationManager Navigation
+
+<h3>CreateSale</h3>
+
+<div class="box">
+	<div class="main-search">
+		Kunde email
+	</div>
+	<input placeholder="Indtast email" />
+	<div class="main-search">
+		Kunde telefonnummer
+	</div>
+	<input placeholder="Indtast telefonnummer"/>
+</div>
+
+<CreateCustomer />
+
+<div class="flex-box">
+	<button class="btn btn-primary" @onclick="GoToNextPage">
+		Næste side
+	</button>
+</div>
+
+@code {
+	private void GoToNextPage()
+	{
+		Navigation.NavigateTo("/sales/current-sale");
+	}
+}

@@ -1,0 +1,17 @@
+﻿.main-search{
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    margin-top: 0.8rem;
+    font-size: large;
+}
+
+.box{
+    border: solid;
+    border-radius: 9px;
+    border-width: 1px;
+    padding: 10px;
+}
+
+.flex-box {
+    display: flex; justify-content: flex-end;
+}

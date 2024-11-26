@@ -1,0 +1,35 @@
+﻿@using Scooterland.Client.Modules.ProductModules;
+@using Scooterland.Client.Modules.SaleModules;
+@page "/sales/current-sale"
+@inject NavigationManager Navigation
+
+
+<div class="flex-container">
+	<!-- Første komponent (fylder 2/3 af bredden) -->
+	<div class="two-thirds-width">
+		<ProductOverview />
+	</div>
+
+	<!-- Anden komponent (fylder 1/3 af bredden) -->
+	<div class="one-third-width">
+		<CurrentSaleOverview />
+	</div>
+</div>
+
+
+	<button class="btn btn-primary" @onclick="GoToPreviousPage">
+		Tilbage
+	</button>
+
+<div class="flex-box">
+	<button class="btn btn-primary">
+		Opret salg
+	</button>
+</div>
+
+@code {
+	private void GoToPreviousPage()
+	{
+		Navigation.NavigateTo("/sales/create-sale");
+	}
+}
