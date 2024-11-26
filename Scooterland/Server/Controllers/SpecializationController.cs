@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using Scooterland.Server.Repositories.SpecializationRepository;
 using Scooterland.Shared.Models;
+using System.Net;
 
 
 namespace Scooterland.Server.Controllers

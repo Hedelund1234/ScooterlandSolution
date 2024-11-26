@@ -63,6 +63,7 @@
     .dropdown-menu i {
         margin-left: 75px; /* Tilføjer afstand mellem tekst og ikon */
         font-size: small;
+        opacity: 0.3;
     }
 
     .dropdown-menu a {
