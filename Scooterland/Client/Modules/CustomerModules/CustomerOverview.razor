@@ -1,14 +1,22 @@
 ﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.CustomerServices;
+
 
 
 <div class="search-container">
-	@*<i> tag is widely used for icons. Remember: Sign up at fontawesome.com to use font 5 awesome icons, like fa fa-search (search icon)*@
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter kunde" id="navn" type="text" />
+	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
+</div>
+
+<div class="search-button-container">
+	<button class="btn-dark" @onclick="SearchCustomers">Søg</button>
+	<button class="btn-dark" @onclick="ClearCustomers">Ryd</button>
 </div>
 
 
-@if (customers == null)
+
+
+@if (filteredCustomers == null)
 {
 	<p><em>Ingen kunder fundet.</em></p>
 }
@@ -25,30 +33,103 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in customers)
+			@foreach (var item in filteredCustomers)
 			{
 				<tr>
-					<td>@item.CustomerId</td>
-					<td>@item.Name</td>
-					<td>@item.Email</td>
-					<td>@item.Phonenumber</td>
-					<td>@item.Address</td>
+					<td class="cell">@item.CustomerId</td>
+					@if (editingCustomerId == item.CustomerId)
+					{
+						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Email" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Phonenumber" /></td>
+						<td class="cell">
+							<input class="cell-input" @bind="item.Address" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveCustomer(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Email</td>
+						<td class="cell">@item.Phonenumber</td>
+						<td class="cell">
+							@item.Address
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditCustomer(item.CustomerId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteCustomer(item.CustomerId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
 				</tr>
 			}
 		</tbody>
 	</table>
 }
 
+
 @code {
-
+	private string nameSearch;
 	private List<Customer> customers = new List<Customer>();
+	private List<Customer> filteredCustomers = new List<Customer>();
+	private int? editingCustomerId = null;
 
-	Customer c1 = new Customer { CustomerId = 1, Name = "Hans Peter", Email = "hanspeter@gmail.com", Phonenumber = "73738829", Address = "Jens Juels Gade 42" };
-	Customer c2 = new Customer { CustomerId = 2, Name = "Ole Hansen", Email = "olehansen@gmail.com", Phonenumber = "47388291", Address = "H.C. Andersens Boulevard 3" };
+	[Inject]
+	public ICustomerService Service { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		customers.Add(c1);
-		customers.Add(c2);
+		customers = (await Service.GetAllCustomers()).ToList();
+		filteredCustomers = customers;
+	}
+
+	private void EditCustomer(int customerId)
+	{
+		editingCustomerId = customerId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveCustomer(Customer customer)
+	{
+		await Service.UpdateCustomer(customer); // Opdater produktet i databasen
+		editingCustomerId = null; // Afslut redigering
+		customers = (await Service.GetAllCustomers()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingCustomerId = null; // Annuller redigering
+	}
+
+	private async Task DeleteCustomer(int customerId)
+	{
+		await Service.DeleteCustomer(customerId);
+		customers = (await Service.GetAllCustomers()).ToList();
+	}
+
+	private void SearchCustomers()
+	{
+		FilterCustomers();
+		StateHasChanged();
+	}
+
+	private void ClearCustomers()
+	{
+		filteredCustomers = customers;
+		nameSearch = "";
+		StateHasChanged();
+	}
+
+	private void FilterCustomers()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredCustomers = customers; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredCustomers = customers.Where(p => p.Name.Contains(nameSearch)).ToList();
+		}
 	}
 }
