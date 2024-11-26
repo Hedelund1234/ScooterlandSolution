@@ -1,32 +1,56 @@
 ﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.SpecializationServices
 
 
 
-<input class="search-bar" placeholder="Søg efter brands" id="navn" type="text" @bind="brand" />
-<br>
-<br />
-<tr />
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" placeholder="Søg efter brand" id="navn" type="text" @bind="brandSearch" />
+</div>
 
+<div class="search-button-container">
+	<button class="btn-dark" @onclick="SearchSpecialization">Søg</button>
+	<button class="btn-dark" @onclick="ClearSpecialization">Ryd</button>
+</div>
 
-@if (specializations == null)
+@if (filteredSpecializations == null)
 {
-	<p><em>Loading...</em></p>
+	<p><em>Ingen produkter fundet.</em></p>
 }
 else
 {
 	<table class="table">
 		<thead>
 			<tr>
-				<th>SpecializationId</th>
+				<th>Id</th>
 				<th>Brand</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in specializations)
+			@foreach (var item in filteredSpecializations)
 			{
 				<tr>
-					<td>@item.SpecializationId</td>
-					<td>@item.Brand</td>
+					<td class="cell">@item.SpecializationId</td>
+					@if (editingSpecializationsId == item.SpecializationId)
+					{
+						<td class="cell">
+							<input class="cell-input" @bind="item.Brand" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveSpecialization(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">
+							@item.Brand
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditSpecialization(item.SpecializationId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteSpecialization(item.SpecializationId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
 				</tr>
 			}
 		</tbody>
@@ -35,22 +59,67 @@ else
 
 
 @code {
-	private string brand;
+	private string brandSearch;
 	private List<Specialization> specializations = new List<Specialization>();
+	private List<Specialization> filteredSpecializations = new List<Specialization>();
 
-	Specialization s1 = new Specialization { SpecializationId = 1, Brand = "Beta" };
-	Specialization s2 = new Specialization { SpecializationId = 2, Brand = "Italjet" };
-	Specialization s3 = new Specialization { SpecializationId = 3, Brand = "Govecs" };
-	Specialization s4 = new Specialization { SpecializationId = 4, Brand = "Solo" };
-	Specialization s5 = new Specialization { SpecializationId = 5, Brand = "Lifan" };
+	private int? editingSpecializationsId = null;
+
+	[Inject]
+	public ISpecializationService Service { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		specializations.Add(s1);
-		specializations.Add(s2);
-		specializations.Add(s3);
-		specializations.Add(s4);
-		specializations.Add(s5);
+		specializations = (await Service.GetAllSpecialization()).ToList();
+		filteredSpecializations = specializations;
+	}
+
+	private void EditSpecialization(int specializationId)
+	{
+		editingSpecializationsId = specializationId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveSpecialization(Specialization specialization)
+	{
+		await Service.UpdateSpecialization(specialization); // Opdater produktet i databasen
+		editingSpecializationsId = null; // Afslut redigering
+		specializations = (await Service.GetAllSpecialization()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingSpecializationsId = null; // Annuller redigering
+	}
+
+	private async Task DeleteSpecialization(int specializationId)
+	{
+		await Service.DeleteSpecialization(specializationId);
+		specializations = (await Service.GetAllSpecialization()).ToList();
+	}
+
+	private void SearchSpecialization()
+	{
+		FilterSpecialization();
+		StateHasChanged();
+	}
+
+	private void ClearSpecialization()
+	{
+		filteredSpecializations = specializations;
+		brandSearch = "";
+		StateHasChanged();
+	}
+
+	private void FilterSpecialization()
+	{
+		if (string.IsNullOrWhiteSpace(brandSearch))
+		{
+			filteredSpecializations = specializations; // Hvis søgningen er tom, vis alle specializations
+		}
+		else
+		{
+			filteredSpecializations = specializations.Where(p => p.Brand.Contains(brandSearch)).ToList();
+		}
 	}
 
 }
