@@ -69,6 +69,9 @@ else
 
 
 @code {
+	[Parameter]
+	public Product ChosenProduct { get; set; } = new Product();
+
 	private string nameSearch;
 	private List<Product> products = new List<Product>(); 
 	private List<Product> filteredProducts = new List<Product>();

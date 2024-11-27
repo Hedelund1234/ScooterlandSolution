@@ -9,7 +9,7 @@
 	<div class="main-search">
 		Kunde email
 	</div>
-	<input placeholder="Indtast email" @bind="emailSearch"/>
+	<input placeholder="Indtast email" @bind="emailSearch" @bind:event="oninput" />
 	<div class="main-search">
 		Kunde telefonnummer
 	</div>
@@ -29,6 +29,9 @@
 	private List<Customer> filteredCustomer = new List<Customer>();
 	private Customer selectedCustomer = new Customer();
 
+	private string _phoneNumSearch;
+	private string _emailSearch;
+
 	[Inject]
 	public ICustomerService Service { get; set; }
 
@@ -36,35 +39,35 @@
 	{
 		customers = (await Service.GetAllCustomers()).ToList();
 	}
-	private string emailSearch;
+
 	private string phoneNumSearch   //Bundet til input-feltet for søgning
 	{
 		get => _phoneNumSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
 			_phoneNumSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
-			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
 			foreach (var customer in customers)
 			{
-				if (customer.Phonenumber == _phoneNumSearch)
+				if (customer.Phonenumber == _phoneNumSearch && !string.IsNullOrEmpty(_phoneNumSearch))
 				{
-					emailSearch = customer.Email;
 					selectedCustomer = customer; // Opdaterer CustomerModel i CreateCustomer
 				}
 			}
 		}
 	}
-	private string _phoneNumSearch;
-
-	private void FilterEmployees()
+	private string emailSearch
 	{
-		if (string.IsNullOrWhiteSpace(phoneNumSearch))
+		get => _emailSearch;
+		set
 		{
-			filteredCustomer = customers; // Hvis søgningen er tom, vis alle produkter
-		}
-		else
-		{
-			filteredCustomer = customers.Where(c => c.Phonenumber.Contains(phoneNumSearch)).ToList();
+			_emailSearch = value;
+			foreach (var customer in customers)
+			{
+				if (customer.Email == _emailSearch && !string.IsNullOrEmpty(_emailSearch))
+				{
+					selectedCustomer = customer;
+				}
+			}
 		}
 	}
 
