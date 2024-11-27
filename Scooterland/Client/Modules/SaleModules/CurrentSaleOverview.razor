@@ -1,17 +1,18 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.CustomerServices
+@using Scooterland.Client.Services.SaleServices
 
-@if (customer == null)
+@if (currentSale == null)
 {
 	<p><em>Ingen kunde tilføjet.</em></p>
 }
 else
 {
 	<div>
-		<span class="product-mrp">Kundenavn:</span>
-		<span class="customer-name">@customer.Name</span>
+		<span class="product-mrp">SaleId:</span>
+		<span class="customer-name">@currentSale.SaleId</span>
 		<span class="product-mrp">KundeId:</span>
-		<span class="product-mrp">@customer.CustomerId</span>
+		<span class="product-mrp">@currentSale.CustomerId</span>
 	</div>
 }
 
@@ -50,18 +51,20 @@ else
 @code {
 	[Parameter]
 	public Customer customer { get; set; } = new Customer();
-
+	private Sale currentSale;
 	private List<Product> products = new List<Product>();
 	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
 	[Inject]
-	public ICustomerService Service { get; set; }
+	public ICustomerService CustomerService { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 	[Parameter]
 	[SupplyParameterFromQuery]
-	public int CustomerId { get; set; }
+	public int SaleId { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		customer = await Service.GetCustomer(CustomerId);
+		currentSale = await SaleService.GetSale(SaleId);
 	}
 	
 	public void OnMinusClicked(SalesLineItem salesLineItem)

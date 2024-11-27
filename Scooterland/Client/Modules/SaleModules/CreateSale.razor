@@ -27,6 +27,7 @@
 @code {
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomer = new List<Customer>();
+	private List<Sale> saleList = new List<Sale>();
 	private Customer selectedCustomer = new Customer();
 	private Sale currentSale = new Sale();
 	private string _phoneNumSearch;
@@ -85,7 +86,10 @@
 			currentSale.CustomerId = dbCustomer.CustomerId;
 			currentSale.StartDate = DateTime.Now;
 			await SaleService.AddSale(currentSale);
-			Navigation.NavigateTo($"/sales/current-sale?customerId={currentSale.CustomerId}");
+
+			saleList = (await SaleService.GetAllSales()).ToList();
+			Sale saleToTransfer = saleList.FirstOrDefault(s => s.CustomerId == currentSale.CustomerId && s.StartDate == currentSale.StartDate);
+			Navigation.NavigateTo($"/sales/current-sale?SaleId={saleToTransfer.SaleId}");
 
 		}
 		catch
