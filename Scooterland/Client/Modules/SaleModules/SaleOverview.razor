@@ -1,0 +1,129 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.SaleServices;
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar"
+		   placeholder="Søg på kundenavn"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
+</div>
+
+@if (filteredSales == null)
+{
+	<p><em>Ingen sales fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Kunde Id</th>
+				<th>Ansat Id</th>
+				<th>Start dato</th>
+				<th>Slut dato</th>
+				<th>Betaling</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredSales)
+			{
+				<tr>
+					<td class="cell">@item.SaleId</td>
+					@if (editingSaleId == item.SaleId)
+					{
+						<td class="cell"><input class="cell-input" @bind="item.CustomerId" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.EmployeeId" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.StartDate" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.EndDate" /></td>
+						<td class="cell">
+							<input class="cell-input" @bind="item.Payment" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveSale(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">@item.CustomerId</td>
+						<td class="cell">@item.EmployeeId</td>
+						<td class="cell">@item.StartDate</td>
+						<td class="cell">@item.EndDate</td>
+						<td class="cell">
+							@item.Payment
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditSale(item.SaleId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteSale(item.SaleId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+	[Inject]
+	public ISaleService Service { get; set; }
+	private List<Sale> sales = new List<Sale>();
+	private List<Sale> filteredSales = new List<Sale>();
+	private int? editingSaleId = null;
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterSales();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		sales = (await Service.GetAllSales()).ToList();
+		filteredSales = sales;
+	}
+
+	private void EditSale(int saleId)
+	{
+		editingSaleId = saleId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveSale(Sale sale)
+	{
+		await Service.UpdateSale(sale); // Opdater produktet i databasen
+		editingSaleId = null; // Afslut redigering
+		sales = (await Service.GetAllSales()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingSaleId = null; // Annuller redigering
+	}
+
+	private async Task DeleteSale(int saleId)
+	{
+		await Service.DeleteSale(saleId);
+		sales = (await Service.GetAllSales()).ToList();
+		filteredSales = sales;
+		StateHasChanged();
+	}
+
+	private void FilterSales()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredSales = sales; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredSales = sales.Where(p => p.Customer.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+		}
+	}
+}

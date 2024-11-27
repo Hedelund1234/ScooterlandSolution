@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Client.Modules.CustomerModules;
 @using Scooterland.Client.Services.CustomerServices;
+@using Scooterland.Client.Services.SaleServices;
 @using Scooterland.Shared.Models;
 @inject NavigationManager Navigation
 
@@ -28,16 +29,19 @@
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomer = new List<Customer>();
 	private Customer selectedCustomer = new Customer();
+	private Sale currentSale = new Sale();
 
 	private string _phoneNumSearch;
 	private string _emailSearch;
 
 	[Inject]
-	public ICustomerService Service { get; set; }
+	public ICustomerService CustomerService { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		customers = (await Service.GetAllCustomers()).ToList();
+		customers = (await CustomerService.GetAllCustomers()).ToList();
 	}
 
 	private string phoneNumSearch   //Bundet til input-feltet for søgning
@@ -71,8 +75,16 @@
 		}
 	}
 
-	private void GoToNextPage()
-	{
+	private async Task GoToNextPage()
+	{		
+		customers = (await CustomerService.GetAllCustomers()).ToList();
+		Customer dbCustomer = customers.FirstOrDefault(c => c.Phonenumber == selectedCustomer.Phonenumber);
+
+@* 		currentSale.CustomerId = dbCustomer.CustomerId; *@
+
+		currentSale.StartDate = DateTime.Now;
+		await SaleService.AddSale(currentSale);
+		
 		Navigation.NavigateTo("/sales/current-sale");
 	}
 }
