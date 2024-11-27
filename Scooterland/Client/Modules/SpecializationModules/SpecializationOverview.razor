@@ -95,6 +95,8 @@ else
 	{
 		await Service.DeleteSpecialization(specializationId);
 		specializations = (await Service.GetAllSpecialization()).ToList();
+		filteredSpecializations = specializations;
+		StateHasChanged();
 	}
 
 	private void SearchSpecialization()

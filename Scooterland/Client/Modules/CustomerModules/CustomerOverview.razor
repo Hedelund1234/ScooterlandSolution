@@ -106,6 +106,8 @@ else
 	{
 		await Service.DeleteCustomer(customerId);
 		customers = (await Service.GetAllCustomers()).ToList();
+		filteredCustomers = customers;
+		StateHasChanged();
 	}
 
 	private void SearchCustomers()
