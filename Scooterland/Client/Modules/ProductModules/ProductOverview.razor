@@ -1,20 +1,15 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.ProductServices;
 
-
-
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
+	<input class="search-bar" 
+			placeholder="Søg efter produkt" 
+			id="navn" 
+			type="text" 
+			@bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
-
-<div class="search-button-container">
-	<button class="btn-dark" @onclick="SearchProducts">Søg</button>
-	<button class="btn-dark" @onclick="ClearProducts">Ryd</button>
-</div>
-
-
-
 
 @if (filteredProducts == null)
 {
@@ -67,18 +62,24 @@ else
 	</table>
 }
 
-
 @code {
 	[Parameter]
 	public Product ChosenProduct { get; set; } = new Product();
-
-	private string nameSearch;
+	[Inject]
+	public IProductService Service { get; set; }
 	private List<Product> products = new List<Product>(); 
 	private List<Product> filteredProducts = new List<Product>();
 	private int? editingProductId = null;
-
-	[Inject]
-	public IProductService Service { get; set; }
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -111,19 +112,6 @@ else
 		StateHasChanged();
 	}
 
-	private void SearchProducts()
-	{
-		FilterProducts();
-		StateHasChanged();
-	}
-
-	private void ClearProducts()
-	{
-		filteredProducts = products;
-		nameSearch = "";
-		StateHasChanged();
-	}
-
 	private void FilterProducts()
 	{
 		if (string.IsNullOrWhiteSpace(nameSearch))
@@ -132,7 +120,7 @@ else
 		}
 		else
 		{
-			filteredProducts = products.Where(p => p.Name.Contains(nameSearch)).ToList();
+			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
 		}
 	}
 }

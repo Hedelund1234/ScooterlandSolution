@@ -15,14 +15,6 @@
 		   @bind:event="oninput" />
 </div>
 
-<div class="search-button-container">
-	<button class="btn-dark" @onclick="SearchEmployees">Søg</button>
-	<button class="btn-dark" @onclick="ClearEmployees">Ryd</button>
-</div>
-
-
-
-
 @if (filteredEmployees == null)
 {
 	<p><em>Ingen medarbejdere fundet.</em></p>
@@ -75,10 +67,12 @@ else
 
 
 @code {
+	[Inject]
+	public IEmployeeService Service { get; set; }
 	private List<Employee> employees = new List<Employee>();
 	private List<Employee> filteredEmployees = new List<Employee>();
 	private int? editingEmployeeId = null;
-
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch	//Bundet til input-feltet for søgning
 	{
 		get => _nameSearch;	//Henter den aktuelle værdi af det private felt _nameSearch
@@ -88,18 +82,12 @@ else
 			FilterEmployees();		//Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
-	private string _nameSearch;	//Private felt som gemmer værdien af inputtet fra søgningen
-
-	[Inject]
-	public IEmployeeService Service { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
 		employees = (await Service.GetAllEmployees()).ToList();
 		filteredEmployees = employees;
 	}
-
-
 
 	private void EditEmployee(int employeeId)
 	{
@@ -126,19 +114,6 @@ else
 		StateHasChanged();
 	}
 
-	private void SearchEmployees()
-	{
-		FilterEmployees();
-		StateHasChanged();
-	}
-
-	private void ClearEmployees()
-	{
-		filteredEmployees = employees;
-		nameSearch = "";
-		StateHasChanged();
-	}
-
 	private void FilterEmployees()
 	{
 		if (string.IsNullOrWhiteSpace(nameSearch))
@@ -147,7 +122,7 @@ else
 		}
 		else
 		{
-			filteredEmployees = employees.Where(p => p.Name.Contains(nameSearch)).ToList();
+			filteredEmployees = employees.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
 		}
 	}
 }
