@@ -104,7 +104,9 @@
 	}
 	private async Task AddProductToSalesLineItem()
 	{
-		salesLineItem.Product = product;
+		salesLineItem.Discount = 25;
+		salesLineItem.Quantity = 1;
+		salesLineItem.Product.ProductId = product.ProductId;
 		salesLineItem.Sale = currentSale;
 		await SalesLineItemService.AddSalesLineItem(salesLineItem);
 	}
