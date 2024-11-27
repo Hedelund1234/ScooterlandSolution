@@ -1,19 +1,15 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.ProductServices;
 
-
-
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-		   placeholder="Søg efter produkt"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg efter produkt"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
-
-
 
 @if (filteredProducts == null)
 {
@@ -34,7 +30,7 @@ else
 		<tbody>
 			@foreach (var item in filteredProducts)
 			{
-				<tr @onclick="() => AddProduct(item)">
+				<tr @onclick="() => OnRowClicked(item.ProductId)">
 					<td class="cell">@item.ProductId</td>
 					<td class="cell">@item.Name</td>
 					<td class="cell">@item.Type</td>	
@@ -47,6 +43,10 @@ else
 
 
 @code {
+	[Parameter]
+	public EventCallback OnAddedProduct { get; set; }
+	[Parameter]
+	public Product chosenProduct { get; set; }
 	[Inject]
 	public IProductService Service { get; set; }
 	private List<Product> products = new List<Product>();
@@ -69,9 +69,9 @@ else
 	}
 
 
-	private async Task AddProduct(Product product)
+	private async Task OnRowClicked(int productId)
 	{
-
+		chosenProduct = filteredProducts.FirstOrDefault(p => p.ProductId == productId);
 	}
 
 	private void FilterProducts()
@@ -85,5 +85,4 @@ else
 			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
 		}
 	}
-
 }
