@@ -1,61 +1,71 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.CustomerServices
 @using Scooterland.Client.Services.SaleServices
+@using Scooterland.Client.Services.SalesLineItemServices
+@using Scooterland.Client.Modules.ProductModules
 
-@if (currentSale == null)
-{
-	<p><em>Ingen kunde tilføjet.</em></p>
-}
-else
-{
-	<div>
-		<span class="product-mrp">SaleId:</span>
-		<span class="customer-name">@currentSale.SaleId</span>
-		<span class="product-mrp">KundeId:</span>
-		<span class="product-mrp">@currentSale.CustomerId</span>
+<div class="flex-container">
+	<!-- Første komponent (fylder 2/3 af bredden) -->
+	<div >
+		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem" chosenProduct="@product" />
 	</div>
-}
 
-@foreach (var item in salesLineItems)
-{
-	<div class="product-card">
-		<div class="product-info">
-			<p class="product-name">@item.Product.Name</p>
-			<p class="product-mrp">@item.Product.Price</p>
+	<!-- Anden komponent (fylder 1/3 af bredden) -->
+
+
+	@if (currentSale == null)
+	{
+		<p><em>Ingen kunde tilføjet.</em></p>
+	}
+	else
+	{
+		<div>
+			<span class="product-mrp">SaleId:</span>
+			<span class="customer-name">@currentSale.SaleId</span>
+			<span class="product-mrp">KundeId:</span>
+			<span class="product-mrp">@currentSale.CustomerId</span>
 		</div>
+	}
 
-
-
-		<div class="product-price">
-			<div class="quantity-control">
-				<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
-				<input class="quantity-input" value="@item.Quantity" />
-				<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+	@foreach (var item in totalSalesLineItems)
+	{
+		<div class="product-card">
+			<div class="product-info">
+				<p class="product-name">@item.Product.Name</p>
+				<p class="product-mrp">@item.Product.Price</p>
 			</div>
-			<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
-		</div>
-	</div>
-}
 
-<div class="total-price-bottom">
-	<span class="total-price-margin"> Total price: </span>
-	<span> @TotalPrice() </span>
+
+
+			<div class="product-price">
+				<div class="quantity-control">
+					<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
+					<input class="quantity-input" value="@item.Quantity" />
+					<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+				</div>
+				<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+			</div>
+		</div>
+	}
+
+	<div class="total-price-bottom">
+		<span class="total-price-margin"> Total price: </span>
+		<span> @TotalPrice() </span>
+	</div>
 </div>
 
 
-
-
-
-
-
 @code {
-	[Parameter]
-	public Customer customer { get; set; } = new Customer();
 	private Sale currentSale;
+	public Product product { get; set; }
 	private List<Product> products = new List<Product>();
-	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
+	private SalesLineItem salesLineItem = new SalesLineItem();
+	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
+
 	[Inject]
 	public ICustomerService CustomerService { get; set; }
+	[Inject]
+	public ISalesLineItemService SalesLineItemService { get; set; }
 	[Inject]
 	public ISaleService SaleService { get; set; }
 	[Parameter]
@@ -66,7 +76,7 @@ else
 	{
 		currentSale = await SaleService.GetSale(SaleId);
 	}
-	
+
 	public void OnMinusClicked(SalesLineItem salesLineItem)
 	{
 		salesLineItem.Quantity--;
@@ -80,7 +90,7 @@ else
 	public decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
-		foreach (var item in salesLineItems)
+		foreach (var item in totalSalesLineItems)
 		{
 			totalPrice += item.Product.Price * item.Quantity;
 		}
@@ -92,6 +102,10 @@ else
 		decimal totalPrice = 0;
 		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
 	}
-
-
+	private async Task AddProductToSalesLineItem()
+	{
+		salesLineItem.Product = product;
+		salesLineItem.Sale = currentSale;
+		await SalesLineItemService.AddSalesLineItem(salesLineItem);
+	}
 }

@@ -4,7 +4,7 @@
 @using Scooterland.Client.Services.CustomerServices;
 @page "/sales/current-sale"
 
-<div class="flex-container">
+@* <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
 	<div class="two-thirds-width">
 		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem" />
@@ -14,8 +14,8 @@
 	<div class="one-third-width">
 		<CurrentSaleOverview Customer="@customer" />
 	</div>
-</div>
-
+</div> *@
+<CurrentSaleOverview/>
 
 <button class="btn btn-primary" @onclick="GoToPreviousPage">
 	Tilbage SKAL SLETTES
