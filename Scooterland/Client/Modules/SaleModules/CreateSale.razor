@@ -34,14 +34,14 @@
 	private string _emailSearch;
 
 	[Inject]
-	public ICustomerService Service { get; set; }
+	public ICustomerService CustomerService { get; set; }
 
 	[Inject]
-	public ISaleService db { get; set; }
+	public ISaleService SaleService { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		customers = (await Service.GetAllCustomers()).ToList();
+		customers = (await CustomerService.GetAllCustomers()).ToList();
 	}
 
 	private string phoneNumSearch   //Bundet til input-feltet for søgning
@@ -77,20 +77,18 @@
 
 	private void GoToNextPage()
 	{
-		if (selectedCustomer == null || selectedCustomer.CustomerId == 0)
+		if (selectedCustomer != null || selectedCustomer.CustomerId != 0)
 		{
-			return;
+			CreateSaleAddCustomerToSale();
+			var customerJson = System.Text.Json.JsonSerializer.Serialize(selectedCustomer);
+			var encodedCustomer = Uri.EscapeDataString(customerJson);
+			Navigation.NavigateTo($"/sales/current-sale?customerJson={encodedCustomer}");
 		}
-
-		CreateSaleAddCustomerToSale();
-		var customerJson = System.Text.Json.JsonSerializer.Serialize(selectedCustomer);
-		var encodedCustomer = Uri.EscapeDataString(customerJson);
-		Navigation.NavigateTo($"/sales/current-sale?customerJson={encodedCustomer}");
 	}
 
 	private async Task CreateSaleAddCustomerToSale()
 	{
-		Sale sale = new Sale { CustomerId = selectedCustomer .CustomerId};
-		await db.AddSale(sale);
+		Sale sale = new Sale { CustomerId = selectedCustomer.CustomerId};
+		await SaleService.AddSale(sale);
 	}
 }

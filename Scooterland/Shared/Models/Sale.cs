@@ -9,7 +9,7 @@ namespace Scooterland.Shared.Models
 {
 	public class Sale
 	{
-		public int? SaleId { get; set; }
+		public int SaleId { get; set; }
 		public int CustomerId { get; set; }
 		public Customer? Customer { get; set; }
 		public int? EmployeeId { get; set; }
@@ -33,11 +33,5 @@ namespace Scooterland.Shared.Models
         {
             this.SaleId = id;
         }
-
-		public Sale(Customer customer)
-		{
-			this.CustomerId = customer.CustomerId;
-		}
-
 	}
 }
