@@ -1,7 +1,7 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.SaleServices;
 
-<div class="search-container">
+@* <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
 		   placeholder="Søg på kundenavn"
@@ -65,11 +65,56 @@ else
 			}
 		</tbody>
 	</table>
+} *@
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar"
+		   placeholder="Søg på kundenavn"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
+</div>
+
+@if (filteredSales == null)
+{
+	<p><em>Ingen sales fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Kunde Id</th>
+				<th>Ansat Id</th>
+				<th>Start dato</th>
+				<th>Slut dato</th>
+				<th>Betaling</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredSales)
+			{
+				<tr @onclick="() => HandleRowClick(item)">
+					<td class="cell">@item.SaleId</td>
+					<td class="cell">@item.CustomerId</td>
+					<td class="cell">@item.EmployeeId</td>
+					<td class="cell">@item.StartDate</td>
+					<td class="cell">@item.EndDate</td>
+					<td class="cell">@item.Payment</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 }
 
 @code {
 	[Inject]
 	public ISaleService Service { get; set; }
+	[Inject]
+	public NavigationManager Navigation { get; set; }
 	private List<Sale> sales = new List<Sale>();
 	private List<Sale> filteredSales = new List<Sale>();
 	private int? editingSaleId = null;
@@ -90,7 +135,24 @@ else
 		filteredSales = sales;
 	}
 
-	private void EditSale(int saleId)
+	private void FilterSales()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredSales = sales; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredSales = sales.Where(p => p.Customer.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+		}
+	}
+
+	private void HandleRowClick(Sale sale)
+	{
+		Navigation.NavigateTo($"/sales/current-sale?saleId={sale.SaleId}");
+	}
+
+@* 	private void EditSale(int saleId)
 	{
 		editingSaleId = saleId; // Sæt den aktuelle række i redigeringstilstand
 	}
@@ -113,17 +175,5 @@ else
 		sales = (await Service.GetAllSales()).ToList();
 		filteredSales = sales;
 		StateHasChanged();
-	}
-
-	private void FilterSales()
-	{
-		if (string.IsNullOrWhiteSpace(nameSearch))
-		{
-			filteredSales = sales; // Hvis søgningen er tom, vis alle produkter
-		}
-		else
-		{
-			filteredSales = sales.Where(p => p.Customer.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
-		}
-	}
+	} *@
 }
