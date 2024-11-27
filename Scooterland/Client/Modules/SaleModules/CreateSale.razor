@@ -90,7 +90,7 @@
 
 	private async Task CreateSaleAddCustomerToSale()
 	{
-		Sale sale = new Sale { CustomerId = selectedCustomer.CustomerId };
+		Sale sale = new Sale { CustomerId = selectedCustomer .CustomerId};
 		await db.AddSale(sale);
 	}
 }
