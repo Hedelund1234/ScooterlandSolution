@@ -3,16 +3,55 @@
 @using Scooterland.Client.Services.SaleServices
 @using Scooterland.Client.Services.SalesLineItemServices
 @using Scooterland.Client.Modules.ProductModules
+@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.ProductServices;
 
 <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
-	<div >
-		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem" chosenProduct="@product" />
+
+	<div class="search-container">
+		<i class="search-icon fa fa-search"></i>
+		<input class="search-bar"
+			   placeholder="Søg efter produkt"
+			   id="navn"
+			   type="text"
+			   @bind="nameSearch"
+			   @bind:event="oninput" />
 	</div>
+
+	@if (filteredProducts == null)
+	{
+		<p><em>Ingen produkter fundet.</em></p>
+	}
+	else
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Navn</th>
+					<th>Type</th>
+					<th>Pris</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in filteredProducts)
+				{
+					<tr @onclick="() => OnRowClicked(item)">
+						<td class="cell">@item.ProductId</td>
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Type</td>
+						<td class="cell">@item.Price</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
 
 	<!-- Anden komponent (fylder 1/3 af bredden) -->
 
-
+	<div>
 	@if (currentSale == null)
 	{
 		<p><em>Ingen kunde tilføjet.</em></p>
@@ -25,14 +64,14 @@
 			<span class="product-mrp">KundeId:</span>
 			<span class="product-mrp">@currentSale.CustomerId</span>
 		</div>
-	}
+	} 
 
-	@foreach (var item in totalSalesLineItems)
+	@foreach (var item in currentSalesLineItems)
 	{
 		<div class="product-card">
 			<div class="product-info">
-				<p class="product-name">@item.Product.Name</p>
-				<p class="product-mrp">@item.Product.Price</p>
+				<p class="product-name">@item.Discount</p>
+				<p class="product-mrp">@item.Quantity</p>
 			</div>
 
 
@@ -45,12 +84,13 @@
 				</div>
 				<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
 			</div>
-		</div>
+		</div> 
 	}
 
 	<div class="total-price-bottom">
 		<span class="total-price-margin"> Total price: </span>
 		<span> @TotalPrice() </span>
+	</div>
 	</div>
 </div>
 
@@ -59,8 +99,11 @@
 	private Sale currentSale;
 	public Product product { get; set; }
 	private List<Product> products = new List<Product>();
+	private List<Product> filteredProducts = new List<Product>();
 	private SalesLineItem salesLineItem = new SalesLineItem();
-	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
+	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
+
+	private List<SalesLineItem> currentSalesLineItems = new List<SalesLineItem>();
 
 	[Inject]
 	public ICustomerService CustomerService { get; set; }
@@ -68,6 +111,8 @@
 	public ISalesLineItemService SalesLineItemService { get; set; }
 	[Inject]
 	public ISaleService SaleService { get; set; }
+	[Inject]
+	public IProductService ProductService { get; set; }
 	[Parameter]
 	[SupplyParameterFromQuery]
 	public int SaleId { get; set; }
@@ -75,6 +120,10 @@
 	protected override async Task OnInitializedAsync()
 	{
 		currentSale = await SaleService.GetSale(SaleId);
+		products = (await ProductService.GetAllProducts()).ToList();
+		allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
+		currentSalesLineItems = allSalesLineItems.Where(s => s.SaleId.Equals(currentSale.SaleId)).ToList();
+		filteredProducts = products;
 	}
 
 	public void OnMinusClicked(SalesLineItem salesLineItem)
@@ -90,24 +139,51 @@
 	public decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
-		foreach (var item in totalSalesLineItems)
-		{
-			totalPrice += item.Product.Price * item.Quantity;
-		}
+		// foreach (var item in currentSalesLineItems)
+		// {
+		// 	totalPrice += item.Product.Price * item.Quantity;
+		// }
 		return totalPrice;
 	}
 
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
 	{
 		decimal totalPrice = 0;
-		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
+		return totalPrice; /* = salesLineItem.Product.Price * salesLineItem.Quantity; */
 	}
-	private async Task AddProductToSalesLineItem()
+
+	private async Task OnRowClicked(Product product)
 	{
-		salesLineItem.Discount = 25;
+		salesLineItem.Discount = 0;
 		salesLineItem.Quantity = 1;
-		salesLineItem.Product.ProductId = product.ProductId;
-		salesLineItem.Sale = currentSale;
+		salesLineItem.ProductId = product.ProductId;
+		salesLineItem.SaleId = currentSale.SaleId;
 		await SalesLineItemService.AddSalesLineItem(salesLineItem);
+
+
+	}
+	
+	private int? editingProductId = null;
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
+	private void FilterProducts()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredProducts = products; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+		}
 	}
 }
