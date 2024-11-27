@@ -13,7 +13,7 @@ namespace Scooterland.Shared.Models
 		public string Phonenumber { get; set; }
 		[MaxLength(150, ErrorMessage = "Adressen må maksimalt være 150 tegn lang")]
 		public string Address { get; set; }
-		public List<Sale>? Sales { get; set; } = new List<Sale>();
+		public List<Sale> Sales { get; set; } = new List<Sale>();
 
 		//Tom contructor til EF
 		public Customer()
