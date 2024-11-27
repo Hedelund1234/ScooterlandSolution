@@ -2,7 +2,6 @@
 @using Scooterland.Client.Services.CustomerServices;
 @using Scooterland.Client.Services.SaleServices;
 @using Scooterland.Shared.Models;
-@inject NavigationManager Navigation
 
 <h3>CreateSale</h3>
 
@@ -29,10 +28,11 @@
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomer = new List<Customer>();
 	private Customer selectedCustomer = new Customer();
-
+	private Sale currentSale = new Sale();
 	private string _phoneNumSearch;
 	private string _emailSearch;
-
+	[Inject]
+	public NavigationManager Navigation { get; set; }
 	[Inject]
 	public ICustomerService CustomerService { get; set; }
 
@@ -75,20 +75,22 @@
 		}
 	}
 
-	private void GoToNextPage()
+	private async Task GoToNextPage()
 	{
-		if (selectedCustomer != null || selectedCustomer.CustomerId != 0)
+		try
 		{
-			CreateSaleAddCustomerToSale();
-			var customerJson = System.Text.Json.JsonSerializer.Serialize(selectedCustomer);
-			var encodedCustomer = Uri.EscapeDataString(customerJson);
-			Navigation.NavigateTo($"/sales/current-sale?customerJson={encodedCustomer}");
-		}
-	}
+			customers = (await CustomerService.GetAllCustomers()).ToList();
+			Customer dbCustomer = customers.FirstOrDefault(c => c.Phonenumber == selectedCustomer.Phonenumber);
 
-	private async Task CreateSaleAddCustomerToSale()
-	{
-		Sale sale = new Sale { CustomerId = selectedCustomer.CustomerId};
-		await SaleService.AddSale(sale);
+			currentSale.CustomerId = dbCustomer.CustomerId;
+			currentSale.StartDate = DateTime.Now;
+			await SaleService.AddSale(currentSale);
+			Navigation.NavigateTo($"/sales/current-sale?customerId={currentSale.CustomerId}");
+
+		}
+		catch
+		{
+			
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.CustomerServices
 
 @if (customer == null)
 {
@@ -52,7 +53,16 @@ else
 
 	private List<Product> products = new List<Product>();
 	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
+	[Inject]
+	public ICustomerService Service { get; set; }
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int CustomerId { get; set; }
 
+	protected override async Task OnInitializedAsync()
+	{
+		customer = await Service.GetCustomer(CustomerId);
+	}
 	
 	public void OnMinusClicked(SalesLineItem salesLineItem)
 	{
@@ -80,8 +90,5 @@ else
 		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
 	}
 
-	protected override async Task OnInitializedAsync()
-	{
 
-	}
 }
