@@ -29,6 +29,9 @@
 	private List<Customer> filteredCustomer = new List<Customer>();
 	private Customer selectedCustomer = new Customer();
 
+	private string _phoneNumSearch;
+	private string _emailSearch;
+
 	[Inject]
 	public ICustomerService Service { get; set; }
 
@@ -67,9 +70,6 @@
 			}
 		}
 	}
-
-	private string _phoneNumSearch;
-	private string _emailSearch;
 
 	private void GoToNextPage()
 	{
