@@ -1,0 +1,94 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.CustomerServices
+
+@if (customer == null)
+{
+	<p><em>Ingen kunde tilføjet.</em></p>
+}
+else
+{
+	<div>
+		<span class="product-mrp">Kundenavn:</span>
+		<span class="customer-name">@customer.Name</span>
+		<span class="product-mrp">KundeId:</span>
+		<span class="product-mrp">@customer.CustomerId</span>
+	</div>
+}
+
+@foreach (var item in salesLineItems)
+{
+	<div class="product-card">
+		<div class="product-info">
+			<p class="product-name">@item.Product.Name</p>
+			<p class="product-mrp">@item.Product.Price</p>
+		</div>
+
+
+
+		<div class="product-price">
+			<div class="quantity-control">
+				<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
+				<input class="quantity-input" value="@item.Quantity" />
+				<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+			</div>
+			<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+		</div>
+	</div>
+}
+
+<div class="total-price-bottom">
+	<span class="total-price-margin"> Total price: </span>
+	<span> @TotalPrice() </span>
+</div>
+
+
+
+
+
+
+
+@code {
+	[Parameter]
+	public Customer customer { get; set; } = new Customer();
+
+	private List<Product> products = new List<Product>();
+	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
+	[Inject]
+	public ICustomerService Service { get; set; }
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int CustomerId { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		customer = await Service.GetCustomer(CustomerId);
+	}
+	
+	public void OnMinusClicked(SalesLineItem salesLineItem)
+	{
+		salesLineItem.Quantity--;
+	}
+
+	public void OnPlusClicked(SalesLineItem salesLineItem)
+	{
+		salesLineItem.Quantity++;
+	}
+
+	public decimal TotalPrice()
+	{
+		decimal totalPrice = 0;
+		foreach (var item in salesLineItems)
+		{
+			totalPrice += item.Product.Price * item.Quantity;
+		}
+		return totalPrice;
+	}
+
+	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
+	{
+		decimal totalPrice = 0;
+		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
+	}
+
+
+}
