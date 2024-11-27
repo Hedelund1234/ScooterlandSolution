@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Client.Modules.CustomerModules;
 @using Scooterland.Client.Services.CustomerServices;
+@using Scooterland.Client.Services.SaleServices;
 @using Scooterland.Shared.Models;
 @inject NavigationManager Navigation
 
@@ -34,6 +35,9 @@
 
 	[Inject]
 	public ICustomerService Service { get; set; }
+
+	[Inject]
+	public ISaleService db { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -73,6 +77,20 @@
 
 	private void GoToNextPage()
 	{
-		Navigation.NavigateTo("/sales/current-sale");
+		if (selectedCustomer == null || selectedCustomer.CustomerId == 0)
+		{
+			return;
+		}
+
+		CreateSaleAddCustomerToSale();
+		var customerJson = System.Text.Json.JsonSerializer.Serialize(selectedCustomer);
+		var encodedCustomer = Uri.EscapeDataString(customerJson);
+		Navigation.NavigateTo($"/sales/current-sale?customerJson={encodedCustomer}");
+	}
+
+	private async Task CreateSaleAddCustomerToSale()
+	{
+		Sale sale = new Sale { CustomerId = selectedCustomer.CustomerId };
+		await db.AddSale(sale);
 	}
 }

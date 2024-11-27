@@ -1,6 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 
-@if (c1 == null)
+@if (customer == null)
 {
 	<p><em>Ingen kunde tilføjet.</em></p>
 }
@@ -8,9 +8,9 @@ else
 {
 	<div>
 		<span class="product-mrp">Kundenavn:</span>
-		<span class="customer-name">@c1.Name</span>
+		<span class="customer-name">@customer.Name</span>
 		<span class="product-mrp">KundeId:</span>
-		<span class="product-mrp">@c1.CustomerId</span>
+		<span class="product-mrp">@customer.CustomerId</span>
 	</div>
 }
 
@@ -47,16 +47,13 @@ else
 
 
 @code {
+	[Parameter]
+	public Customer customer { get; set; } = new Customer();
 
 	private List<Product> products = new List<Product>();
 	private List<SalesLineItem> salesLineItems = new List<SalesLineItem>();
 
-	Customer c1 = new Customer { Name = "Hans", Phonenumber = "23232323", CustomerId = 1 };
-
-	SalesLineItem s1 = new SalesLineItem { SalesLineItemId = 1, SaleId = 1, ProductId = 1, Quantity = 4, Discount = 0, Product = new Product { ProductId = 1, Name = "Dæk", Type = "Vare", Price = 250.00M } };
-	SalesLineItem s2 = new SalesLineItem { SalesLineItemId = 2, SaleId = 2, ProductId = 2, Quantity = 1, Discount = 0, Product = new Product { ProductId = 2, Name = "Olie", Type = "Vare", Price = 89.95M } };
-	SalesLineItem s3 = new SalesLineItem { SalesLineItemId = 3, SaleId = 3, ProductId = 3, Quantity = 3, Discount = 0, Product = new Product { ProductId = 3, Name = "Ko", Type = "Vare", Price = 22.22M } };
-
+	
 	public void OnMinusClicked(SalesLineItem salesLineItem)
 	{
 		salesLineItem.Quantity--;
@@ -85,8 +82,6 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		salesLineItems.Add(s1);
-		salesLineItems.Add(s2);
-		salesLineItems.Add(s3);
+
 	}
 }

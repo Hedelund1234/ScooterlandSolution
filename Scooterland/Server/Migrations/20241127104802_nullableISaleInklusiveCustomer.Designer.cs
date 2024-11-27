@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scooterland.Server.DataAccess;
 
@@ -11,9 +12,11 @@ using Scooterland.Server.DataAccess;
 namespace Scooterland.Server.Migrations
 {
     [DbContext(typeof(ScooterlandDbContext))]
-    partial class ScooterlandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127104802_nullableISaleInklusiveCustomer")]
+    partial class nullableISaleInklusiveCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasIndex("SpecializationsSpecializationId");
 
-                    b.ToTable("EmployeeSpecialization", (string)null);
+                    b.ToTable("EmployeeSpecialization");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.Customer", b =>
@@ -67,7 +70,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.Employee", b =>
@@ -90,7 +93,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.Product", b =>
@@ -116,7 +119,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.Sale", b =>
@@ -153,7 +156,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("Sales", (string)null);
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.SalesLineItem", b =>
@@ -182,7 +185,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasIndex("SaleId");
 
-                    b.ToTable("SalesLineItems", (string)null);
+                    b.ToTable("SalesLineItems");
                 });
 
             modelBuilder.Entity("Scooterland.Shared.Models.Specialization", b =>
@@ -200,7 +203,7 @@ namespace Scooterland.Server.Migrations
 
                     b.HasKey("SpecializationId");
 
-                    b.ToTable("Specializations", (string)null);
+                    b.ToTable("Specializations");
                 });
 
             modelBuilder.Entity("EmployeeSpecialization", b =>
