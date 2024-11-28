@@ -129,14 +129,24 @@
 
 	private async Task AddProductToSalesLineItem(Product selectedProduct)
 	{
-		product = selectedProduct;
-		SalesLineItem salesLineItem = new SalesLineItem();
-		salesLineItem.Discount = 0;
-		salesLineItem.Quantity = 1;
-		salesLineItem.SaleId = currentSale.SaleId;
-		salesLineItem.ProductId = product.ProductId;
-		await SalesLineItemService.AddSalesLineItem(salesLineItem);
-		allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
-		totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
+		SalesLineItem thisItem = totalSalesLineItems.FirstOrDefault(p => p.ProductId == selectedProduct.ProductId);
+
+		if (thisItem != null)  // Check if a matching item was found
+		{
+			OnPlusClicked(thisItem);
+		}
+		else
+		{
+			product = selectedProduct;
+			SalesLineItem salesLineItem = new SalesLineItem();
+			salesLineItem.Discount = 0;
+			salesLineItem.Quantity = 1;
+			salesLineItem.SaleId = currentSale.SaleId;
+			salesLineItem.ProductId = product.ProductId;
+			await SalesLineItemService.AddSalesLineItem(salesLineItem);
+			allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
+			totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
+		}
+
 	}
 }
