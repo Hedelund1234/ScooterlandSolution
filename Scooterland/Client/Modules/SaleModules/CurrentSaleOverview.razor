@@ -76,8 +76,14 @@
 	protected override async Task OnInitializedAsync()
 	{
 		currentSale = await SaleService.GetSale(SaleId);
+		UpdateSalesLineItems();
+	}
+
+	public async Task UpdateSalesLineItems()
+	{
 		allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
 		totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
+		StateHasChanged();
 	}
 
 	public async Task OnMinusClicked(SalesLineItem salesLineItem)
@@ -87,32 +93,14 @@
 		{
 			salesLineItem.Quantity--;
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
-
-			if (statusCode == 200 || statusCode == 204) // Success: Either OK or No Content
-			{
-				StateHasChanged(); // Update the UI
-			}
-			else
-			{
-				
-				Console.WriteLine($"Failed to update: Status Code {statusCode}");
-			}
+			UpdateSalesLineItems();
 		}
 
 		// If quantity is now 0, delete the item
 		if (salesLineItem.Quantity == 0)
 		{
 			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId); // Assuming DeleteSalesLineItem is implemented in the service
-
-			if (deleteStatusCode == 200) // Success: Item deleted
-			{
-				totalSalesLineItems.Remove(salesLineItem); // Remove the item from the UI list
-				StateHasChanged(); // Re-render the component
-			}
-			else
-			{
-				Console.WriteLine($"Failed to delete item: Status Code {deleteStatusCode}");
-			}
+			UpdateSalesLineItems();
 		}
 	}
 
@@ -120,16 +108,7 @@
 	{
 		salesLineItem.Quantity++;
 		int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
-
-		if (statusCode == 204) // No Content (Success)
-		{
-			StateHasChanged(); // Update the UI
-		}
-		else
-		{
-			
-			Console.WriteLine($"Failed to update: Status Code {statusCode}");
-		}
+		UpdateSalesLineItems();
 	}
 
 	public decimal TotalPrice()
