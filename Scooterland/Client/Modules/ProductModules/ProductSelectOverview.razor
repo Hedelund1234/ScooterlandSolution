@@ -30,7 +30,7 @@ else
 		<tbody>
 			@foreach (var item in filteredProducts)
 			{
-				<tr @onclick="() => OnRowClicked(item.ProductId)">
+				<tr @onclick="() => OnRowClicked(item)">
 					<td class="cell">@item.ProductId</td>
 					<td class="cell">@item.Name</td>
 					<td class="cell">@item.Type</td>	
@@ -69,9 +69,9 @@ else
 	}
 
 
-	private async Task OnRowClicked(int productId)
+	private async Task OnRowClicked(Product product)
 	{
-		chosenProduct = filteredProducts.FirstOrDefault(p => p.ProductId == productId);
+		//chosenProduct = filteredProducts.FirstOrDefault(p => p.ProductId == productId);
 
 		// Send valgt produkt tilbage til parent-komponenten
 		 if (chosenProduct != null)
