@@ -90,7 +90,6 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 			List<SalesLineItem> salesLineItems;
 			try
 			{
-				//salesLineItems = db.SalesLineItems.ToList();
 				salesLineItems = db.SalesLineItems.Include(salesLineItems => salesLineItems.Product).ToList();
 			}
 			catch
