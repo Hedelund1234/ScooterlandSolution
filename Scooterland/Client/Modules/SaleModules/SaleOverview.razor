@@ -1,72 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.SaleServices;
 
-@* <div class="search-container">
-	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar"
-		   placeholder="Søg på kundenavn"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
-</div>
-
-@if (filteredSales == null)
-{
-	<p><em>Ingen sales fundet.</em></p>
-}
-else
-{
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Kunde Id</th>
-				<th>Ansat Id</th>
-				<th>Start dato</th>
-				<th>Slut dato</th>
-				<th>Betaling</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in filteredSales)
-			{
-				<tr>
-					<td class="cell">@item.SaleId</td>
-					@if (editingSaleId == item.SaleId)
-					{
-						<td class="cell"><input class="cell-input" @bind="item.CustomerId" /></td>
-						<td class="cell"><input class="cell-input" @bind="item.EmployeeId" /></td>
-						<td class="cell"><input class="cell-input" @bind="item.StartDate" /></td>
-						<td class="cell"><input class="cell-input" @bind="item.EndDate" /></td>
-						<td class="cell">
-							<input class="cell-input" @bind="item.Payment" />
-							<div class="button-container">
-								<button class="btn btn-save" @onclick="() => SaveSale(item)">Gem</button>
-								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
-							</div>
-						</td>
-					}
-					else
-					{
-						<td class="cell">@item.CustomerId</td>
-						<td class="cell">@item.EmployeeId</td>
-						<td class="cell">@item.StartDate</td>
-						<td class="cell">@item.EndDate</td>
-						<td class="cell">
-							@item.Payment
-							<div class="button-container">
-								<button class="edit-button" @onclick="() => EditSale(item.SaleId)"><i class="fa-solid fa-pencil"></i></button>
-								<button class="edit-button" @onclick="() => DeleteSale(item.SaleId)"><i class="fa-regular fa-trash-can"></i></button>
-							</div>
-						</td>
-					}
-				</tr>
-			}
-		</tbody>
-	</table>
-} *@
-
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
@@ -87,11 +21,12 @@ else
 		<thead>
 			<tr>
 				<th>Id</th>
-				<th>Kunde Id</th>
-				<th>Ansat Id</th>
+				<th>Kunde navn</th>
+				<th>Mekaniker</th>
+				<th>Scooter mærke</th>
 				<th>Start dato</th>
 				<th>Slut dato</th>
-				<th>Betaling</th>
+				<th>Total beløb</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -99,8 +34,23 @@ else
 			{
 				<tr @onclick="() => HandleRowClick(item)">
 					<td class="cell">@item.SaleId</td>
-					<td class="cell">@item.CustomerId</td>
-					<td class="cell">@item.EmployeeId</td>
+					<td class="cell">@item.Customer.Name</td>
+					@if (item.Employee is null)
+					{
+						<td class="cell"></td>
+					}
+					else
+					{
+						<td class="cell">@item.Employee.Name</td>
+					}
+					@if (item.Specialization is null)
+					{
+						<td class="cell"></td>
+					}
+					else
+					{
+						<td class="cell">@item.Specialization.Brand</td>
+					}
 					<td class="cell">@item.StartDate</td>
 					<td class="cell">@item.EndDate</td>
 					<td class="cell">@item.Payment</td>
