@@ -18,9 +18,14 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryEF>();
 builder.Services.AddScoped<ISaleRepository, SaleRepositoryEF>();
 builder.Services.AddScoped<ISpecializationRepository, SpecializationRepositoryEF>();
 builder.Services.AddScoped<ISalesLineItemRepository, SalesLineItemRepositoryEF>();
+builder.Services.AddControllers() // Konfigurer JSON-serialisering i serveren til at ignorere cirkulære referencer.
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+	});
+
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

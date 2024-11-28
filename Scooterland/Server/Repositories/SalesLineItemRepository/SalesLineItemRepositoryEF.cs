@@ -1,4 +1,5 @@
-﻿using Scooterland.Server.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using Scooterland.Server.DataAccess;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.SalesLineItemRepository
@@ -89,7 +90,8 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 			List<SalesLineItem> salesLineItems;
 			try
 			{
-				salesLineItems = db.SalesLineItems.ToList();
+				//salesLineItems = db.SalesLineItems.ToList();
+				salesLineItems = db.SalesLineItems.Include(salesLineItems => salesLineItems.Product).ToList();
 			}
 			catch
 			{
