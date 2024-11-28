@@ -99,7 +99,7 @@
 		// If quantity is now 0, delete the item
 		if (salesLineItem.Quantity == 0)
 		{
-			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId); // Assuming DeleteSalesLineItem is implemented in the service
+			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId); 
 			UpdateSalesLineItems();
 		}
 	}
