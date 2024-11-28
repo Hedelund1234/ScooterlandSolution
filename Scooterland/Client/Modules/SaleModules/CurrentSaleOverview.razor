@@ -92,17 +92,17 @@
 	public decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
-		// foreach (var item in totalSalesLineItems)
-		// {
-		// 	totalPrice += item.Product.Price * item.Quantity;
-		// }
+		foreach (var item in totalSalesLineItems)
+		{
+			totalPrice += item.Product.Price * item.Quantity;
+		}
 		return totalPrice;
 	}
 
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
 	{
 		decimal totalPrice = 0;
-		return totalPrice /* = salesLineItem.Product.Price * salesLineItem.Quantity */;
+		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
 	}
 
 	private async Task AddProductToSalesLineItem(Product selectedProduct)
