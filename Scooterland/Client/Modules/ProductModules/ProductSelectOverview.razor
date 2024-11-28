@@ -44,7 +44,7 @@ else
 
 @code {
 	[Parameter]
-	public EventCallback OnAddedProduct { get; set; }
+	public EventCallback<Product> OnAddedProduct { get; set; }
 	[Parameter]
 	public Product chosenProduct { get; set; }
 	[Inject]
@@ -73,8 +73,12 @@ else
 	{
 		chosenProduct = filteredProducts.FirstOrDefault(p => p.ProductId == productId);
 
-		await OnAddedProduct.InvokeAsync();
-	}
+		// Send valgt produkt tilbage til parent-komponenten
+		 if (chosenProduct != null)
+		{
+			await OnAddedProduct.InvokeAsync(chosenProduct);
+		}
+	}	
 
 	private void FilterProducts()
 	{

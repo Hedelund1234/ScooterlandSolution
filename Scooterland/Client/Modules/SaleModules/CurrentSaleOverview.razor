@@ -6,13 +6,12 @@
 
 <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
-	<div >
-		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem" chosenProduct="@product" />
+	<div>
+		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem"
+		chosenProduct="@product"/>
 	</div>
 
 	<!-- Anden komponent (fylder 1/3 af bredden) -->
-
-
 	@if (currentSale == null)
 	{
 		<p><em>Ingen kunde tilføjet.</em></p>
@@ -31,8 +30,8 @@
 	{
 		<div class="product-card">
 			<div class="product-info">
-				<p class="product-name">@item.Product.Name</p>
-				<p class="product-mrp">@item.Product.Price</p>
+				@* <p class="product-name">@item.Product.Name</p>
+				<p class="product-mrp">@item.Product.Price</p> *@
 			</div>
 
 
@@ -59,8 +58,9 @@
 	private Sale currentSale;
 	public Product product { get; set; }
 	private List<Product> products = new List<Product>();
-	private SalesLineItem salesLineItem = new SalesLineItem();
+
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
+	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 
 	[Inject]
 	public ICustomerService CustomerService { get; set; }
@@ -77,6 +77,11 @@
 		currentSale = await SaleService.GetSale(SaleId);
 	}
 
+	private void UpdateSelectedProduct()
+	{
+
+	}
+
 	public void OnMinusClicked(SalesLineItem salesLineItem)
 	{
 		salesLineItem.Quantity--;
@@ -90,22 +95,28 @@
 	public decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
-		foreach (var item in totalSalesLineItems)
-		{
-			totalPrice += item.Product.Price * item.Quantity;
-		}
+		// foreach (var item in totalSalesLineItems)
+		// {
+		// 	totalPrice += item.Product.Price * item.Quantity;
+		// }
 		return totalPrice;
 	}
 
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
 	{
 		decimal totalPrice = 0;
-		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
+		return totalPrice /* = salesLineItem.Product.Price * salesLineItem.Quantity */;
 	}
-	private async Task AddProductToSalesLineItem()
+	private async Task AddProductToSalesLineItem(Product selectedProduct)
 	{
-		salesLineItem.Product = product;
-		salesLineItem.Sale = currentSale;
+		product = selectedProduct;
+		SalesLineItem salesLineItem = new SalesLineItem();
+		salesLineItem.Discount = 0;
+		salesLineItem.Quantity = 1;
+		salesLineItem.SaleId = currentSale.SaleId;
+		salesLineItem.ProductId = product.ProductId;
 		await SalesLineItemService.AddSalesLineItem(salesLineItem);
+		allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
+		totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
 	}
 }

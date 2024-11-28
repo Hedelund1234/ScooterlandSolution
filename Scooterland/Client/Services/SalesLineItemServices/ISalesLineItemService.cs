@@ -13,5 +13,7 @@ namespace Scooterland.Client.Services.SalesLineItemServices
 		Task<int> DeleteSalesLineItem(int id);
 
 		Task<int> UpdateSalesLineItem(SalesLineItem salesLineItem);
+
+
 	}
 }
