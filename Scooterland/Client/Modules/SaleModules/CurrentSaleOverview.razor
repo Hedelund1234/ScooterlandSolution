@@ -75,11 +75,8 @@
 	protected override async Task OnInitializedAsync()
 	{
 		currentSale = await SaleService.GetSale(SaleId);
-	}
-
-	private void UpdateSelectedProduct()
-	{
-
+		allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
+		totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
 	}
 
 	public void OnMinusClicked(SalesLineItem salesLineItem)
@@ -107,6 +104,7 @@
 		decimal totalPrice = 0;
 		return totalPrice /* = salesLineItem.Product.Price * salesLineItem.Quantity */;
 	}
+
 	private async Task AddProductToSalesLineItem(Product selectedProduct)
 	{
 		product = selectedProduct;
