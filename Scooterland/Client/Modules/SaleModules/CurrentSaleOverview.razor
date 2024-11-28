@@ -6,50 +6,51 @@
 
 <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
-	<div>
+	<div class="two-thirds-width">
 		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem"
-		chosenProduct="@product"/>
+							   chosenProduct="@product" />
 	</div>
-
-	<!-- Anden komponent (fylder 1/3 af bredden) -->
-	@if (currentSale == null)
-	{
-		<p><em>Ingen kunde tilføjet.</em></p>
-	}
-	else
-	{
-		<div>
-			<span class="product-mrp">SaleId:</span>
-			<span class="customer-name">@currentSale.SaleId</span>
-			<span class="product-mrp">Kunde:</span>
-			<span class="product-mrp">@currentSale.Customer.Name</span>
-		</div>
-	}
-
-	@foreach (var item in totalSalesLineItems)
-	{
-		<div class="product-card">
-			<div class="product-info">
-				<p class="product-name">@item.Product.Name</p>
-				<p class="product-mrp">@item.Product.Price</p>
+	<div class="one-third-width">
+		<!-- Anden komponent (fylder 1/3 af bredden) -->
+		@if (currentSale == null)
+		{
+			<p><em>Ingen kunde tilføjet.</em></p>
+		}
+		else
+		{
+			<div>
+				<span class="product-mrp">SaleId:</span>
+				<span class="customer-name">@currentSale.SaleId</span>
+				<span class="product-mrp">Kunde:</span>
+				<span class="product-mrp">@currentSale.Customer.Name</span>
 			</div>
+		}
 
-
-
-			<div class="product-price">
-				<div class="quantity-control">
-					<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
-					<input class="quantity-input" value="@item.Quantity" />
-					<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+		@foreach (var item in totalSalesLineItems)
+		{
+			<div class="product-card">
+				<div class="product-info">
+					<p class="product-name">@item.Product.Name</p>
+					<p class="product-mrp">@item.Product.Price</p>
 				</div>
-				<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
-			</div>
-		</div>
-	}
 
-	<div class="total-price-bottom">
-		<span class="total-price-margin"> Total price: </span>
-		<span> @TotalPrice() </span>
+
+
+				<div class="product-price">
+					<div class="quantity-control">
+						<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
+						<input class="quantity-input" value="@item.Quantity" />
+						<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+					</div>
+					<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+				</div>
+			</div>
+		}
+
+		<div class="total-price-bottom">
+			<span class="total-price-margin"> Total price: </span>
+			<span> @TotalPrice() </span>
+		</div>
 	</div>
 </div>
 
