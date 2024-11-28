@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Scooterland.Server.DataAccess;
+using Scooterland.Server.Migrations;
 using Scooterland.Shared.Models;
+using System.Linq;
 
 namespace Scooterland.Server.Repositories.SaleRepository
 {
@@ -74,8 +76,8 @@ namespace Scooterland.Server.Repositories.SaleRepository
             Sale sale;
             try
             {
-                sale = db.Sales.Include(sale => sale.Customer).FirstOrDefault();
-            }
+                sale = db.Sales.Where(sale => sale.SaleId == id).Include(sale => sale.Customer).FirstOrDefault();
+			}
 			catch
             {
                 sale = new Sale(-1);
