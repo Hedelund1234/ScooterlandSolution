@@ -79,14 +79,39 @@
 		totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
 	}
 
-	public void OnMinusClicked(SalesLineItem salesLineItem)
+	public async Task OnMinusClicked(SalesLineItem salesLineItem)
 	{
-		salesLineItem.Quantity--;
+		if (salesLineItem.Quantity > 0)
+		{
+			salesLineItem.Quantity--;
+			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
+
+			if (statusCode == 204) // No Content (Success)
+			{
+				StateHasChanged(); // Update the UI
+			}
+			else
+			{
+				
+				Console.WriteLine($"Failed to update: Status Code {statusCode}");
+			}
+		}
 	}
 
-	public void OnPlusClicked(SalesLineItem salesLineItem)
+	public async Task OnPlusClicked(SalesLineItem salesLineItem)
 	{
 		salesLineItem.Quantity++;
+		int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
+
+		if (statusCode == 204) // No Content (Success)
+		{
+			StateHasChanged(); // Update the UI
+		}
+		else
+		{
+			
+			Console.WriteLine($"Failed to update: Status Code {statusCode}");
+		}
 	}
 
 	public decimal TotalPrice()
