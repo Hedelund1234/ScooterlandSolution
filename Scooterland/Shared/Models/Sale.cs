@@ -17,7 +17,7 @@ namespace Scooterland.Shared.Models
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public decimal? Payment { get; set; }
-		public List<SalesLineItem>? SalesLineItem { get; set; } = new List<SalesLineItem>();
+		//public List<SalesLineItem>? SalesLineItem { get; set; } = new List<SalesLineItem>();
 
 		public int? SpecializationId { get; set; }
 		public Specialization? Specialization { get; set; }

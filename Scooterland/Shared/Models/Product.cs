@@ -17,7 +17,7 @@ namespace Scooterland.Shared.Models
 		public string Type { get; set; }
 		[Range(minimum:0,maximum:System.Int32.MaxValue, ErrorMessage = "Prisen skal være positiv!")]
 		public decimal Price { get; set; }
-		public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
+		//public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
 
 		//Tom contructor til EF
 		public Product()
