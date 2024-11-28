@@ -72,11 +72,11 @@ else
 	private async Task OnRowClicked(Product product)
 	{
 		//chosenProduct = filteredProducts.FirstOrDefault(p => p.ProductId == productId);
-
+		
 		// Send valgt produkt tilbage til parent-komponenten
-		 if (chosenProduct != null)
+		 if (product != null)
 		{
-			await OnAddedProduct.InvokeAsync(chosenProduct);
+			await OnAddedProduct.InvokeAsync(product);
 		}
 	}	
 
