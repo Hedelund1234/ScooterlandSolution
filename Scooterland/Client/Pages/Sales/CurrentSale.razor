@@ -39,8 +39,11 @@
 	[Inject]
 	public ISaleService SaleService { get; set; }
 
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
+
 	Customer customer;
-	int SaleId;
 
 	private async Task GoToInvoicePage()
 	{

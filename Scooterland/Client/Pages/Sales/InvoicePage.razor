@@ -1,9 +1,25 @@
 ﻿@using Scooterland.Client.Modules.SaleModules;
+@using Scooterland.Client.Services.SaleServices;
+@using Scooterland.Shared.Models;
 @page "/sales/invoice"
 <h3>InvoicePage</h3>
 
 <InvoiceCurrentOverview/>
 
 @code {
+	[Inject]
+	public ISaleService SaleService { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
+
+	private Sale sale;
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Brug SaleId til at hente salgsoplysninger
+		sale = await SaleService.GetSale(SaleId);
+	}
 
 }
