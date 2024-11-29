@@ -1,0 +1,51 @@
+﻿.invoice-container {
+    width: 38%; /* Fylder 1/3 af siden */
+    border: 2px solid black; /* Rammen */
+    padding: 15px;
+    margin: 0; /* Ingen centreret margin */
+    box-sizing: border-box; /* Inkluder padding i bredden */
+    float: left; /* Sørger for, at containeren flytter sig helt til venstre */
+    border-radius: 30px;
+    margin-bottom: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between; /* Adskiller venstre og højre side */
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+    white-space: nowrap; /* Forhindrer datoen i at bryde til en ny linje */
+}
+
+.divider {
+    height: 1px; /* Tykkelsen af linjen */
+    background-color: black; /* Farve på linjen */
+    margin: 10px 0px; /* Afstand fra siderne og fra øvrige elementer */
+}
+.product-container {
+    border: 1px solid black; /* Rammen */
+    padding: 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.invoice-table {
+    width: 100%; /* Tabellen fylder hele bredden af containeren */
+}
+
+    .invoice-table td {
+        padding: 5px; /* Lidt afstand i cellerne */
+        text-align: right; /* Venstrestillet tekst i cellerne */
+    }
+
+.fixed-field {
+    text-decoration: underline; /* Understreger tallet */
+    padding-left: 0px; /* Lidt afstand til venstre */
+    padding-right: 5px; /* Lidt afstand til højre */
+}

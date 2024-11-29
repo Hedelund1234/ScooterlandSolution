@@ -1,0 +1,183 @@
+﻿@using Scooterland.Shared.Models;
+
+<h1>Faktura</h1>
+<div class="invoice-container">
+	<div class="header">
+		<div class="left">
+			<div>Scooterland</div>
+			<div>Scooterlandgade 23</div>
+			<div>Vejle 7100</div>
+			<div>22 00 99 00</div>
+			<div>scooterland@Scooterland.dk</div>
+		</div>
+		<div class="right">
+			<div>Startdato: @sale.Sale.StartDate?.ToString("dd-MM-yyyy")</div>
+			<br />
+			<div>Slutdato: @sale.Sale.EndDate?.ToString("dd-MM-yyyy")</div>
+		</div>
+	</div>
+	<br />
+	<h3>Kunde oplysninger</h3>
+	<div class="divider"></div>
+	<div class="header">
+		<div class="left">
+			<div>@sale.Sale.Customer.Name</div>
+			<div>@sale.Sale.Customer.Address</div>
+			<div>@sale.Sale.Customer.Phonenumber</div>
+			<div>@sale.Sale.Customer.Email</div>
+		</div>
+		<div class="right">
+			<div>Kundenummer: @sale.Sale.Customer.CustomerId</div>
+		</div>
+	</div>
+	<br />
+	<div class="product-container">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Produkt id</th>
+					<th>Navn</th>
+					<th>Type</th>
+					<th>Antal</th>
+					<th>Pris</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in produkter)
+				{
+					<tr>
+						<td class="cell">@item.ProductId</td>
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Type</td>
+						@if (item.ProductId == 200)
+						{
+							<td class="cell">2</td>
+						}
+						else if (item.ProductId == 201)
+						{
+							<td class="cell">4</td>
+						}
+						else if (item.ProductId == 202)
+						{
+							<td class="cell">1</td>
+						}
+
+						<td class="cell">@item.Price kr.</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="right">
+		<table class="invoice-table">
+			<tr>
+				<td>Total før rabat:</td>
+				<td><span class="fixed-field">@TotalPrice()</span></td>
+			</tr>
+			<tr>
+				<td>Rabat:</td>
+				<td><span class="fixed-field">@discount %</span></td>
+			</tr>
+			<tr>
+				<td>At betale:</td>
+				<td><span class="fixed-field">@TotalPriceAfterDiscount()</span></td>
+			</tr>
+		</table>
+	</div>
+</div>
+@code
+{
+	decimal discount = 2;
+	public decimal TotalPrice()
+	{
+		decimal totalPrice = 0;
+		decimal quanitiy = 0;
+		foreach (var item in produkter)
+		{
+			if (item.ProductId == 200)
+			{
+				quanitiy = 2;
+			}
+			else if (item.ProductId == 201)
+			{
+				quanitiy = 4;
+			}
+			else if (item.ProductId == 202)
+			{
+				quanitiy = 1;
+			}
+			totalPrice += item.Price * quanitiy;
+		}
+		return totalPrice;
+	}
+
+	public decimal TotalPriceAfterDiscount()
+	{
+		decimal totalPrice = TotalPrice();
+		decimal priceAfterDiscount = totalPrice - (totalPrice / 100 * discount);
+		return priceAfterDiscount;
+	}
+
+
+	SalesLineItem sale = new SalesLineItem
+		{
+			Sale = new Sale
+			{
+				SaleId = 100,
+				StartDate = new DateTime(2024, 11, 20),
+				EndDate = DateTime.Now,
+				Payment = 2000,
+				Customer = new Customer
+				{
+					CustomerId = 101,
+					Name = "Jesper Andersen",
+					Address = "Jespervej 199",
+					Email = "jesper@jesper.dk",
+					Phonenumber = "12312312"
+				},
+				Employee = new Employee
+				{
+					EmployeeId = 102,
+					Name = "Tonni Bonde",
+					Role = "Mekaniker"
+				},
+
+			},
+			Product = new Product
+			{
+				ProductId = 200,
+				Name = "Olie",
+				Price = 500,
+				Type = "Vare"
+			},
+
+			Quantity = 3,
+			Discount = 0
+		};
+
+	List<Product> produkter = new List<Product>
+	{
+		new Product
+		{
+			ProductId = 200,
+			Name = "Olie",
+			Price = 500.00M,
+			Type = "Vare"
+		}, new Product
+		{
+			ProductId = 201,
+			Name = "Dæk",
+			Price = 1200.00M,
+			Type = "Vare"
+		}, new Product
+		{
+			ProductId = 202,
+			Name = "Bremsevæske",
+			Price = 300.00M,
+			Type = "Vare"
+		}
+	};
+
+}
+

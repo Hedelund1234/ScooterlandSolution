@@ -2,6 +2,7 @@
 @using Scooterland.Client.Modules.SaleModules;
 @using Scooterland.Shared.Models;
 @using Scooterland.Client.Services.CustomerServices;
+@using Scooterland.Client.Services.SaleServices;
 @page "/sales/current-sale"
 
 @* <div class="flex-container">
@@ -15,7 +16,7 @@
 		<CurrentSaleOverview Customer="@customer" />
 	</div>
 </div> *@
-<CurrentSaleOverview/>
+<CurrentSaleOverview />
 
 <button class="btn btn-primary" @onclick="GoToPreviousPage">
 	Tilbage SKAL SLETTES
@@ -23,8 +24,8 @@
 
 
 <div class="flex-box">
-	<button class="btn btn-primary">
-		Opret salg
+	<button class="btn btn-primary" @onclick="GoToInvoicePage">
+		Gå til betaling
 	</button>
 </div>
 
@@ -35,11 +36,15 @@
 	[Inject]
 	public ICustomerService Service { get; set; }
 
+	[Inject]
+	public ISaleService SaleService { get; set; }
+
 	Customer customer;
+	int SaleId;
 
-	private void AddProductToSalesLineItem()
+	private async Task GoToInvoicePage()
 	{
-
+		Navigation.NavigateTo($"/sales/invoice?SaleId={SaleId}");
 	}
 
 	private Product Product;
