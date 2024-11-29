@@ -92,7 +92,8 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		currentSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).Where(x => x.SaleId == SaleId).ToList();
+		//Det er så vidt jeg kan se linjen nedenunder der giver reload fejl
+		currentSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).Where(x => x.SaleId == SaleId).ToList(); 
 		currentSale = await SaleService.GetSale(SaleId);
 	}
 
