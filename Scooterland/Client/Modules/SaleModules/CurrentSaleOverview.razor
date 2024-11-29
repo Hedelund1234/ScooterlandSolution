@@ -167,9 +167,7 @@
 	public async Task SaveKommentar()
 	{		
 			currentSale.Kommentar = noteInput;
-
-			int statusCode = await SaleService.UpdateSale(currentSale);
-			
+			await SaleService.UpdateSale(currentSale);			
 			StateHasChanged();		
 	}
 
