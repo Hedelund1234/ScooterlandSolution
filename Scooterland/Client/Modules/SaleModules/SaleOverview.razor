@@ -34,16 +34,16 @@ else
 		<tbody>
 			@foreach (var item in filteredSales)
 			{
-				<tr @ondblclick="() => HandleRowClick(item)" @onclick="()=>AssignMekanikerToSale(item)">
+				<tr @ondblclick="() => HandleRowClick(item)">
 					<td class="cell">@item.SaleId</td>
 					<td class="cell">@item.Customer.Name</td>
 					@if (item.Employee is null)
 					{
-						<td class="cell"></td>
+						<td @onclick="()=>AssignMekanikerToSale(item)" class="cell"></td>
 					}
 					else
 					{
-						<td class="cell">@item.Employee.Name</td>
+						<td @onclick="()=>AssignMekanikerToSale(item)" class="cell">@item.Employee.Name</td>
 					}
 					@if (item.Specialization is null)
 					{
@@ -73,16 +73,16 @@ else
 @if (showEmployeeDropdown)
 {
 	<div class="employee-dropdown">
-		<select @bind="selectedEmployeeId">
+		<select class="employee-dropdown" @bind="selectedEmployeeId">
 			<option value="">-- Vælg mekaniker --</option>
 			@foreach (var emp in employeeList)
 			{
 				<option value="@emp.EmployeeId">@emp.Name</option>
 			}
 		</select>
-		<button @onclick="UpdateSaleWithMekaniker">Gem</button>
-		<button @onclick="CancelAssignEmployee">Annuller</button>
-		<button @onclick="RemoveMekanikerFromSale">Fjern</button>
+		<button class="employee-btn" @onclick="UpdateSaleWithMekaniker">Gem</button>
+		<button class="employee-btn" @onclick="CancelAssignEmployee">Annuller</button>
+		<button class="employee-btn" @onclick="RemoveMekanikerFromSale">Fjern</button>
 	</div>
 }
 
