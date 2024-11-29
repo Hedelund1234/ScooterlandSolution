@@ -48,24 +48,41 @@ namespace Scooterland.Server.Repositories.SaleRepository
 
 		public bool UpdateSale(Sale sale)
 		{
+			//var db = new ScooterlandDbContext();
+			//Sale foundSale = db.Sales.Where(x => x.SaleId == sale.SaleId).FirstOrDefault();
+
+			//var originalSale = foundSale;
+
+			//foundSale.EndDate = sale.EndDate;
+			//foundSale.Payment = sale.Payment;
+			//foundSale.Kommentar = sale.Kommentar;
+			//db.SaveChanges();
+
+			//if (originalSale.EndDate != foundSale.EndDate ||
+			//	originalSale.Payment != foundSale.Payment || originalSale.Kommentar != foundSale.Kommentar)
+			//{
+			//	return true;
+			//}
+			//else
+			//{
+			//	return false;
+			//}
+
+			// Fik en fejl kode fra SaleController linje 81 selvom metoden virker, men som jeg ser det er vores problem vores OR checks.
+			// originalSale og foundSale vil altid have de samme data, så vå får altid en false retur
 			var db = new ScooterlandDbContext();
 			Sale foundSale = db.Sales.Where(x => x.SaleId == sale.SaleId).FirstOrDefault();
 
-			var originalSale = foundSale;
+			if (foundSale == null)
+				return false;
 
 			foundSale.EndDate = sale.EndDate;
 			foundSale.Payment = sale.Payment;
-			db.SaveChanges();
+			foundSale.Kommentar = sale.Kommentar;
 
-			if (originalSale.EndDate != foundSale.EndDate ||
-				originalSale.Payment != foundSale.Payment)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			db.SaveChanges();  //Hvis save lykkedes, returner true. 
+
+			return true;
 		}
 
 
