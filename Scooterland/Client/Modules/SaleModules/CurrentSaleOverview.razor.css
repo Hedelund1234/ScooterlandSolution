@@ -13,6 +13,9 @@
 /* Komponent, der fylder 1/3 af bredden */
 .one-third-width {
     width: 33.33%;
+    display: flex;
+    flex-direction: column; /* Stack the content vertically */
+    align-items: flex-start;
 }
 
 
@@ -96,3 +99,42 @@
     border-radius: 4px;
     margin: 0 10px; /* Lidt mellemrum mellem input og knapperne */
 }
+
+.note-box-container {
+    width: 100%;
+    margin-top: 1rem; /* Tilføjer plads mellem the forrige container og note-box */
+    align-self: flex-end;
+}
+
+.note-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical; 
+}
+
+.gem-button {
+    background-color: darkgrey; /* Green color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.5rem; /* Add space above the button */
+    
+}
+
+    .gem-button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+
+    .gem-button:active {
+        transform: scale(0.98); /* Slight shrink when clicked */
+    }
+
+
+
+

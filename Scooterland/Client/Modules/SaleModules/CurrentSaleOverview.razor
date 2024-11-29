@@ -4,6 +4,7 @@
 @using Scooterland.Client.Services.SalesLineItemServices
 @using Scooterland.Client.Modules.ProductModules
 
+<h3>CurrentSaleOverview - Header Slettes eller andet navn</h3>
 <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
 	<div class="two-thirds-width">
@@ -50,9 +51,18 @@
 		<div class="total-price-bottom">
 			<span class="total-price-margin"> Total price: </span>
 			<span> @TotalPrice() </span>
+		</div>		
+
+
+		<div class="note-box-container">
+			<label for="noteInput">Kommentar:</label>
+			<textarea id="noteInput" class="note-input" @bind="noteInput"></textarea>
 		</div>
+		<button class="gem-button" @onclick="SaveKommentar">Gem</button>
 	</div>
 </div>
+
+
 
 
 @code {
@@ -62,6 +72,8 @@
 
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
+
+	private string noteInput;
 
 	[Inject]
 	public ICustomerService CustomerService { get; set; }
@@ -76,6 +88,10 @@
 	protected override async Task OnInitializedAsync()
 	{
 		currentSale = await SaleService.GetSale(SaleId);
+		if (currentSale.Kommentar != null)
+		{
+			noteInput = currentSale.Kommentar;
+		}
 		UpdateSalesLineItems();
 	}
 
@@ -89,15 +105,13 @@
 	public async Task OnMinusClicked(SalesLineItem salesLineItem)
 	{
 		// Only decrement if quantity is greater than 0
-		if (salesLineItem.Quantity > 0)
+		if (salesLineItem.Quantity > 1)
 		{
 			salesLineItem.Quantity--;
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 			UpdateSalesLineItems();
 		}
-
-		// If quantity is now 0, delete the item
-		if (salesLineItem.Quantity == 0)
+		else
 		{
 			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId); 
 			UpdateSalesLineItems();
@@ -149,4 +163,12 @@
 		}
 
 	}
+
+	public async Task SaveKommentar()
+	{		
+			currentSale.Kommentar = noteInput;
+			await SaleService.UpdateSale(currentSale);			
+			StateHasChanged();		
+	}
+
 }
