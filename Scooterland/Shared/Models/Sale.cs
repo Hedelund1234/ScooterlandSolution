@@ -21,9 +21,11 @@ namespace Scooterland.Shared.Models
 		public int? SpecializationId { get; set; }
 		public Specialization? Specialization { get; set; }
 
+        public string? Kommentar { get; set; }
 
-		//Tom contructor til EF
-		public Sale()
+
+        //Tom contructor til EF
+        public Sale()
         {
             
         }
