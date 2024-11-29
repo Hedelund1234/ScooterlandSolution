@@ -165,24 +165,12 @@
 	}
 
 	public async Task SaveKommentar()
-	{
-		
-			Console.WriteLine($"Before update - SaleId: {currentSale.SaleId}, Kommentar: {noteInput}");
+	{		
 			currentSale.Kommentar = noteInput;
 
 			int statusCode = await SaleService.UpdateSale(currentSale);
-
-			if (statusCode == 200)
-			{
-				Console.WriteLine("Kommentar saved successfully!");
-			}
-			else
-			{
-				Console.WriteLine($"Failed to save Kommentar. Status code: {statusCode}");
-			}
-
-			StateHasChanged();
-		
+			
+			StateHasChanged();		
 	}
 
 }
