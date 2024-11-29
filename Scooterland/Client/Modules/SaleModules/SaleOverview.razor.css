@@ -104,3 +104,10 @@
         cursor: pointer; /* Skift cursor til hånd */
         border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
     }
+
+
+
+
+.employee-dropdown button:active {
+    transform: scale(0.98); /* Slight shrink effect when clicked */
+}

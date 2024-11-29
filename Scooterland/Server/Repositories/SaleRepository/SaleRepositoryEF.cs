@@ -79,6 +79,7 @@ namespace Scooterland.Server.Repositories.SaleRepository
 			foundSale.EndDate = sale.EndDate;
 			foundSale.Payment = sale.Payment;
 			foundSale.Kommentar = sale.Kommentar;
+			foundSale.EmployeeId = sale.EmployeeId;
 
 			db.SaveChanges();  //Hvis save lykkedes, returner true. 
 
