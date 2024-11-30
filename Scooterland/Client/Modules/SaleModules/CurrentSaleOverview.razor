@@ -51,7 +51,7 @@
 		<div class="total-price-bottom">
 			<span class="total-price-margin"> Total price: </span>
 			<span> @TotalPrice() </span>
-		</div>		
+		</div>
 
 
 		<div class="note-box-container">
@@ -113,7 +113,7 @@
 		}
 		else
 		{
-			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId); 
+			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId);
 			UpdateSalesLineItems();
 		}
 	}
@@ -165,10 +165,9 @@
 	}
 
 	public async Task SaveKommentar()
-	{		
-			currentSale.Kommentar = noteInput;
-			await SaleService.UpdateSale(currentSale);			
-			StateHasChanged();		
+	{
+		currentSale.Kommentar = noteInput;
+		await SaleService.UpdateSale(currentSale);
+		StateHasChanged();
 	}
-
 }

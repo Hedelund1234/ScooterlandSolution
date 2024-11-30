@@ -13,9 +13,9 @@
 			<div>scooterland@Scooterland.dk</div>
 		</div>
 		<div class="right">
-			<div>Startdato: @currentSale.StartDate?.ToString("dd-MM-yyyy")</div>
+			<div>Startdato: @currentSale?.StartDate?.ToString("dd-MM-yyyy")</div>
 			<br />
-			<div>Slutdato: @currentSale.EndDate?.ToString("dd-MM-yyyy")</div>
+			<div>Slutdato: @currentSale?.EndDate?.ToString("dd-MM-yyyy")</div>
 		</div>
 	</div> 
 	<br />
@@ -23,13 +23,13 @@
 	<div class="divider"></div>
 	<div class="header">
 		<div class="left">
-			<div>@currentSale.Customer.Name</div>
-			<div>@currentSale.Customer.Address</div>
-			<div>@currentSale.Customer.Phonenumber</div>
-			<div>@currentSale.Customer.Email</div>
+			<div>@currentSale?.Customer?.Name</div>
+			<div>@currentSale?.Customer?.Address</div>
+			<div>@currentSale?.Customer?.Phonenumber</div>
+			<div>@currentSale?.Customer?.Email</div>
 		</div>
 		<div class="right">
-			<div>Kundenummer: @currentSale.Customer.CustomerId</div>
+			<div>Kundenummer: @currentSale?.Customer?.CustomerId</div>
 		</div>
 	</div> 
 	<br />
@@ -50,12 +50,12 @@
 				@foreach (var salesLineItem in currentSalesLineItems)
 				{
 					<tr>
-						<td class="cell">@salesLineItem.ProductId</td>
-						<td class="cell">@salesLineItem.Product.Name</td>
-						<td class="cell">@salesLineItem.Product.Type</td>
-						<td class="cell">@salesLineItem.Quantity</td>
+						<td class="cell">@salesLineItem?.ProductId</td>
+						<td class="cell">@salesLineItem?.Product?.Name</td>
+						<td class="cell">@salesLineItem?.Product?.Type</td>
+						<td class="cell">@salesLineItem?.Quantity</td>
 						<td class="cell">@Math.Round(salesLineItem.Discount, 0)%</td>
-						<td class="cell">@salesLineItem.Product.Price kr.</td>
+						<td class="cell">@salesLineItem?.Product?.Price kr.</td>
 					</tr>
 				}
 			</tbody>
@@ -85,12 +85,12 @@
 	public int SaleId { get; set; }
 
 	[Inject]
-	public ISaleService SaleService { get; set; }
+	public ISaleService? SaleService { get; set; }
 	[Inject]
-	public ISalesLineItemService SalesLineItemService { get; set; }
+	public ISalesLineItemService? SalesLineItemService { get; set; }
 
-	private Sale currentSale;
-	private List<SalesLineItem> currentSalesLineItems;
+	private Sale? currentSale;
+	private List<SalesLineItem>? currentSalesLineItems = new List<SalesLineItem>();
 
 	protected override async Task OnInitializedAsync()
 	{

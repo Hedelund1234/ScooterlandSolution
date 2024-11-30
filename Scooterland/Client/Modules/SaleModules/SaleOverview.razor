@@ -151,7 +151,6 @@ else
 		}
 	}
 
-
 	private async Task UpdateSaleWithMekaniker()
 	{
 		// Hvis der er et aktuelt Sale og en valgt mekaniker, så fortsætter opdateringen.
@@ -189,12 +188,7 @@ else
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
 			sales = (await Service.GetAllSales()).ToList();		
-			
-
 		}
 		CancelAssignEmployee();
-
 	}
-
-
 }
