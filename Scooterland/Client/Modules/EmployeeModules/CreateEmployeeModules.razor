@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.EmployeeServices
+@using Scooterland.Client.Services.SpecializationServices
 @page "/administration/employees/create-employee"
 
 <h3>Opret Ny Ansat</h3>
@@ -7,48 +8,113 @@
 
 
 <EditForm Model="@EmployeeModel"
-          OnValidSubmit="@HandleValidSubmit"
-          OnInvalidSubmit="@HandleInvalidSubmit"
-          class="row p-3">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="col-md-6 mb-3">
-        <label for="Name">Navn</label>
-        <InputText id="Name" @bind-Value="EmployeeModel.Name" class="form-control" />
-        <ValidationMessage For="@(() => EmployeeModel.Name)" />
-    </div>    
-    <div class="col-md-2 mb-3">
-        <label for="Role">Role</label>
-        <InputText id="Role" @bind-Value="EmployeeModel.Role" class="form-control" />
-        <ValidationMessage For="@(() => EmployeeModel.Role)" />
-    </div>
+		  OnValidSubmit="@HandleValidSubmit"
+		  OnInvalidSubmit="@HandleInvalidSubmit"
+		  class="row p-3">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
 
-    <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Tilføj</button>
-    </div>
+	<div class="col-md-6 mb-3">
+		<label for="Name">Navn</label>
+		<InputText id="Name" @bind-Value="EmployeeModel.Name" class="form-control" />
+		<ValidationMessage For="@(() => EmployeeModel.Name)" />
+	</div>
+
+	<div class="col-md-2 mb-3">
+		<label for="Role">Role</label>
+		<InputText id="Role" @bind-Value="EmployeeModel.Role" class="form-control" />
+		<ValidationMessage For="@(() => EmployeeModel.Role)" />
+	</div>
+
+	<div class="col-md-2 mb-3">
+		<label for="Specialization">Specialicering</label>
+		<div class="dropdown">
+			<button class="dropdown-toggle" @onclick="OpenCloseDropdown">
+				@*Åbener og lukker dropdown*@
+				Vælg Specialicering
+			</button>
+			<div class="dropdown-menu @(isDropdownOpen ? "show" : "hide")">
+				@*Giver to muligheder - show og hide - alt efter om isDropdownOpen er false eller true*@
+				@foreach (var option in specializations)
+				{
+					<div class="dropdown-item">
+						<input type="checkbox" id="@option.Brand" @bind="@selectedOptions[option.Brand]" /> @*Et checkbox input som binder til specialicerings brand og som har indbygget bool alt after om checkbox er valgt eller ej*@
+						<label for="@option.Brand">@option.Brand</label> @*Viser specialicerings brand*@
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 mb-3">
+		<button type="submit" class="btn btn-primary">Tilføj</button>
+	</div>
 
 </EditForm>
 
 
 
 @code {
-    [Inject]
-    public IEmployeeService Service { get; set; }
+	[Inject]
+	public IEmployeeService Service { get; set; }
 
-    private int ErrorCode { get; set; } = 0;
+	[Inject]
+	public ISpecializationService SpecializationService { get; set; }
 
-    Employee EmployeeModel = new Employee();
+	private int ErrorCode { get; set; } = 0;
+
+	private bool isDropdownOpen = false;
+
+	Employee EmployeeModel = new Employee();
+
+	private Dictionary<string, bool> selectedOptions = new(); //Dictionary som indeholder en string (specialicerings brand) og en bool (om checkbox er valgt eller ej)
+
+	private List<Specialization> specializations = new List<Specialization>();
 
 
-    private async Task HandleValidSubmit()
-    {
-        ErrorCode = await Service.AddEmployee(EmployeeModel);
+	private async Task HandleValidSubmit()
+	{
+		ErrorCode = await Service.AddEmployee(EmployeeModel);
 
-        Console.WriteLine("Employee added: return code: " + ErrorCode);
-    }
-    private void HandleInvalidSubmit()
-    {
+		Console.WriteLine("Employee added: return code: " + ErrorCode);
+		int employeeId = (await Service.GetAllEmployees()).OrderByDescending(x => x.EmployeeId).FirstOrDefault().EmployeeId;
 
-    }
+		foreach (var option in selectedOptions)
+		{
+			if (option.Value) // Hvis checkbox er valgt
+			{
+				var specialization = specializations.FirstOrDefault(x => x.Brand == option.Key);
+				if (specialization != null)
+				{
+					// await Service.AddEmployeeSpecialization(employeeId, specialization.SpecializationId);
+					//Jeg tænker vi skal have lavet en ny model, og opdateret i interface, ServiceEF, DbContext og muligvis oprette et nyt Repository til EmployeeSpecialization
+					//Databasen er vel opsat til at klare det? Jeg gik i gang men tænkte det var nok bedst hvis alle var med.
+					
+					//Derudover er der lidt et problem med at HandleValidSubmit kører hver gang der pilles ved dropdown, jeg har ikke løst det endnu
 
+				}
+			}
+		}
+	}
+	private void HandleInvalidSubmit()
+	{
+
+	}
+
+	private void OpenCloseDropdown()
+	{
+		isDropdownOpen = !isDropdownOpen;
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		specializations = (await SpecializationService.GetAllSpecialization()).ToList();
+		foreach (var option in specializations)
+		{
+			if (!selectedOptions.ContainsKey(option.Brand))
+			{
+				selectedOptions[option.Brand] = false;
+			}
+		}
+	}
 }
