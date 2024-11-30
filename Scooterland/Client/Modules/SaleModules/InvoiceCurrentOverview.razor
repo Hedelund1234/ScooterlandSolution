@@ -17,7 +17,7 @@
 			<br />
 			<div>Slutdato: @currentSale.EndDate?.ToString("dd-MM-yyyy")</div>
 		</div>
-	</div>
+	</div> 
 	<br />
 	<h3>Kunde oplysninger</h3>
 	<div class="divider"></div>
@@ -31,16 +31,17 @@
 		<div class="right">
 			<div>Kundenummer: @currentSale.Customer.CustomerId</div>
 		</div>
-	</div>
+	</div> 
 	<br />
 	<div class="product-container">
-		<table class="table">
+		  <table class="table">
 			<thead>
 				<tr>
 					<th>Produkt id</th>
 					<th>Navn</th>
 					<th>Type</th>
 					<th>Antal</th>
+					<th>Rabat</th>
 					<th>Pris</th>
 
 				</tr>
@@ -53,11 +54,12 @@
 						<td class="cell">@salesLineItem.Product.Name</td>
 						<td class="cell">@salesLineItem.Product.Type</td>
 						<td class="cell">@salesLineItem.Quantity</td>
+						<td class="cell">@Math.Round(salesLineItem.Discount, 0)%</td>
 						<td class="cell">@salesLineItem.Product.Price kr.</td>
 					</tr>
 				}
 			</tbody>
-		</table>
+		</table>  
 	</div>
 	<div class="right">
 		<table class="invoice-table">
@@ -65,16 +67,16 @@
 				<td>Total før rabat:</td>
 				<td><span class="fixed-field">@TotalPrice() kr.</span></td>
 			</tr>
-			@* <tr>
+			 <tr>
 				<td>Besparelse:</td>
-				<td><span class="fixed-field">@TotalPrice kr.</span></td>
-			</tr> *@
+				<td><span class="fixed-field">@TotalSaved() kr.</span></td>
+			</tr> 
 			<tr>
 				<td>At betale:</td>
 				<td><span class="fixed-field">@TotalPriceAfterDiscount() kr.</span></td>
 			</tr>
 		</table>
-	</div>
+	</div> 
 </div>
 @code
 {
@@ -92,7 +94,6 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		//Det er så vidt jeg kan se linjen nedenunder der giver reload fejl
 		currentSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).Where(x => x.SaleId == SaleId).ToList(); 
 		currentSale = await SaleService.GetSale(SaleId);
 	}
@@ -123,6 +124,6 @@
 			lineTotalPrice -= lineTotalPrice * (saleLineItem.Discount / 100); // Træk rabatten fra
 			totalPriceAfterDiscount += lineTotalPrice;
 		}
-		return totalPriceAfterDiscount;
+		return Math.Round(totalPriceAfterDiscount, 2);
 	}
 }
