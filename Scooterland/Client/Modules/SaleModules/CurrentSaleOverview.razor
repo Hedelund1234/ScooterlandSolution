@@ -4,7 +4,6 @@
 @using Scooterland.Client.Services.SalesLineItemServices
 @using Scooterland.Client.Modules.ProductModules
 
-<h3>CurrentSaleOverview - Header Slettes eller andet navn</h3>
 <div class="flex-container">
 	<!-- Første komponent (fylder 2/3 af bredden) -->
 	<div class="two-thirds-width">
@@ -27,26 +26,37 @@
 			</div>
 		}
 
-		@foreach (var item in totalSalesLineItems)
-		{
-			<div class="product-card">
-				<div class="product-info">
-					<p class="product-name">@item.Product.Name</p>
-					<p class="product-mrp">@item.Product.Price</p>
-				</div>
+		<div class="scrollable-box">
+			@if (totalSalesLineItems != null && totalSalesLineItems.Any())
+			{
+				@foreach (var item in totalSalesLineItems)
+				{
+					<div class="product-card">
+						<div class="product-info">
+							<p class="product-name">@item.Product.Name</p>
+							<p class="product-mrp">@item.Product.Price</p>
+						</div>
 
-
-
-				<div class="product-price">
-					<div class="quantity-control">
-						<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
-						<input class="quantity-input" value="@item.Quantity" />
-						<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+						<div class="product-price">
+							<div class="quantity-control">
+								<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
+								<input class="quantity-input" value="@item.Quantity" />
+								<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
+							</div>
+							<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+						</div>
 					</div>
-					<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+				}
+			}
+			else
+			{
+				<div class="empty-message">
+					Ingen varer tilføjet endnu.
 				</div>
-			</div>
-		}
+			}
+		</div>
+
+
 
 		<div class="total-price-bottom">
 			<span class="total-price-margin"> Total price: </span>
@@ -132,7 +142,11 @@
 		{
 			totalPrice += item.Product.Price * item.Quantity;
 		}
-		return totalPrice;
+		if (totalPrice != 0)
+		{
+			return totalPrice;
+		}
+		return 0.00M;
 	}
 
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)

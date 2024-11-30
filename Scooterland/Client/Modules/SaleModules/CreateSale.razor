@@ -78,21 +78,28 @@
 
 	private async Task GoToNextPage()
 	{
-		try
+		if (selectedCustomer != null)
 		{
-			customers = (await CustomerService.GetAllCustomers()).ToList();
-			Customer dbCustomer = customers.FirstOrDefault(c => c.Phonenumber == selectedCustomer.Phonenumber);
+			try
+			{
+				customers = (await CustomerService.GetAllCustomers()).ToList();
+				Customer dbCustomer = customers.FirstOrDefault(c => c.Phonenumber == selectedCustomer.Phonenumber);
 
-			currentSale.CustomerId = dbCustomer.CustomerId;
-			currentSale.StartDate = DateTime.Now;
-			await SaleService.AddSale(currentSale);
+				currentSale.CustomerId = dbCustomer.CustomerId;
+				currentSale.StartDate = DateTime.Now;
+				await SaleService.AddSale(currentSale);
 
-			saleList = (await SaleService.GetAllSales()).ToList();
-			Sale saleToTransfer = saleList.FirstOrDefault(s => s.CustomerId == currentSale.CustomerId && s.StartDate == currentSale.StartDate);
-			Navigation.NavigateTo($"/sales/current-sale?SaleId={saleToTransfer.SaleId}");
+				saleList = (await SaleService.GetAllSales()).ToList();
+				Sale saleToTransfer = saleList.FirstOrDefault(s => s.CustomerId == currentSale.CustomerId && s.StartDate == currentSale.StartDate);
+				Navigation.NavigateTo($"/sales/current-sale?SaleId={saleToTransfer.SaleId}");
 
+			}
+			catch
+			{
+
+			}
 		}
-		catch
+		else
 		{
 			
 		}

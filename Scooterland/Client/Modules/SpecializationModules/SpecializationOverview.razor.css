@@ -8,7 +8,7 @@
 
 .cell-input {
     text-align: center; /* Centrer tekst i inputfeltet */
-    width: 40%; /* Sørg for, at input ikke overlapper knapperne */
+    width: auto; /* Sørg for, at input ikke overlapper knapperne */
 }
 
 .button-container {
@@ -16,6 +16,7 @@
     top: 50%; /* Centrer knapperne vertikalt */
     right: 5px; /* Placér knapperne tæt på cellens højre kant */
     transform: translateY(-50%); /* Juster vertikalt for perfekt centrering */
+    flex-wrap: wrap;
 }
 
 /* Knap-styling */
@@ -24,6 +25,14 @@
     background: none;
     font-size: 15px;
 }
+    .edit-button:hover {
+        transform: scale(1.3);
+        transition-duration: 0.5s;
+        border-color: none;
+        border-radius: 100px;
+        background-color: lightgray;
+        opacity: 0.9;
+    }
 
 .btn-save {
     background-color: #28a745;
@@ -73,6 +82,7 @@
 .table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
     .table th, .table td {

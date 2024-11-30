@@ -18,6 +18,23 @@
     align-items: flex-start;
 }
 
+.empty-message {
+    margin-top: 5rem;
+    margin-bottom: auto;
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+.scrollable-box {
+    width: 400px; /* Fast bredde */
+    height: 300px; /* Fast højde */
+    border: 1px solid #ccc; /* Ramme */
+    border-radius: 8px; /* Bløde hjørner */
+    padding: 1px; /* Indre afstand */
+    overflow-y: auto; /* Aktiver lodret scroll, hvis indholdet overstiger højden */
+    background-color: #f9f9f9; /* Baggrundsfarve */
+}
 
 .total-price-margin {
     margin-right: 9rem;
