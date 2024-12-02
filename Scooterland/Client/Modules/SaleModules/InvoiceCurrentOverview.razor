@@ -54,7 +54,7 @@
 						<td class="cell">@salesLineItem?.Product?.Name</td>
 						<td class="cell">@salesLineItem?.Product?.Type</td>
 						<td class="cell">@salesLineItem?.Quantity</td>
-						<td class="cell">@Math.Round(salesLineItem.Discount, 0)%</td>
+						<td class="cell">@(salesLineItem.Discount)%</td>
 						<td class="cell">@salesLineItem?.Product?.Price kr.</td>
 					</tr>
 				}

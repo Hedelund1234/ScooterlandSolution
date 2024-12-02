@@ -43,7 +43,19 @@
 								<input class="quantity-input" value="@item.Quantity" />
 								<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
 							</div>
-							<span class="price-discount">Price: @TotalLineItemPrice(item)</span>
+							<div class="discount-input">
+								<div class="input-container">
+								<label for="discount">Rabat:</label>
+									<input id="discount" type="number"
+										   @bind="item.Discount"
+										   @bind:event="oninput"
+										   @onchange="() => SaveDiscount(item)"
+										   inputmode="numeric"
+										   min="0" max="100" step="1" />
+									<span class="percentage-symbol">%</span>
+								</div>
+							</div>
+							<span class="price-discount">Pris: @TotalLineItemPrice(item)</span>
 						</div>
 					</div>
 				}
@@ -140,19 +152,34 @@
 		decimal totalPrice = 0;
 		foreach (var item in totalSalesLineItems)
 		{
-			totalPrice += item.Product.Price * item.Quantity;
+			if (item.Discount > 0)
+			{
+				// ?? null-coalescing operator: giver os 0 som default værdi hvis PriceAfterDiscount(item) er null.
+				totalPrice += (PriceAfterDiscount(item) ?? 0); // pris med rabat
+			}
+			else
+			{
+				totalPrice += item.Product.Price * item.Quantity; // normalpris
+			}
 		}
-		if (totalPrice != 0)
-		{
-			return totalPrice;
-		}
-		return 0.00M;
+		return totalPrice;
 	}
 
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
 	{
-		decimal totalPrice = 0;
-		return totalPrice = salesLineItem.Product.Price * salesLineItem.Quantity;
+		decimal price;
+
+		if (salesLineItem.Discount > 0)
+		{
+			// ?? null-coalescing operator: giver os 0 som default værdi hvis PriceAfterDiscount(item) er null.
+			price = PriceAfterDiscount(salesLineItem) ?? 0; // rabatpris
+		}
+		else
+		{
+			price = salesLineItem.Product.Price * salesLineItem.Quantity; // normalpris
+		}
+
+		return price;
 	}
 
 	private async Task AddProductToSalesLineItem(Product selectedProduct)
@@ -184,4 +211,37 @@
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}
+
+	public decimal? PriceAfterDiscount(SalesLineItem salesLineItem)
+	{
+		//Sikrer at rabatten ikke overstiger 100% så vi ikke får en negativ pris. 
+		if (salesLineItem.Discount > 100)
+		{
+			salesLineItem.Discount = 100;
+		}
+		//Udregner rabatten som en brøkdel af prisen. For eksempel: et produkt koster 100 kr. med 10% rabat: 
+		//100 * (10/100) = 10. Dette betyder en rabat på 10 kr.
+		decimal? discountAmount = salesLineItem.Product.Price * (salesLineItem.Discount / 100M);
+		//Beregner den samlede pris efter rabatten ved at trække rabatten fra og gange med antallet af produkter.
+		decimal? discountedPrice = (salesLineItem.Product.Price - discountAmount) * salesLineItem.Quantity;
+
+		//Tjekker den ikke er null og returnerer resultatet afrundet til 2 decimaler. 
+		if (discountedPrice.HasValue)
+		{
+			return Math.Round(discountedPrice.Value, 2);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public async Task SaveDiscount(SalesLineItem salesLineItem)
+	{
+
+		await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
+		UpdateSalesLineItems();
+	}
+
+
 }

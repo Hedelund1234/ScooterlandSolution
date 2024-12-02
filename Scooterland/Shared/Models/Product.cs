@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace Scooterland.Shared.Models
 		[MaxLength(30, ErrorMessage = "Type må maksimalt være 30 anslag lang!")]
 		public string Type { get; set; }
 		[Range(minimum:0,maximum:System.Int32.MaxValue, ErrorMessage = "Prisen skal være positiv!")]
+		[Column(TypeName = "decimal(18,2)")]
 		public decimal Price { get; set; }
 		//public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
 
