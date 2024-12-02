@@ -11,20 +11,21 @@ namespace Scooterland.Shared.Models
 	{
 		public int SaleId { get; set; }
 		public int CustomerId { get; set; }
-		public Customer Customer { get; set; }
-		public int EmployeeId { get; set; }
-		public Employee Employee { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
-		public decimal Payment { get; set; }
-		public List<SalesLineItem> SalesLineItem { get; set; } = new List<SalesLineItem>();
+		public Customer? Customer { get; set; }
+		public int? EmployeeId { get; set; }
+		public Employee? Employee { get; set; }
+		public DateTime? StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
+		public bool? Payment { get; set; }
+		//public List<SalesLineItem>? SalesLineItem { get; set; } = new List<SalesLineItem>();
+		public int? SpecializationId { get; set; }
+		public Specialization? Specialization { get; set; }
 
-		public int SpecializationId { get; set; }
-		public Specialization Specialization { get; set; }
+        public string? Kommentar { get; set; }
 
 
-		//Tom contructor til EF
-		public Sale()
+        //Tom contructor til EF
+        public Sale()
         {
             
         }
@@ -33,7 +34,5 @@ namespace Scooterland.Shared.Models
         {
             this.SaleId = id;
         }
-
-
-    }
+	}
 }

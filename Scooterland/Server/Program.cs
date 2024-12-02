@@ -19,8 +19,8 @@ builder.Services.AddScoped<ISaleRepository, SaleRepositoryEF>();
 builder.Services.AddScoped<ISpecializationRepository, SpecializationRepositoryEF>();
 builder.Services.AddScoped<ISalesLineItemRepository, SalesLineItemRepositoryEF>();
 
-var app = builder.Build();
 
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

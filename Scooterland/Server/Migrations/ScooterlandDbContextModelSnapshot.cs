@@ -130,19 +130,22 @@ namespace Scooterland.Server.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Payment")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Kommentar")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SpecializationId")
+                    b.Property<bool?>("Payment")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("SpecializationId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("SaleId");
@@ -164,8 +167,8 @@ namespace Scooterland.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalesLineItemId"));
 
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -221,22 +224,18 @@ namespace Scooterland.Server.Migrations
             modelBuilder.Entity("Scooterland.Shared.Models.Sale", b =>
                 {
                     b.HasOne("Scooterland.Shared.Models.Customer", "Customer")
-                        .WithMany("Sales")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Scooterland.Shared.Models.Employee", "Employee")
-                        .WithMany("Sale")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("Scooterland.Shared.Models.Specialization", "Specialization")
-                        .WithMany("Sales")
-                        .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("SpecializationId");
 
                     b.Navigation("Customer");
 
@@ -248,13 +247,13 @@ namespace Scooterland.Server.Migrations
             modelBuilder.Entity("Scooterland.Shared.Models.SalesLineItem", b =>
                 {
                     b.HasOne("Scooterland.Shared.Models.Product", "Product")
-                        .WithMany("SalesLineItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Scooterland.Shared.Models.Sale", "Sale")
-                        .WithMany("SalesLineItem")
+                        .WithMany()
                         .HasForeignKey("SaleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -262,31 +261,6 @@ namespace Scooterland.Server.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Sale");
-                });
-
-            modelBuilder.Entity("Scooterland.Shared.Models.Customer", b =>
-                {
-                    b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("Scooterland.Shared.Models.Employee", b =>
-                {
-                    b.Navigation("Sale");
-                });
-
-            modelBuilder.Entity("Scooterland.Shared.Models.Product", b =>
-                {
-                    b.Navigation("SalesLineItems");
-                });
-
-            modelBuilder.Entity("Scooterland.Shared.Models.Sale", b =>
-                {
-                    b.Navigation("SalesLineItem");
-                });
-
-            modelBuilder.Entity("Scooterland.Shared.Models.Specialization", b =>
-                {
-                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }

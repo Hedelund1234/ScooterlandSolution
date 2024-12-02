@@ -1,16 +1,17 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.ProductServices;
 
-
-
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
+	<input class="search-bar"
+	placeholder="Søg efter produkt"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
-
-
-@if (products == null)
+@if (filteredProducts == null)
 {
 	<p><em>Ingen produkter fundet.</em></p>
 }
@@ -27,9 +28,9 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in products)
+			@foreach (var item in filteredProducts)
 			{
-				<tr @onclick="() => AddProduct(item)">
+				<tr @onclick="() => OnRowClicked(item)">
 					<td class="cell">@item.ProductId</td>
 					<td class="cell">@item.Name</td>
 					<td class="cell">@item.Type</td>	
@@ -42,22 +43,49 @@ else
 
 
 @code {
-	private string nameSearch;
-	private List<Product> products = new List<Product>();
-	private int? editingProductId = null;
-
+	[Parameter]
+	public EventCallback<Product> OnAddedProduct { get; set; }
+	[Parameter]
+	public Product chosenProduct { get; set; }
 	[Inject]
 	public IProductService Service { get; set; }
-
+	private List<Product> products = new List<Product>();
+	private List<Product> filteredProducts = new List<Product>();
+	private int? editingProductId = null;
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
 	protected override async Task OnInitializedAsync()
 	{
 		products = (await Service.GetAllProducts()).ToList();
+		filteredProducts = products;
 	}
 
+	private async Task OnRowClicked(Product product)
+	{		
+		// Send valgt produkt tilbage til parent-komponenten
+		 if (product != null)
+		{
+			await OnAddedProduct.InvokeAsync(product);
+		}
+	}	
 
-	private async Task AddProduct(Product product)
+	private void FilterProducts()
 	{
-
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredProducts = products; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+		}
 	}
-
 }

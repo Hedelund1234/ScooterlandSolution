@@ -1,11 +1,11 @@
-﻿.main-search{
+﻿.main-search {
     font-weight: bold;
     margin-bottom: 0.8rem;
     margin-top: 0.8rem;
     font-size: large;
 }
 
-.box{
+.box {
     border: solid;
     border-radius: 9px;
     border-width: 1px;
@@ -13,5 +13,37 @@
 }
 
 .flex-box {
-    display: flex; justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
+
+/* Message box styling */
+.message-box {
+    position: fixed; /* Makes the box stay fixed on the screen */
+    top: 30%; /* Adjust vertical position */
+    left: 50%; /* Center the box horizontally */
+    transform: translateX(-50%); /* Centers the box more accurately */
+    background-color: white; /* Set background color */
+    color: black; /* White text color */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3); /* Optional: Adds a shadow effect */
+    z-index: 1000; /* Ensures it's on top of other elements */
+    text-align: center; /* Centers text */
+}
+
+.message-success {
+    
+}
+
+    .message-success button {
+        background-color: #1b6ec2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+
+        .message-success button:hover {
+            background-color: #15589b;
+        }

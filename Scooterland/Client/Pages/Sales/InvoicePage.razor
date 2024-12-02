@@ -1,0 +1,44 @@
+﻿@using Scooterland.Client.Modules.SaleModules;
+@using Scooterland.Client.Services.SaleServices;
+@using Scooterland.Shared.Models;
+@page "/sales/invoice"
+
+<div class="invoiceContainer">
+	<div class="overview">
+		<InvoiceCurrentOverview />
+	</div>
+	<div class="endSale">
+		<button @onclick="EndSale" style="display: @(isVisible ? "inline-block" : "none")">Afslut salg</button>
+	</div>
+</div>
+
+@code {
+	[Inject]
+	public ISaleService SaleService { get; set; }
+
+	[Inject]
+	public NavigationManager Navigation { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
+
+	private Sale sale;
+
+	private bool isVisible = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Brug SaleId til at hente salgsoplysninger
+		sale = await SaleService.GetSale(SaleId);
+		isVisible = sale?.EndDate == null;
+	}
+
+	private async Task EndSale()
+	{
+		Sale currentSale = await SaleService.GetSale(SaleId);
+		currentSale.EndDate = DateTime.Now;
+		await SaleService.UpdateSale(currentSale);
+		Navigation.NavigateTo($"/");
+	}
+}

@@ -1,4 +1,5 @@
-﻿using Scooterland.Server.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using Scooterland.Server.DataAccess;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.SalesLineItemRepository
@@ -48,21 +49,15 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 			var db = new ScooterlandDbContext();
 			SalesLineItem foundSalesLineItem = db.SalesLineItems.Where(x => x.SalesLineItemId == salesLineItem.SalesLineItemId).FirstOrDefault();
 
-			var originalSalesLineItem = foundSalesLineItem;
+			if (foundSalesLineItem == null) 
+				return false;
 
 			foundSalesLineItem.Quantity = salesLineItem.Quantity;
 			foundSalesLineItem.Discount = salesLineItem.Discount;
 			db.SaveChanges();
+			return true;
 
-			if (originalSalesLineItem.Quantity != foundSalesLineItem.Quantity ||
-				originalSalesLineItem.Discount != foundSalesLineItem.Discount)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			
 		}
 
 
@@ -89,7 +84,7 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 			List<SalesLineItem> salesLineItems;
 			try
 			{
-				salesLineItems = db.SalesLineItems.ToList();
+				salesLineItems = db.SalesLineItems.Include(salesLineItems => salesLineItems.Product).ToList();
 			}
 			catch
 			{

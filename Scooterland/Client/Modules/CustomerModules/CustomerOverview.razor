@@ -1,20 +1,17 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.CustomerServices;
 
-
+<h3>Alle kunder</h3>
 
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter produkt" id="navn" type="text" @bind="nameSearch" />
+	<input class="search-bar"
+			placeholder="Søg efter produkt"
+			id="navn"
+			type="text" 
+			@bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
-
-<div class="search-button-container">
-	<button class="btn-dark" @onclick="SearchCustomers">Søg</button>
-	<button class="btn-dark" @onclick="ClearCustomers">Ryd</button>
-</div>
-
-
-
 
 @if (filteredCustomers == null)
 {
@@ -69,15 +66,22 @@ else
 	</table>
 }
 
-
 @code {
-	private string nameSearch;
+	[Inject]
+	public ICustomerService Service { get; set; }
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomers = new List<Customer>();
 	private int? editingCustomerId = null;
-
-	[Inject]
-	public ICustomerService Service { get; set; }
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterCustomers();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -106,18 +110,7 @@ else
 	{
 		await Service.DeleteCustomer(customerId);
 		customers = (await Service.GetAllCustomers()).ToList();
-	}
-
-	private void SearchCustomers()
-	{
-		FilterCustomers();
-		StateHasChanged();
-	}
-
-	private void ClearCustomers()
-	{
 		filteredCustomers = customers;
-		nameSearch = "";
 		StateHasChanged();
 	}
 
@@ -129,7 +122,7 @@ else
 		}
 		else
 		{
-			filteredCustomers = customers.Where(p => p.Name.Contains(nameSearch)).ToList();
+			filteredCustomers = customers.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
 		}
 	}
 }

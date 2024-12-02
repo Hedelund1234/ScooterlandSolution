@@ -1,21 +1,21 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.SpecializationServices
 
-
+<h3>Alle specialiseringer</h3>
 
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
-	<input class="search-bar" placeholder="Søg efter brand" id="navn" type="text" @bind="brandSearch" />
-</div>
-
-<div class="search-button-container">
-	<button class="btn-dark" @onclick="SearchSpecialization">Søg</button>
-	<button class="btn-dark" @onclick="ClearSpecialization">Ryd</button>
+	<input class="search-bar" 
+			placeholder="Søg efter brand" 
+			id="navn" 
+			type="text" 
+			@bind="brandSearch"
+		   @bind:event="oninput" />
 </div>
 
 @if (filteredSpecializations == null)
 {
-	<p><em>Ingen produkter fundet.</em></p>
+	<p><em>Ingen specialiationer fundet.</em></p>
 }
 else
 {
@@ -59,14 +59,22 @@ else
 
 
 @code {
-	private string brandSearch;
-	private List<Specialization> specializations = new List<Specialization>();
-	private List<Specialization> filteredSpecializations = new List<Specialization>();
-
-	private int? editingSpecializationsId = null;
-
 	[Inject]
 	public ISpecializationService Service { get; set; }
+	private List<Specialization> specializations = new List<Specialization>();
+	private List<Specialization> filteredSpecializations = new List<Specialization>();
+	private int? editingSpecializationsId = null;
+	private string _brandSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string brandSearch   //Bundet til input-feltet for søgning
+	{
+		get => _brandSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_brandSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterSpecializations();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -95,22 +103,11 @@ else
 	{
 		await Service.DeleteSpecialization(specializationId);
 		specializations = (await Service.GetAllSpecialization()).ToList();
-	}
-
-	private void SearchSpecialization()
-	{
-		FilterSpecialization();
-		StateHasChanged();
-	}
-
-	private void ClearSpecialization()
-	{
 		filteredSpecializations = specializations;
-		brandSearch = "";
 		StateHasChanged();
 	}
 
-	private void FilterSpecialization()
+	private void FilterSpecializations()
 	{
 		if (string.IsNullOrWhiteSpace(brandSearch))
 		{
@@ -118,7 +115,7 @@ else
 		}
 		else
 		{
-			filteredSpecializations = specializations.Where(p => p.Brand.Contains(brandSearch)).ToList();
+			filteredSpecializations = specializations.Where(p => p.Brand.ToLower().Contains(brandSearch.ToLower())).ToList();
 		}
 	}
 
