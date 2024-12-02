@@ -281,7 +281,7 @@
 
 		if (salesLineItem.Quantity > 1)
 		{
-			salesLineItem.Quantity--;
+			
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 			UpdateSalesLineItems();
 		}
