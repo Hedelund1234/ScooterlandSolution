@@ -281,7 +281,7 @@
 	public async Task UpdateQuantity(SalesLineItem salesLineItem)
 	{
 
-		if (salesLineItem.Quantity > 1)
+		if (salesLineItem.Quantity > 0)
 		{
 			
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
