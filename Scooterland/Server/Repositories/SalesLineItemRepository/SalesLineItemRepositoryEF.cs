@@ -49,15 +49,15 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 			var db = new ScooterlandDbContext();
 			SalesLineItem foundSalesLineItem = db.SalesLineItems.Where(x => x.SalesLineItemId == salesLineItem.SalesLineItemId).FirstOrDefault();
 
-			if (foundSalesLineItem == null) 
-				return false;
+			if (foundSalesLineItem == null)
+			{
+                return false;
+            }
 
 			foundSalesLineItem.Quantity = salesLineItem.Quantity;
 			foundSalesLineItem.Discount = salesLineItem.Discount;
 			db.SaveChanges();
 			return true;
-
-			
 		}
 
 
