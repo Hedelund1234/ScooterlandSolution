@@ -24,6 +24,19 @@
 	</button>
 </div>
 
+@if (isMessageBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Tilføj kunde</h4>
+			<p>Du mangler at tilføje en kunde</p>
+			<div class="message-actions">
+				<button @onclick="CloseMessageBox">Luk</button>
+			</div>
+		</div>
+	</div>
+}
+
 @code {
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomer = new List<Customer>();
@@ -32,6 +45,7 @@
 	private Sale currentSale = new Sale();
 	private string _phoneNumSearch;
 	private string _emailSearch;
+	private bool isMessageBoxVisible = false;
 	[Inject]
 	public NavigationManager Navigation { get; set; }
 	[Inject]
@@ -76,6 +90,11 @@
 		}
 	}
 
+	private void CloseMessageBox()
+	{
+		isMessageBoxVisible = false;
+	}
+
 	private async Task GoToNextPage()
 	{
 		if (selectedCustomer != null)
@@ -96,7 +115,7 @@
 			}
 			catch
 			{
-
+				isMessageBoxVisible = true;
 			}
 		}
 		else
