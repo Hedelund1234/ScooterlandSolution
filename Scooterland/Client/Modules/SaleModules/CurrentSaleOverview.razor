@@ -244,4 +244,36 @@
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}
+
+	public decimal? PriceAfterDiscount(SalesLineItem salesLineItem)
+	{
+		//Sikrer, at rabatten ikke overstiger 100%. Hvis rabatten er højere, sættes den til 100%.
+		if (salesLineItem.Discount > 100)
+		{
+			salesLineItem.Discount = 100;
+		}
+		//Udregner rabatten som en brøkdel af prisen. For eksempel: et produkt koster 100 kr. med 10% rabat:
+		//100 * (10/100) = 10. Dette betyder en rabat på 10 kr.
+		decimal? discountAmount = salesLineItem.Product.Price * (salesLineItem.Discount / 100M);
+		//Beregner den samlede pris efter rabatten ved at trække rabatten fra og gange med antallet af produkter.
+		decimal? discountedPrice = (salesLineItem.Product.Price - discountAmount) * salesLineItem.Quantity;
+
+		//Kontrollerer, om den beregnede pris ikke er null, og returnerer resultatet afrundet til 2 decimaler.
+		if (discountedPrice.HasValue)
+		{
+			return Math.Round(discountedPrice.Value, 2);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public async Task SaveDiscount(SalesLineItem salesLineItem)
+	{
+
+		await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
+		UpdateSalesLineItems();
+	}
+
 }
