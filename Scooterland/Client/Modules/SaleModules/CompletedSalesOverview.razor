@@ -1,0 +1,119 @@
+﻿<h3>CompletedSalesOverview</h3>
+
+@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.SaleServices;
+@using Scooterland.Client.Services.EmployeeServices;
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar"
+		   placeholder="Søg på kundenavn"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
+</div>
+
+@if (filteredSales == null)
+{
+	<p><em>Ingen sales fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Kunde navn</th>
+				<th>Mekaniker</th>
+				<th>Scooter mærke</th>
+				<th>Kommentar</th>
+				<th>Start dato</th>
+				<th>Slut dato</th>
+				<th>Total beløb</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredSales)
+			{
+				<tr @ondblclick="() => HandleRowClick(item)">
+					<td class="cell">@item.SaleId</td>
+					<td class="cell">@item.Customer.Name</td>
+					@if (item.Employee is null)
+					{
+						<td class="cell"></td>
+					}
+					else
+					{
+						<td class="cell">@item.Employee.Name</td>
+					}
+					@if (item.Specialization is null)
+					{
+						<td class="cell"></td>
+					}
+					else
+					{
+						<td class="cell">@item.Specialization.Brand</td>
+					}
+					@if (item.Kommentar is null)
+					{
+						<td class="cell"></td>
+					}
+					else
+					{
+						<td class="cell">@item.Kommentar</td>
+					}
+					<td class="cell">@item.StartDate</td>
+					<td class="cell">@item.EndDate</td>
+					<td class="cell">@item.Payment</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	[Inject]
+	public ISaleService Service { get; set; }
+	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
+	private Sale? currentSale;
+	[Inject]
+	public NavigationManager Navigation { get; set; }
+	private List<Sale> sales = new List<Sale>();
+	private List<Sale> filteredSales = new List<Sale>();
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterSales();      // Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		sales = (await Service.GetAllSales()).Where(x => x.EndDate != null).ToList();
+		filteredSales = sales;
+	}
+
+	private void FilterSales()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredSales = sales; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			filteredSales = sales.Where(p =>
+			p.Customer.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+		}
+	}
+
+	private void HandleRowClick(Sale sale)
+	{
+		Navigation.NavigateTo($"/sales/invoice?SaleId={sale.SaleId}");
+	}
+}

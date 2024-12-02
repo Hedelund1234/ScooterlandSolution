@@ -5,11 +5,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-		   placeholder="Søg på kundenavn"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg på kundenavn"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredSales == null)
@@ -134,7 +134,14 @@ else
 
 	private void HandleRowClick(Sale sale)
 	{
-		Navigation.NavigateTo($"/sales/current-sale?saleId={sale.SaleId}");
+		if (sale.EndDate != null)
+		{
+			Navigation.NavigateTo($"/sales/invoice?saleId={sale.SaleId}");
+		}
+		else
+		{
+			Navigation.NavigateTo($"/sales/current-sale?saleId={sale.SaleId}");
+		}
 	}
 
 
