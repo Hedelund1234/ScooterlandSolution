@@ -22,7 +22,7 @@
     top: 30%; /* Adjust vertical position */
     left: 50%; /* Center the box horizontally */
     transform: translateX(-50%); /* Centers the box more accurately */
-    background-color: #333; /* Set background color */
+    background-color: white; /* Set background color */
     color: white; /* White text color */
     padding: 20px;
     border-radius: 10px; /* Rounded corners */
@@ -40,7 +40,7 @@
     justify-content: center; /* Centers the button */
 }
 
-    .message-actions button {
+    .message-error button {
         background-color: #ff4d4d; /* Red button color */
         color: white;
         padding: 10px 20px;
@@ -49,6 +49,24 @@
         cursor: pointer;
     }
 
-        .message-actions button:hover {
+        .message-error button:hover {
             background-color: #cc0000; /* Darker red on hover */
         }
+
+.message-success button {
+    background-color: #ff4d4d; /* Red button color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.message-success {
+    background-color: #1b6ec2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

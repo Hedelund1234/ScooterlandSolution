@@ -24,14 +24,27 @@
 	</button>
 </div>
 
-@if (isMessageBoxVisible)
+@if (isErrorBoxVisible)
 {
 	<div class="message-box">
 		<div class="message-content">
 			<h4>Tilføj kunde</h4>
 			<p>Du mangler at tilføje en kunde</p>
 			<div class="message-actions">
-				<button @onclick="CloseMessageBox">Luk</button>
+				<button class="message-error" @onclick="CloseMessageBox">Luk</button>
+			</div>
+		</div>
+	</div>
+}
+
+@if (isSuccessBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Salg oprettet</h4>
+			<p>Salget blev oprettet korrekt</p>
+			<div class="message-actions">
+				<button class="message-success" @onclick="NavigateToNextPage">Gå til produktsiden</button>
 			</div>
 		</div>
 	</div>
@@ -45,7 +58,8 @@
 	private Sale currentSale = new Sale();
 	private string _phoneNumSearch;
 	private string _emailSearch;
-	private bool isMessageBoxVisible = false;
+	private bool isErrorBoxVisible = false;
+	private bool isSuccessBoxVisible = false;
 	[Inject]
 	public NavigationManager Navigation { get; set; }
 	[Inject]
@@ -92,7 +106,7 @@
 
 	private void CloseMessageBox()
 	{
-		isMessageBoxVisible = false;
+		isErrorBoxVisible = false;
 	}
 
 	private async Task GoToNextPage()
@@ -107,20 +121,23 @@
 				currentSale.CustomerId = dbCustomer.CustomerId;
 				currentSale.StartDate = DateTime.Now;
 				await SaleService.AddSale(currentSale);
-
-				saleList = (await SaleService.GetAllSales()).ToList();
-				Sale saleToTransfer = saleList.FirstOrDefault(s => s.CustomerId == currentSale.CustomerId && s.StartDate == currentSale.StartDate);
-				Navigation.NavigateTo($"/sales/current-sale?SaleId={saleToTransfer.SaleId}");
-
+				isSuccessBoxVisible = true;
 			}
 			catch
 			{
-				isMessageBoxVisible = true;
+				isErrorBoxVisible = true;
 			}
 		}
 		else
 		{
 			
 		}
+	}
+
+	private async Task NavigateToNextPage()
+	{
+		saleList = (await SaleService.GetAllSales()).ToList();
+		Sale saleToTransfer = saleList.FirstOrDefault(s => s.CustomerId == currentSale.CustomerId && s.StartDate == currentSale.StartDate);
+		Navigation.NavigateTo($"/sales/current-sale?SaleId={saleToTransfer.SaleId}");
 	}
 }
