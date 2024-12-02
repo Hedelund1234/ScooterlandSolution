@@ -165,11 +165,13 @@
 			salesLineItem.Quantity--;
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 			UpdateSalesLineItems();
+			Console.WriteLine($"Quantiy updated from OnMinusClicked status code: {statusCode}");
 		}
 		else
 		{
 			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId);
 			UpdateSalesLineItems();
+			Console.WriteLine($"Quantiy deleted from OnMinusClicked status code: {deleteStatusCode}");
 		}
 	}
 
@@ -284,11 +286,13 @@
 			
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 			UpdateSalesLineItems();
+			Console.WriteLine($"Quantiy update status code: {statusCode}");
 		}
 		else
 		{
 			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId);
 			UpdateSalesLineItems();
+			Console.WriteLine($"Quantity deleted status code: {deleteStatusCode}");
 		}
 	}
 
