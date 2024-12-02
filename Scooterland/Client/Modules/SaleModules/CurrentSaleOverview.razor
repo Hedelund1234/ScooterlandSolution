@@ -41,7 +41,7 @@
 						<div class="product-price">
 							<div class="quantity-control">
 								<button class="quantity-btn" @onclick="() => OnMinusClicked(item)">-</button>
-								<input class="quantity-input" value="@item.Quantity" />
+								<input class="quantity-input" type="number" @bind="item.Quantity" @onblur="() => UpdateQuantity(item)" />
 								<button class="quantity-btn" @onclick="() => OnPlusClicked(item)">+</button>
 							</div>
 							<div class="discount-input">
@@ -50,7 +50,7 @@
 									<input id="discount" type="number"
 										   @bind="item.Discount"
 										   @bind:event="oninput"
-										   @onchange="() => SaveDiscount(item)"
+										   @onchange="() => UpdateDiscount(item)"
 										   inputmode="numeric"
 										   min="0" max="100" step="1" />
 									<span class="percentage-symbol">%</span>
@@ -269,11 +269,31 @@
 		}
 	}
 
-	public async Task SaveDiscount(SalesLineItem salesLineItem)
+	public async Task UpdateDiscount(SalesLineItem salesLineItem)
 	{
 
 		await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 		UpdateSalesLineItems();
 	}
+
+	public async Task UpdateQuantity(SalesLineItem salesLineItem)
+	{
+
+		if (salesLineItem.Quantity > 1)
+		{
+			salesLineItem.Quantity--;
+			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
+			UpdateSalesLineItems();
+		}
+		else
+		{
+			int deleteStatusCode = await SalesLineItemService.DeleteSalesLineItem(salesLineItem.SalesLineItemId);
+			UpdateSalesLineItems();
+		}
+	}
+
+	
+
+
 
 }
