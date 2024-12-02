@@ -9,7 +9,7 @@
 		<InvoiceCurrentOverview />
 	</div>
 	<div class="endSale">
-		<button @onclick="EndSale">Afslut salg</button>
+		<button @onclick="EndSale" style="display: @(isVisible ? "inline-block" : "none")">Afslut salg</button>
 	</div>
 </div>
 
@@ -26,10 +26,13 @@
 
 	private Sale sale;
 
+	private bool isVisible = false;
+
 	protected override async Task OnInitializedAsync()
 	{
 		// Brug SaleId til at hente salgsoplysninger
 		sale = await SaleService.GetSale(SaleId);
+		isVisible = sale?.EndDate == null;
 	}
 
 	private async Task EndSale()

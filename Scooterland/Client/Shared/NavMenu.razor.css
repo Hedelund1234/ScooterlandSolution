@@ -61,9 +61,11 @@
     }
 
     .dropdown-menu i {
-        margin-left: 75px; /* Tilføjer afstand mellem tekst og ikon */
-        font-size: small;
-        opacity: 0.3;
+        position: absolute; /* Makes the icon position relative to the parent */
+        right: 20px; /* Places the icon 10px from the right edge */
+        top: 40%; /* Vertically center the icon */
+        font-size: small; /* Adjust font size if needed */
+        opacity: 0.3; /* Set icon opacity */
     }
 
     .dropdown-menu a {
