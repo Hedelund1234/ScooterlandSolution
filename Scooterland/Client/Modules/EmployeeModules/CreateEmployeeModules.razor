@@ -55,10 +55,10 @@ class="row p-3">
 {
 	<div class="message-box">
 		<div class="message-content">
-			<h4>Slag oprettet</h4>
-			<p>Salget blev oprettet korrekt</p>
-			<div class="message-actions">
-				<button class="message-success" @onclick="CloseMessageBox">OK</button>
+			<h4>@(EmployeeModel.Role) oprettet</h4>
+			<p>@(EmployeeModel.Role) blev oprettet korrekt</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
 			</div>
 		</div>
 	</div>

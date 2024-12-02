@@ -48,38 +48,22 @@
     color: black; /* White text color */
     padding: 20px;
     border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: Adds a shadow effect */
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3); /* Optional: Adds a shadow effect */
     z-index: 1000; /* Ensures it's on top of other elements */
-}
-
-.message-content {
     text-align: center; /* Centers text */
 }
 
-.message-actions {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center; /* Centers the button */
+.message-success {
 }
 
-.message-success button {
-    background-color: #ff4d4d; /* Red button color */
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-    .message-success button:hover {
-        background-color: #175ea5; /* Darker red on hover */
+    .message-success button {
+        background-color: #1b6ec2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
     }
 
-.message-success {
-    background-color: #1b6ec2;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+        .message-success button:hover {
+            background-color: #15589b;
+        }

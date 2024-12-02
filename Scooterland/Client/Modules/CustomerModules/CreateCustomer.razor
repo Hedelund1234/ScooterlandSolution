@@ -4,9 +4,9 @@
 <h3>Opret ny kunde</h3>
 
 <EditForm Model="@CustomerModel"
-          OnValidSubmit="@HandleValidSubmit"
-          OnInvalidSubmit="@HandleInvalidSubmit"
-          class="row p-3">
+OnValidSubmit="@HandleValidSubmit"
+OnInvalidSubmit="@HandleInvalidSubmit"
+class="row p-3">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="col-md-6 mb-3">
@@ -36,6 +36,18 @@
 
 </EditForm>
 
+@if (isSuccessBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Kunde oprettet</h4>
+            <p>Kunde blev oprettet korrekt</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -46,6 +58,8 @@
 
     private int ErrorCode { get; set; } = 0;
 
+    private bool isSuccessBoxVisible = false;
+
     // Customer CustomerModel = new Customer();
 
     private async Task HandleValidSubmit()
@@ -53,9 +67,16 @@
         ErrorCode = await Service.AddCustomer(CustomerModel);
 
         Console.WriteLine("Customer added: return code: " + ErrorCode);
+        isSuccessBoxVisible = true;
     }
+
     private void HandleInvalidSubmit()
     {
-        
+
+    }
+
+    private void CloseMessageBox()
+    {
+        isSuccessBoxVisible = false;
     }
 }
