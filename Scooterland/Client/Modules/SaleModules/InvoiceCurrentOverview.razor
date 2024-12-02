@@ -98,7 +98,6 @@
 		currentSale = await SaleService.GetSale(SaleId);
 	}
 
-	// decimal discount = 2;
 	private decimal TotalPrice()
 	{
 		decimal totalPrice = 0;
@@ -108,8 +107,6 @@
 		}
 		return totalPrice;
 	}
-	//  public decimal TotalPrice() => currentSalesLineItems.Sum(x => x.Product.Price * x.Quantity);
-	//Er den for poppet, synes den er lækker men også højt niveau
 
 	private decimal TotalSaved()
 	{
@@ -128,6 +125,4 @@
 		}
 		return Math.Round(totalPriceAfterDiscount, 2);
 	}
-	// public decimal TotalPriceAfterDiscount() => currentSalesLineItems.Sum(x => Math.Round(x.Product.Price* x.Quantity* (1 - x.Discount / 100), 2));
-	//Er den for poppet, synes den er lækker men også højt niveau
 }

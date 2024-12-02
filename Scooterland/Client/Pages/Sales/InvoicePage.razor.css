@@ -1,0 +1,21 @@
+﻿.invoiceContainer {
+    display: flex; /* Gør containeren til en flexbox */
+}
+
+.overview {
+    flex-grow: 1; /* Sørg for at InvoiceCurrentOverview fylder al den nødvendige plads */
+}
+
+.endSale {
+    margin-top: auto; /* Sørg for at knappen skubbes til bunden af overview */
+    padding: 20px; /* Tilføj lidt luft omkring knappen */
+}
+
+    .endSale button {
+        color: white;
+        border: none;
+        background-color: #1b6ec2;
+        padding: 15px;
+        border-radius: 10px;
+        width: 8rem;
+    }

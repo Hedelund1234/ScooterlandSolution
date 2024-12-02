@@ -8,29 +8,21 @@
 <CurrentSaleOverview />
 
 <div class="flex-box">
-    <button class="btn btn-primary" @onclick="GoToInvoicePage">
-        Gå til betaling
-    </button>
+	<button class="btn btn-primary" @onclick="GoToInvoicePage">
+		Vis faktura
+	</button>
 </div>
 
 @code {
-    [Inject]
-    public NavigationManager Navigation { get; set; }
+	[Inject]
+	public NavigationManager Navigation { get; set; }
 
-    [Inject]
-    public ISaleService SaleService { get; set; }
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
 
-    [Parameter]
-    [SupplyParameterFromQuery]
-    public int SaleId { get; set; }
-
-    private async Task GoToInvoicePage()
-    {
-        Sale currentSale = await SaleService.GetSale(SaleId);
-        currentSale.EndDate = DateTime.Now;
-		await SaleService.UpdateSale(currentSale);
+	private void GoToInvoicePage()
+	{
 		Navigation.NavigateTo($"/sales/invoice?SaleId={SaleId}");
 	}
-
-
 }

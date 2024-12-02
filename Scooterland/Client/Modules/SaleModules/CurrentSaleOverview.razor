@@ -2,6 +2,7 @@
 @using Scooterland.Client.Services.CustomerServices
 @using Scooterland.Client.Services.SaleServices
 @using Scooterland.Client.Services.SalesLineItemServices
+@using Scooterland.Client.Services.SpecializationServices
 @using Scooterland.Client.Modules.ProductModules
 
 <div class="flex-container">
@@ -75,6 +76,29 @@
 			<span> @TotalPrice() </span>
 		</div>
 
+@* 		<div>
+			<span class="">Scooter brand:</span>
+			@if (currentSale?.Specialization?.Brand == null)
+			{
+				<select @onchange="UpdateBrand" class="form-control">
+					<option>Vælg et scooter brand</option>
+					@foreach (var item in specializations)
+					{
+						<option value="@item.SpecializationId">@item.Brand</option>
+					}
+				</select>
+			}
+			else
+			{
+				<select @onchange="UpdateBrand" class="form-control">
+					<option>@currentSale.Specialization.Brand</option>
+					@foreach (var item in specializations)
+					{
+						<option value="@item.SpecializationId">@item.Brand</option>
+					}
+				</select>
+			}
+		</div> *@
 
 		<div class="note-box-container">
 			<label for="noteInput">Kommentar:</label>
@@ -91,6 +115,8 @@
 	private Sale currentSale;
 	public Product product { get; set; }
 	private List<Product> products = new List<Product>();
+	private List<Specialization> specializations = new List<Specialization>();
+	private int? specializationsid;
 
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
@@ -103,6 +129,8 @@
 	public ISalesLineItemService SalesLineItemService { get; set; }
 	[Inject]
 	public ISaleService SaleService { get; set; }
+	[Inject]
+	public ISpecializationService SpecializationService { get; set; }
 	[Parameter]
 	[SupplyParameterFromQuery]
 	public int SaleId { get; set; }
@@ -113,6 +141,11 @@
 		if (currentSale.Kommentar != null)
 		{
 			noteInput = currentSale.Kommentar;
+		}
+		specializations = (await SpecializationService.GetAllSpecialization()).ToList();
+		if (currentSale.SpecializationId != null)
+		{
+			specializationsid = currentSale.SpecializationId;
 		}
 		UpdateSalesLineItems();
 	}
@@ -211,37 +244,4 @@
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}
-
-	public decimal? PriceAfterDiscount(SalesLineItem salesLineItem)
-	{
-		//Sikrer at rabatten ikke overstiger 100% så vi ikke får en negativ pris. 
-		if (salesLineItem.Discount > 100)
-		{
-			salesLineItem.Discount = 100;
-		}
-		//Udregner rabatten som en brøkdel af prisen. For eksempel: et produkt koster 100 kr. med 10% rabat: 
-		//100 * (10/100) = 10. Dette betyder en rabat på 10 kr.
-		decimal? discountAmount = salesLineItem.Product.Price * (salesLineItem.Discount / 100M);
-		//Beregner den samlede pris efter rabatten ved at trække rabatten fra og gange med antallet af produkter.
-		decimal? discountedPrice = (salesLineItem.Product.Price - discountAmount) * salesLineItem.Quantity;
-
-		//Tjekker den ikke er null og returnerer resultatet afrundet til 2 decimaler. 
-		if (discountedPrice.HasValue)
-		{
-			return Math.Round(discountedPrice.Value, 2);
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	public async Task SaveDiscount(SalesLineItem salesLineItem)
-	{
-
-		await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
-		UpdateSalesLineItems();
-	}
-
-
 }

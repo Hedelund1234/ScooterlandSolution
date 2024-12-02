@@ -15,3 +15,40 @@
 .flex-box {
     display: flex; justify-content: flex-end;
 }
+
+/* Message box styling */
+.message-box {
+    position: fixed; /* Makes the box stay fixed on the screen */
+    top: 30%; /* Adjust vertical position */
+    left: 50%; /* Center the box horizontally */
+    transform: translateX(-50%); /* Centers the box more accurately */
+    background-color: #333; /* Set background color */
+    color: white; /* White text color */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: Adds a shadow effect */
+    z-index: 1000; /* Ensures it's on top of other elements */
+}
+
+.message-content {
+    text-align: center; /* Centers text */
+}
+
+.message-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center; /* Centers the button */
+}
+
+    .message-actions button {
+        background-color: #ff4d4d; /* Red button color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .message-actions button:hover {
+            background-color: #cc0000; /* Darker red on hover */
+        }

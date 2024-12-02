@@ -14,13 +14,26 @@
 					<li><a href="/sales/create-sale">Opret ordre</a></li>@*dropdown element*@
 					<li><a href="/sales/all-sales">Alle ordre</a></li>@*dropdown element*@
 					<li><a href="/sales/incomplete-sales">Igangværende ordre</a></li>@*dropdown element*@
+					<li><a href="/sales/completedsales">Aflsuttede ordre</a></li>@*dropdown element*@
 				</ul>
 			</li>
 			<li class="dropdown">
 				<a href="/administration">Administration</a>
 				<ul class="dropdown-menu">
-					<li><a href="/administration/customers">Kunder</a></li>
-					<li><a href="/administration/products">Produkter</a></li>
+					<li class="dropdown">
+						<a href="/administration/customers" class="dropdown-li">Kunder<i class="fa-solid fa-greater-than"></i></a>
+						<ul class="dropdown-menu right-dropdown">
+							<li><a href="/administration/customers/create-customer">Opret ny kunde</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+						<a href="/administration/products" class="dropdown-li">Produkt<i class="fa-solid fa-greater-than"></i></a>
+						<ul class="dropdown-menu right-dropdown">
+							<li><a href="/administration/products/create-product">Opret nyt produkt</a></li>
+						</ul>
+					</li>
+
 					<li class="dropdown">
 						<a href="/administration/employees" class="dropdown-li">Ansatte<i class="fa-solid fa-greater-than"></i></a> @*Tilføjer '>' til Ansatte*@
 						<!-- New nested dropdown menu under Ansatte -->
@@ -29,7 +42,14 @@
 							<!-- Add more future menus here -->
 						</ul>
 					</li>
-					<li><a href="/administration/specialization">Specialisering</a></li>
+
+
+					<li class="dropdown">
+						<a href="/administration/specialization" class="dropdown-li">Specialisering<i class="fa-solid fa-greater-than"></i></a>
+						<ul class="dropdown-menu right-dropdown">
+							<li><a href="administration/specialization/create-specialization">Opret ny specialisering</a></li>
+						</ul>
+					</li>
 					<li><a href="/administration/backup">Backup</a></li>
 				</ul>
 			</li>
