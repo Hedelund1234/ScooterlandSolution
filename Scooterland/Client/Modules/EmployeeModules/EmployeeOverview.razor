@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.EmployeeServices;
+@using Scooterland.Client.Services.SpecializationServices;
 
 
 @* Søgefelt-container, der inkluderer et ikon og et input-felt *@
@@ -11,11 +12,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-		   placeholder="Søg efter medarbejder"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg efter medarbejder"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredEmployees == null)
@@ -29,8 +30,8 @@ else
 			<tr>
 				<th>Id</th>
 				<th>Navn</th>
-				<th>Role</th>				
-
+				<th>Role</th>
+				<th>Mærke specialitioner</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -61,6 +62,38 @@ else
 								<button class="edit-button" @onclick="() => DeleteEmployee(item.EmployeeId)"><i class="fa-regular fa-trash-can"></i></button>
 							</div>
 						</td>
+
+
+
+
+@* 						<td>
+							<div>Nuværende mærker</div>
+							@foreach (var spec in item.Specializations)
+							{
+								<div>
+									@spec.Brand
+									<button class="edit-button" @onclick="() => RemoveSpecialization(item, spec)"><i class="fa-regular fa-trash-can"></i></button>
+								</div>
+							}
+
+							<select @bind="selectedSpecialization" class="form-control">
+								<option value="" disabled selected>Vælg en specialisering</option>
+								@foreach (var brand in allSpecializations)
+								{
+									<option value="@brand.SpecializationId">@brand.Brand</option>
+								}
+							</select>
+
+
+
+
+														@foreach (var brand in allSpecializations)
+							{
+								@brand.Brand
+							}
+
+
+						</td> *@
 					}
 				</tr>
 			}
@@ -72,17 +105,21 @@ else
 @code {
 	[Inject]
 	public IEmployeeService Service { get; set; }
+	[Inject]
+	public ISpecializationService SpecializationService { get; set; }
 	private List<Employee> employees = new List<Employee>();
 	private List<Employee> filteredEmployees = new List<Employee>();
+	private List<Specialization> allSpecializations = new List<Specialization>();
+	private int? selectedSpecialization;
 	private int? editingEmployeeId = null;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
-	private string nameSearch	//Bundet til input-feltet for søgning
+	private string nameSearch   //Bundet til input-feltet for søgning
 	{
-		get => _nameSearch;	//Henter den aktuelle værdi af det private felt _nameSearch
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value;	//Opdaterer det pribate felt _nameSearch med den nye værdi
-			FilterEmployees();		//Kalder FilterEmployees() for at opdatere listen med det samme
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
 
@@ -90,7 +127,17 @@ else
 	{
 		employees = (await Service.GetAllEmployees()).ToList();
 		filteredEmployees = employees;
+		allSpecializations = (await SpecializationService.GetAllSpecialization()).ToList();
+
 	}
+
+@* 	public async Task RemoveSpecialization(Employee employee, Specialization specialization)
+	{
+		employee.Specializations.Remove(specialization);
+		await Service.UpdateEmployee(employee);
+		employees = (await Service.GetAllEmployees()).ToList();
+		StateHasChanged();
+	} *@
 
 	private void EditEmployee(int employeeId)
 	{
