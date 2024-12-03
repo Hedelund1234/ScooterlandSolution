@@ -118,7 +118,16 @@
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 	private Specialization currentSpecialization = new Specialization();
-	private int? brandId;
+	private int? _brandId;
+	public int? brandId
+	{
+		get => _brandId;
+		set
+		{
+			_brandId = value;
+			UpdateSpecialization();
+		}
+	}
 	private string noteInput;
 
 	[Inject]
@@ -149,6 +158,13 @@
 			currentSpecialization = specializations.FirstOrDefault(x => x.SpecializationId == brandId);
 		}
 		UpdateSalesLineItems();
+	}
+
+	private async Task UpdateSpecialization()
+	{
+		currentSale.SpecializationId = brandId;
+		await SaleService.UpdateSale(currentSale);
+		StateHasChanged();
 	}
 
 	public async Task UpdateSalesLineItems()
