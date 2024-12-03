@@ -12,19 +12,54 @@
 <div class="submenu-container">
     <div class="submenu-item">
         <NavLink href="/administration/customers" class="submenu-link">Kunder</NavLink>
-        <p>Her kan du oprette en ny ordre ved at udfylde nødvendige oplysninger.</p>
+        <p>En oversigt over alle produkter; id, email, telefonnummer og adresse. Her kan også redigeres og slettes.</p>
+
+        <!-- Subsubmenu for Kunder -->
+        <div class="subsubmenu-container">
+            <div class="subsubmenu-item">
+                <NavLink href="/administration/customers/create-customer" class="subsubmenu-link">- Opret ny kunde</NavLink>
+                <p>Opretter en ny kunde i databasen.</p>
+            </div>
+        </div>
     </div>
+
     <div class="submenu-item">
         <NavLink href="/administration/products" class="submenu-link">Produkter</NavLink>
-        <p>Se en liste over alle ordrer, både igangværende og afsluttede.</p>
+        <p>En oversigt over alle produkter; id, navn, type og pris. Her kan også redigeres og slettes.</p>
+
+        <!-- Subsubmenu for Produkter -->
+        <div class="subsubmenu-container">
+            <div class="subsubmenu-item">
+                <NavLink href="/administration/products/create-product" class="subsubmenu-link">- Opret ny produkt</NavLink>
+                <p>Opretter et nyt produkt i databasen</p>
+            </div>
+        </div>
     </div>
+
     <div class="submenu-item">
         <NavLink href="/administration/employees" class="submenu-link">Ansatte</NavLink>
-        <p>Vis alle ordrer, der stadig er under behandling.</p>
+        <p>En oversigt over alle ansatte; id, navn, rolle og speciale for mekanikere. Her kan også redigeres og slettes.</p>
+
+        <!-- Subsubmenu for Ansatte -->
+        <div class="subsubmenu-container">
+            <div class="subsubmenu-item">
+                <NavLink href="/administration/employees/create-employee" class="subsubmenu-link">- Opret ny ansat</NavLink>
+                <p>Opretter en ny ansat i databasen.</p>
+            </div>
+        </div>
     </div>
+
     <div class="submenu-item">
         <NavLink href="/administration/specialization" class="submenu-link">Specialisering</NavLink>
-        <p>Gennemse afsluttede ordrer og deres detaljer.</p>
+        <p>En oversigt over alle specialiseringer; id og mærke. Her kan også redigeres og slettes.</p>
+
+        <!-- Subsubmenu for Specialisering -->
+        <div class="subsubmenu-container">
+            <div class="subsubmenu-item">
+                <NavLink href="/administration/specialization/create-specialization" class="subsubmenu-link">- Opret ny specialisering</NavLink>
+                <p>Opretter en ny specialisering i databasen.</p>
+            </div>
+        </div>
     </div>
 </div>
 
