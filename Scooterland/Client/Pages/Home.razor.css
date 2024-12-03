@@ -13,4 +13,22 @@
 /* Komponent, der fylder 1/3 af bredden */
 .one-third-width {
     width: 33.33%;
+
 }
+
+.breadcrumbs {
+    display: inline; /* Ensures breadcrumbs stay on the same line */
+    font-size: 14px; /* Adjust size to make it smaller */
+    font-weight: normal; /* Makes the text less bold if needed */
+}
+
+.breadcrumb-link {
+    text-decoration: none; /* Removes underline for links */
+    color: #007bff; /* Bootstrap blue for links, or adjust to your preference */
+    margin: 0 5px; /* Adds spacing around the separators */
+}
+
+    .breadcrumb-link:hover {
+        text-decoration: underline; /* Adds underline on hover for clarity */
+    }
+

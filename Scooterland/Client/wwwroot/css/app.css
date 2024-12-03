@@ -99,3 +99,21 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+.breadcrumbs {
+    display: inline-block; /* Ensures breadcrumbs stay on the same line */
+    font-size: 14px; /* Adjust size to make it smaller */
+    font-weight: normal; /* Makes the text less bold if needed */
+    color: black;
+    padding-bottom: 5px;
+}
+
+.breadcrumb-link {
+    text-decoration: underline; /* Removes underline for links */
+    color: black !important; /* Bootstrap blue for links, or adjust to your preference */
+    margin: 0 5px; /* Adds spacing around the separators */
+}
+
+    .breadcrumb-link:hover {
+        text-decoration: underline; /* Adds underline on hover for clarity */
+    }
