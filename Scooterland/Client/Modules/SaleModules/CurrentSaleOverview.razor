@@ -9,7 +9,7 @@
 	<!-- Første komponent (fylder 2/3 af bredden) -->
 	<div class="two-thirds-width">
 		<ProductSelectOverview OnAddedProduct="AddProductToSalesLineItem"
-							   chosenProduct="@product" />
+		chosenProduct="@product" />
 	</div>
 	<div class="one-third-width">
 		<!-- Anden komponent (fylder 1/3 af bredden) -->
@@ -20,7 +20,7 @@
 		else
 		{
 			<div>
-				<span class="product-mrp">SaleId:</span>
+				<span class="product-mrp">Ordrenr.:</span>
 				<span class="customer-name">@currentSale.SaleId</span>
 				<span class="product-mrp">Kunde:</span>
 				<span class="product-mrp">@currentSale.Customer.Name</span>
@@ -46,13 +46,13 @@
 							</div>
 							<div class="discount-input">
 								<div class="input-container">
-								<label for="discount">Rabat:</label>
+									<label for="discount">Rabat:</label>
 									<input id="discount" type="number"
-										   @bind="item.Discount"
-										   @bind:event="oninput"
-										   @onchange="() => UpdateDiscount(item)"
-										   inputmode="numeric"
-										   min="0" max="100" step="1" />
+									@bind="item.Discount"
+									@bind:event="oninput"
+									@onchange="() => UpdateDiscount(item)"
+									inputmode="numeric"
+									min="0" max="100" step="1" />
 									<span class="percentage-symbol">%</span>
 								</div>
 							</div>
@@ -69,42 +69,41 @@
 			}
 		</div>
 
-
-
+		<!-- Calculation of totalprice -->
 		<div class="total-price-bottom">
-			<span class="total-price-margin"> Total price: </span>
+			<span class="total-price-margin"> Total pris: </span>
 			<span> @TotalPrice() </span>
 		</div>
 
-@* 		<div>
-			<span class="">Scooter brand:</span>
-			@if (currentSale?.Specialization?.Brand == null)
-			{
-				<select @onchange="UpdateBrand" class="form-control">
-					<option>Vælg et scooter brand</option>
-					@foreach (var item in specializations)
-					{
-						<option value="@item.SpecializationId">@item.Brand</option>
-					}
-				</select>
-			}
-			else
-			{
-				<select @onchange="UpdateBrand" class="form-control">
-					<option>@currentSale.Specialization.Brand</option>
-					@foreach (var item in specializations)
-					{
-						<option value="@item.SpecializationId">@item.Brand</option>
-					}
-				</select>
-			}
-		</div> *@
+		<!-- Dropdown menu to pick brand -->
+		<label for="noteInput">Vælg scooter mærke:</label>
+		@if (currentSale?.SpecializationId == null)
+		{
+			<select @bind="brandId">
+				<option value="">Vælg et brand</option>
+				@foreach (var item in specializations)
+				{
+					<option value="@item.SpecializationId">@item.Brand</option>
+				}
+			</select>
+		}
+		else
+		{
+			<select @bind="brandId">
+				<option value="" disabled selected="">@currentSpecialization.Brand</option>
+				@foreach (var item in specializations)
+				{
+					<option value="@item.SpecializationId">@item.Brand</option>
+				}
+			</select>
+		}
 
+		<!-- Comment box + save button (also saves brand pick) -->
 		<div class="note-box-container">
 			<label for="noteInput">Kommentar:</label>
 			<textarea id="noteInput" class="note-input" @bind="noteInput"></textarea>
 		</div>
-		<button class="gem-button" @onclick="SaveKommentar">Gem</button>
+		<button class="gem-button" @onclick="SaveCommentAndBrand">Gem</button>
 	</div>
 </div>
 
@@ -116,11 +115,10 @@
 	public Product product { get; set; }
 	private List<Product> products = new List<Product>();
 	private List<Specialization> specializations = new List<Specialization>();
-	private int? specializationsid;
-
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
-
+	private Specialization currentSpecialization = new Specialization();
+	private int? brandId;
 	private string noteInput;
 
 	[Inject]
@@ -137,15 +135,18 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		//Loading the current sale
 		currentSale = await SaleService.GetSale(SaleId);
-		if (currentSale.Kommentar != null)
+		if (currentSale?.Kommentar != null)
 		{
 			noteInput = currentSale.Kommentar;
 		}
+		//Loading all about specialization 
 		specializations = (await SpecializationService.GetAllSpecialization()).ToList();
-		if (currentSale.SpecializationId != null)
+		brandId = currentSale.SpecializationId;
+		if (brandId != null)
 		{
-			specializationsid = currentSale.SpecializationId;
+			currentSpecialization = specializations.FirstOrDefault(x => x.SpecializationId == brandId);
 		}
 		UpdateSalesLineItems();
 	}
@@ -203,7 +204,6 @@
 	public decimal TotalLineItemPrice(SalesLineItem salesLineItem)
 	{
 		decimal price;
-
 		if (salesLineItem.Discount > 0)
 		{
 			// ?? null-coalescing operator: giver os 0 som default værdi hvis PriceAfterDiscount(item) er null.
@@ -213,7 +213,6 @@
 		{
 			price = salesLineItem.Product.Price * salesLineItem.Quantity; // normalpris
 		}
-
 		return price;
 	}
 
@@ -237,12 +236,12 @@
 			allSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).ToList();
 			totalSalesLineItems = allSalesLineItems.Where(salesLineItem => salesLineItem.SaleId == currentSale.SaleId).ToList();
 		}
-
 	}
 
-	public async Task SaveKommentar()
+	public async Task SaveCommentAndBrand()
 	{
 		currentSale.Kommentar = noteInput;
+		currentSale.SpecializationId = brandId;
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}
@@ -273,17 +272,14 @@
 
 	public async Task UpdateDiscount(SalesLineItem salesLineItem)
 	{
-
 		await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 		UpdateSalesLineItems();
 	}
 
 	public async Task UpdateQuantity(SalesLineItem salesLineItem)
 	{
-
 		if (salesLineItem.Quantity > 0)
 		{
-			
 			int statusCode = await SalesLineItemService.UpdateSalesLineItem(salesLineItem);
 			UpdateSalesLineItems();
 			Console.WriteLine($"Quantiy update status code: {statusCode}");
@@ -295,9 +291,4 @@
 			Console.WriteLine($"Quantity deleted status code: {deleteStatusCode}");
 		}
 	}
-
-	
-
-
-
 }

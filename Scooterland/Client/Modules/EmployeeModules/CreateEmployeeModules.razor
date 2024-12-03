@@ -27,7 +27,7 @@ class="row p-3">
 
 	<div class="col-md-2 mb-3">
 		<label for="Specialization">Specialicering</label>
-		<div class="dropdown" >
+		<div class="dropdown">
 			<button type="button" class="dropdown-toggle" @onclick="OpenCloseDropdown">
 				@*Åbener og lukker dropdown*@
 				Vælg Specialicering
@@ -55,8 +55,21 @@ class="row p-3">
 {
 	<div class="message-box">
 		<div class="message-content">
-			<h4>@(EmployeeModel.Role) oprettet</h4>
+			<h4>Ansat oprettet</h4>
 			<p>@(EmployeeModel.Role) blev oprettet korrekt</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Ansat blev ikke oprettet</p>
 			<div class="message-success">
 				<button @onclick="CloseMessageBox">OK</button>
 			</div>
@@ -77,6 +90,8 @@ class="row p-3">
 
 	private bool isSuccessBoxVisible = false;
 
+	private bool isErrorBoxVisible = false;
+
 	Employee EmployeeModel = new Employee();
 
 	private Dictionary<string, bool> selectedOptions = new(); //Dictionary som indeholder en string (specialicerings brand) og en bool (om checkbox er valgt eller ej)
@@ -86,33 +101,50 @@ class="row p-3">
 
 	private async Task HandleValidSubmit()
 	{
-		ErrorCode = await Service.AddEmployee(EmployeeModel);
-
-		Console.WriteLine("Employee added: return code: " + ErrorCode);
-		int employeeId = (await Service.GetAllEmployees()).OrderByDescending(x => x.EmployeeId).FirstOrDefault().EmployeeId;
-		isSuccessBoxVisible = true;
-		foreach (var option in selectedOptions)
+		if (EmployeeModel.Name == null || EmployeeModel.Role == null)
 		{
-			if (option.Value) // Hvis checkbox er valgt
+			isErrorBoxVisible = true;
+		}
+		else
+		{
+			ErrorCode = await Service.AddEmployee(EmployeeModel);
+
+			Console.WriteLine("Employee added: return code: " + ErrorCode);
+			isSuccessBoxVisible = true;
+			EmployeeModel = new Employee();
+			OpenCloseDropdown();
+
+			// Nulstil dropdown-valg
+			foreach (var key in selectedOptions.Keys.ToList())
 			{
-				var specialization = specializations.FirstOrDefault(x => x.Brand == option.Key);
-				if (specialization != null)
-				{
-					// await Service.AddEmployeeSpecialization(employeeId, specialization.SpecializationId);
-					//Jeg tænker vi skal have lavet en ny model, og opdateret i interface, ServiceEF, DbContext og muligvis oprette et nyt Repository til EmployeeSpecialization
-					//Databasen er vel opsat til at klare det? Jeg gik i gang men tænkte det var nok bedst hvis alle var med.
-
-					//Derudover er der lidt et problem med at HandleValidSubmit kører hver gang der pilles ved dropdown, jeg har ikke løst det endnu
-
-				}
+				selectedOptions[key] = false;
 			}
 		}
+
+		// int employeeId = (await Service.GetAllEmployees()).OrderByDescending(x => x.EmployeeId).FirstOrDefault().EmployeeId;
+
+		// foreach (var option in selectedOptions)
+		// {
+		// 	if (option.Value) // Hvis checkbox er valgt
+		// 	{
+		// 		var specialization = specializations.FirstOrDefault(x => x.Brand == option.Key);
+		// 		if (specialization != null)
+		// 		{
+		// 			// await Service.AddEmployeeSpecialization(employeeId, specialization.SpecializationId);
+		// 			//Jeg tænker vi skal have lavet en ny model, og opdateret i interface, ServiceEF, DbContext og muligvis oprette et nyt Repository til EmployeeSpecialization
+		// 			//Databasen er vel opsat til at klare det? Jeg gik i gang men tænkte det var nok bedst hvis alle var med.
+
+		// 			//Derudover er der lidt et problem med at HandleValidSubmit kører hver gang der pilles ved dropdown, jeg har ikke løst det endnu
+
+		// 		}
+		// 	}
+		// }
 	}
 	private void HandleInvalidSubmit()
 	{
 
 	}
-	
+
 	private void OpenCloseDropdown()
 	{
 		isDropdownOpen = !isDropdownOpen;
@@ -121,13 +153,7 @@ class="row p-3">
 	private void CloseMessageBox()
 	{
 		isSuccessBoxVisible = false;
-		EmployeeModel = new Employee();
-
-		// Nulstil dropdown-valg
-		foreach (var key in selectedOptions.Keys.ToList())
-		{
-			selectedOptions[key] = false;
-		}
+		isErrorBoxVisible = false;
 	}
 
 	protected override async Task OnInitializedAsync()

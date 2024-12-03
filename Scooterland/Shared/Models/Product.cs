@@ -17,8 +17,8 @@ namespace Scooterland.Shared.Models
 		[MaxLength(30, ErrorMessage = "Type må maksimalt være 30 anslag lang!")]
 		public string Type { get; set; }
 		[Range(minimum:0,maximum:System.Int32.MaxValue, ErrorMessage = "Prisen skal være positiv!")]
-		[Column(TypeName = "decimal(18,2)")]
-		public decimal Price { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
 		//public List<SalesLineItem> SalesLineItems { get; set; } = new List<SalesLineItem>();
 
 		//Tom contructor til EF

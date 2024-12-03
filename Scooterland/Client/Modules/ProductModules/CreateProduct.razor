@@ -5,9 +5,9 @@
 
 
 <EditForm Model="@ProductModel"
-          OnValidSubmit="@HandleValidSubmit"
-          OnInvalidSubmit="@HandleInvalidSubmit"
-          class="row p-3">
+OnValidSubmit="@HandleValidSubmit"
+OnInvalidSubmit="@HandleInvalidSubmit"
+class="row p-3">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="col-md-6 mb-3">
@@ -32,6 +32,32 @@
 
 </EditForm>
 
+@if (isSuccessBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Produkt oprettet</h4>
+            <p>@(ProductModel.Name) blev oprettet korrekt</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isErrorBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Fejl</h4>
+            <p>Produkt blev ikke oprettet</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
 
     [Inject]
@@ -39,17 +65,36 @@
 
     private int ErrorCode { get; set; } = 0;
 
+    private bool isSuccessBoxVisible = false;
+
+    private bool isErrorBoxVisible = false;
+
     Product ProductModel = new Product();
 
 
     private async Task HandleValidSubmit()
     {
-        ErrorCode = await Service.AddProduct(ProductModel);
+        if (ProductModel.Name == null || ProductModel.Type == null || ProductModel.Price <= 0) //Har ændret product model til standard værdi på -1
+        {
+            isErrorBoxVisible = true;
+        }
+        else
+        {
+            ErrorCode = await Service.AddProduct(ProductModel);
 
-        Console.WriteLine("Product added: return code: " + ErrorCode);
+            Console.WriteLine("Product added: return code: " + ErrorCode);
+            isSuccessBoxVisible = true;
+            ProductModel = new Product();
+        }
     }
     private void HandleInvalidSubmit()
     {
 
+    }
+
+    private void CloseMessageBox()
+    {
+        isSuccessBoxVisible = false;
+        isErrorBoxVisible = false;
     }
 }
