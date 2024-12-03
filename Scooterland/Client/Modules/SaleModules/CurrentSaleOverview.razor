@@ -103,10 +103,22 @@
 			<label for="noteInput">Kommentar:</label>
 			<textarea id="noteInput" class="note-input" @bind="noteInput"></textarea>
 		</div>
-		<button class="gem-button" @onclick="SaveCommentAndBrand">Gem</button>
+		<button class="gem-button" @onclick="SaveComment">Gem kommentar</button>
 	</div>
 </div>
 
+@if (isSuccessBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Gemt</h4>
+			<p>Kommentar gemt</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
 
 
 
@@ -118,6 +130,7 @@
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 	private Specialization currentSpecialization = new Specialization();
+	private bool isSuccessBoxVisible = false;
 	private int? _brandId;
 	public int? brandId
 	{
@@ -254,10 +267,10 @@
 		}
 	}
 
-	public async Task SaveCommentAndBrand()
+	public async Task SaveComment()
 	{
+		isSuccessBoxVisible = true;
 		currentSale.Kommentar = noteInput;
-		currentSale.SpecializationId = brandId;
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}
@@ -306,5 +319,10 @@
 			UpdateSalesLineItems();
 			Console.WriteLine($"Quantity deleted status code: {deleteStatusCode}");
 		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isSuccessBoxVisible = false;
 	}
 }
