@@ -1,6 +1,14 @@
 ﻿@using Scooterland.Client.Modules.SaleModules;
 @page "/sales/all-sales"
 
+<h3 class="breadcrumbs">
+    <NavLink href="/" class="breadcrumb-link">Forside</NavLink>
+    &gt;
+    <NavLink href="/sales" class="breadcrumb-link">Ordre</NavLink>
+    &gt;
+    <NavLink href="/sales/all-sales" class="breadcrumb-link">Alle ordrer</NavLink>
+</h3>
+
 <SaleOverview/>
 
 @code {
