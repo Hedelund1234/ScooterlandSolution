@@ -110,10 +110,43 @@ a, .btn-link {
 
 .breadcrumb-link {
     text-decoration: underline; /* Removes underline for links */
-    color: black !important; /* Bootstrap blue for links, or adjust to your preference */
+    color: black; /* Bootstrap blue for links, or adjust to your preference */
     margin: 0 5px; /* Adds spacing around the separators */
 }
 
     .breadcrumb-link:hover {
         text-decoration: underline; /* Adds underline on hover for clarity */
+        color: #007bff;
     }
+
+.submenu-container {
+    margin-top: 15px; /* Adds space between 'Ordre information' and the submenu */
+    display: inline-flex;
+    flex-direction: column; /* Stacks submenu items vertically */
+    gap: 15px; /* Adds space between each submenu item */
+}
+
+.submenu-item {
+    background-color: #f9f9f9; /* Light background for better visibility */
+    padding: 10px; /* Space inside each submenu item */
+    border: 1px solid #ddd; /* Subtle border to define the submenu box */
+    border-radius: 5px; /* Rounded corners for better aesthetics */
+}
+
+.submenu-link {
+    font-size: 16px;
+    font-weight: bold;
+    color: black; /* Link color (Bootstrap blue) */
+    text-decoration: none; /* Removes underline */
+}
+
+    .submenu-link:hover {
+        text-decoration: underline; /* Underline on hover for clarity */
+    }
+
+.submenu-item p {
+    margin: 5px 0 0 0; /* Adds some space above the text */
+    font-size: 14px; /* Slightly smaller font for the description */
+    color: #555; /* Gray color for text */
+}
+
