@@ -1,16 +1,17 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.SpecializationServices
+@using Scooterland.Client.Services.SaleServices
 
 <h3>Alle specialiseringer</h3>
 
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar" 
-			placeholder="Søg efter brand" 
-			id="navn" 
-			type="text" 
-			@bind="brandSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg efter brand" 
+	id="navn" 
+	type="text" 
+	@bind="brandSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredSpecializations == null)
@@ -57,13 +58,30 @@ else
 	</table>
 }
 
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Dette scooter brand bliver brugt hos en eller flere kunder!</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
 
 @code {
+	private bool isErrorBoxVisible = false;
 	[Inject]
 	public ISpecializationService Service { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 	private List<Specialization> specializations = new List<Specialization>();
 	private List<Specialization> filteredSpecializations = new List<Specialization>();
+	private List<Sale> sales = new List<Sale>();
 	private int? editingSpecializationsId = null;
+	private bool isUsed = false;
 	private string _brandSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string brandSearch   //Bundet til input-feltet for søgning
 	{
@@ -101,10 +119,32 @@ else
 
 	private async Task DeleteSpecialization(int specializationId)
 	{
-		await Service.DeleteSpecialization(specializationId);
-		specializations = (await Service.GetAllSpecialization()).ToList();
-		filteredSpecializations = specializations;
-		StateHasChanged();
+		sales = (await SaleService.GetAllSales()).ToList();
+		foreach (var item in sales)
+		{
+			if (item.SpecializationId == specializationId)
+			{
+				isUsed = true;
+
+			}
+		}
+
+		if (!isUsed)
+		{
+			await Service.DeleteSpecialization(specializationId);
+			specializations = (await Service.GetAllSpecialization()).ToList();
+			filteredSpecializations = specializations;
+			StateHasChanged();
+			return;
+		}
+		
+		isErrorBoxVisible = true;
+		isUsed = false;
+	}
+
+	private void CloseMessageBox()
+	{
+		isErrorBoxVisible = false;
 	}
 
 	private void FilterSpecializations()

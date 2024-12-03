@@ -80,6 +80,7 @@ namespace Scooterland.Server.Repositories.SaleRepository
 			foundSale.Payment = sale.Payment;
 			foundSale.Kommentar = sale.Kommentar;
 			foundSale.EmployeeId = sale.EmployeeId;
+			foundSale.SpecializationId = sale.SpecializationId;
 
 			db.SaveChanges();  //Hvis save lykkedes, returner true. 
 
