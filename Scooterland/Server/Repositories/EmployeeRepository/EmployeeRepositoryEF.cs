@@ -1,4 +1,5 @@
-﻿using Scooterland.Server.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using Scooterland.Server.DataAccess;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.EmployeeRepository
@@ -51,11 +52,13 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 			var originalEmployee = foundEmployee;
 
 			foundEmployee.Name = employee.Name;
-			foundEmployee.Role = employee.Role;			
+			foundEmployee.Role = employee.Role;
+			//foundEmployee.Specializations = employee.Specializations;
 			db.SaveChanges();
 
 			if (originalEmployee.Name != foundEmployee.Name ||
-				originalEmployee.Role != foundEmployee.Role)
+				originalEmployee.Role != foundEmployee.Role /*||
+				originalEmployee.Specializations != foundEmployee.Specializations*/)
 			{
 				return true;
 			}
@@ -90,6 +93,8 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 			try
 			{
 				employees = db.Employees.ToList();
+
+				//employees = db.Employees.Include(s => s.Specializations).ToList();
 			}
 			catch
 			{
