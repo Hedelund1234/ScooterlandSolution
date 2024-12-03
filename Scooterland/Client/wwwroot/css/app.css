@@ -150,3 +150,35 @@ a, .btn-link {
     color: #555; /* Gray color for text */
 }
 
+.subsubmenu-container {
+    margin-top: 5px; /* Reduced space between submenu and subsubmenu */
+    margin-left: 15px; /* Less indentation for a subtler nested effect */
+}
+
+.subsubmenu-item {
+    background-color: #fafafa; /* Light background for a more subtle appearance */
+    padding: 5px 10px; /* Reduced padding to make it more compact */
+    border-radius: 5px; /* Rounded corners to keep aesthetics */
+}
+
+.subsubmenu-link {
+    font-size: 14px; /* Smaller font size for subsubmenu links */
+    font-weight: normal; /* Keeping font weight normal */
+    color: black; /* Link color */
+    text-decoration: none; /* Removes underline */
+}
+
+    .subsubmenu-link:hover {
+        text-decoration: underline; /* Underline on hover */
+        color: #007bff; /* Keeps the hover color */
+    }
+
+.subsubmenu-item p {
+    margin: 5px 0 0 0; /* Adds space above the description */
+    font-size: 12px; /* Smaller font for the description */
+    color: #777; /* Slightly lighter gray for description text */
+}
+
+
+
+
