@@ -179,6 +179,11 @@ a, .btn-link {
     color: #777; /* Slightly lighter gray for description text */
 }
 
+/*h3 {
+    display: block;*/ /* Ensures each h3 element behaves as a block */
+    /*margin-top: 15px;*/ 
+/*}*/
+
 
 
 
