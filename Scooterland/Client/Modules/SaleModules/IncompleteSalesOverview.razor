@@ -159,7 +159,15 @@ else
 	{
 		currentSaleId = sale.SaleId;
 		// Henter alle ansatte og filtrerer dem, så kun dem med rollen "Mekaniker" vises i listen.
-		employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker").ToList();
+		if (sale.SpecializationId == null)
+		{
+			employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker").ToList();
+		}
+		else
+		{
+			employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker" 
+								&& e.Specializations.Any(s => s.SpecializationId == sale.SpecializationId)).ToList();
+		}
 		// Hvis der findes mekanikere, aktiveres dropdown-menuen og det valgte Sale gemmes i currentSale.
 		if (employeeList.Any())
 		{
