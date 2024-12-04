@@ -79,38 +79,4 @@
     box-shadow: 0px 0px 7px black; /* Subtle black glow - [horizontal-offset] [vertical-offset] [blur-radius] */
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
 
-    .table th, .table td {
-        padding: 4px;
-        text-align: center;
-    }
-
-    .table th {
-        background-color: lightgray;
-        font-weight: bold;
-        border: 1px solid #ddd;
-    }
-
-    .table td {
-        border: 1px solid #ddd;
-        transition: background-color 0.3s ease, transform 0.2s ease; /* Gør hover-effekten mere flydende */
-    }
-
-    .table tbody tr:nth-child(odd) td {
-        background-color: white; /* Hvid for ulige rækker */
-    }
-
-    .table tbody tr:nth-child(even) td {
-        background-color: #f2f2f2; /* Lys grå for lige rækker */
-    }
-
-    /*Hover effekten*/
-    .table tbody tr:hover {
-        cursor: pointer; /* Skift cursor til hånd */
-        border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
-    }
