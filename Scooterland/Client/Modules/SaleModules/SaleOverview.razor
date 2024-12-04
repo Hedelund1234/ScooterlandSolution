@@ -7,11 +7,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-	placeholder="Søg på kundenavn"
-	id="navn"
-	type="text"
-	@bind="nameSearch"
-	@bind:event="oninput" />
+		   placeholder="Søg på kundenavn"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
 
 @if (filteredSales == null)
@@ -136,8 +136,12 @@ else
 		}
 		else
 		{
-			filteredSales = sales.Where(p => 
-			p.Customer.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+			//Søger på customerName, SpecializationName, employeeName -> tjekker på om den der er nullable er null
+			filteredSales = sales.Where(p =>
+			p.Customer.Name.ToLower().Contains(nameSearch.ToLower()) ||
+			(p.Specialization != null && p.Specialization.Brand.ToLower().Contains(nameSearch.ToLower())) || 
+			(p.Employee != null && p.Employee.Name.ToLower().Contains(nameSearch.ToLower()))
+			).ToList();
 		}
 	}
 
@@ -204,7 +208,7 @@ else
 			await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
-			sales = (await Service.GetAllSales()).ToList();		
+			sales = (await Service.GetAllSales()).ToList();
 		}
 		CancelAssignEmployee();
 	}
