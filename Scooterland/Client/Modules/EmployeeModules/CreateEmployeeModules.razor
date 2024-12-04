@@ -24,26 +24,28 @@ class="row p-3">
 		<InputText id="Role" @bind-Value="EmployeeModel.Role" class="form-control" />
 		<ValidationMessage For="@(() => EmployeeModel.Role)" />
 	</div>
+@* 
 
 	<div class="col-md-2 mb-3">
 		<label for="Specialization">Specialicering</label>
 		<div class="dropdown">
 			<button type="button" class="dropdown-toggle" @onclick="OpenCloseDropdown">
-				@*Åbener og lukker dropdown*@
+				<!--Åbener og lukker dropdown-->
 				Vælg Specialicering
 			</button>
 			<div class="dropdown-menu @(isDropdownOpen ? "show" : "hide")">
-				@*Giver to muligheder - show og hide - alt efter om isDropdownOpen er false eller true*@
+				<!--Giver to muligheder - show og hide - alt efter om isDropdownOpen er false eller true*-->
 				@foreach (var option in specializations)
 				{
 					<div class="dropdown-item">
-						<input type="checkbox" id="@option.Brand" @bind="@selectedOptions[option.Brand]" /> @*Et checkbox input som binder til specialicerings brand og som har indbygget bool alt after om checkbox er valgt eller ej*@
-						<label for="@option.Brand">@option.Brand</label> @*Viser specialicerings brand*@
+						<input type="checkbox" id="@option.Brand" @bind="@selectedOptions[option.Brand]" /> <!--Et checkbox input som binder til specialicerings brand og som har indbygget bool alt after om checkbox er valgt eller ej-->
+						<label for="@option.Brand">@option.Brand</label> <!--Viser specialicerings brand-->
 					</div>
 				}
 			</div>
 		</div>
 	</div>
+  *@
 
 	<div class="col-12 mb-3">
 		<button type="submit" class="btn btn-primary">Tilføj</button>
@@ -81,12 +83,12 @@ class="row p-3">
 	[Inject]
 	public IEmployeeService Service { get; set; }
 
-	[Inject]
-	public ISpecializationService SpecializationService { get; set; }
+	// [Inject]
+	// public ISpecializationService SpecializationService { get; set; }
 
 	private int ErrorCode { get; set; } = 0;
 
-	private bool isDropdownOpen = false;
+	// private bool isDropdownOpen = false;
 
 	private bool isSuccessBoxVisible = false;
 
@@ -94,9 +96,9 @@ class="row p-3">
 
 	Employee EmployeeModel = new Employee();
 
-	private Dictionary<string, bool> selectedOptions = new(); //Dictionary som indeholder en string (specialicerings brand) og en bool (om checkbox er valgt eller ej)
+	/* private Dictionary<string, bool> selectedOptions = new(); */ //Dictionary som indeholder en string (specialicerings brand) og en bool (om checkbox er valgt eller ej)
 
-	private List<Specialization> specializations = new List<Specialization>();
+	// private List<Specialization> specializations = new List<Specialization>();
 
 
 	private async Task HandleValidSubmit()
@@ -112,13 +114,13 @@ class="row p-3">
 			Console.WriteLine("Employee added: return code: " + ErrorCode);
 			isSuccessBoxVisible = true;
 			EmployeeModel = new Employee();
-			OpenCloseDropdown();
+			// OpenCloseDropdown();
 
-			// Nulstil dropdown-valg
-			foreach (var key in selectedOptions.Keys.ToList())
-			{
-				selectedOptions[key] = false;
-			}
+			// // Nulstil dropdown-valg
+			// foreach (var key in selectedOptions.Keys.ToList())
+			// {
+			// 	selectedOptions[key] = false;
+			// }
 		}
 
 		// int employeeId = (await Service.GetAllEmployees()).OrderByDescending(x => x.EmployeeId).FirstOrDefault().EmployeeId;
@@ -145,10 +147,10 @@ class="row p-3">
 
 	}
 
-	private void OpenCloseDropdown()
-	{
-		isDropdownOpen = !isDropdownOpen;
-	}
+	// private void OpenCloseDropdown()
+	// {
+	// 	isDropdownOpen = !isDropdownOpen;
+	// }
 
 	private void CloseMessageBox()
 	{
@@ -158,13 +160,13 @@ class="row p-3">
 
 	protected override async Task OnInitializedAsync()
 	{
-		specializations = (await SpecializationService.GetAllSpecialization()).ToList();
-		foreach (var option in specializations)
-		{
-			if (!selectedOptions.ContainsKey(option.Brand))
-			{
-				selectedOptions[option.Brand] = false;
-			}
-		}
+		// specializations = (await SpecializationService.GetAllSpecialization()).ToList();
+		// foreach (var option in specializations)
+		// {
+		// 	if (!selectedOptions.ContainsKey(option.Brand))
+		// 	{
+		// 		selectedOptions[option.Brand] = false;
+		// 	}
+		// }
 	}
 }
