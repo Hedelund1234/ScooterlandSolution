@@ -30,6 +30,7 @@ else
 				<th>Kommentar</th>
 				<th>Start dato</th>
 				<th>Slut dato</th>
+				<th>Telefonnr.</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,6 +65,7 @@ else
 					}
 					<td class="cell">@item.StartDate</td>
 					<td class="cell">@item.EndDate</td>
+					<td class="cell">@item.Customer.Phonenumber</td>
 				</tr>
 				@if (showEmployeeDropdown && item.SaleId == currentSaleId)
 				{
@@ -84,6 +86,7 @@ else
 								<button class="employee-btn" @onclick="RemoveMekanikerFromSale">Fjern</button>
 							</div>
 						</td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -162,7 +165,15 @@ else
 	{
 		currentSaleId = sale.SaleId;
 		// Henter alle ansatte og filtrerer dem, så kun dem med rollen "Mekaniker" vises i listen.
-		employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker").ToList();
+		if (sale.SpecializationId == null)
+		{
+			employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker").ToList();
+		}
+		else
+		{
+			employeeList = (await EmployeeService.GetAllEmployees()).Where(e => e.Role == "Mekaniker"
+								&& e.Specializations.Any(s => s.SpecializationId == sale.SpecializationId)).ToList();
+		}
 		// Hvis der findes mekanikere, aktiveres dropdown-menuen og det valgte Sale gemmes i currentSale.
 		if (employeeList.Any())
 		{
