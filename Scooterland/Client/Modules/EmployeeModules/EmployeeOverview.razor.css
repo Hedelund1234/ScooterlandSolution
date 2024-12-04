@@ -114,3 +114,36 @@
         cursor: pointer; /* Skift cursor til hånd */
         border: 0.1rem solid black; /* Tilføjer en sort kant ved hover */
     }
+
+
+
+
+
+/*Below is used for specialization dropdown menus*/
+.dropdown-specialization {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu-specialization {
+    display: block;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    border: 1px solid #ddd;
+}
+
+.dropdown-item-specialization {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+    .dropdown-item-specialization:hover {
+        background-color: #f1f1f1;
+    }

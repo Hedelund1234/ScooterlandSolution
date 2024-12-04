@@ -65,8 +65,8 @@ else
 
 
 
-
-@* 						<td>
+						<!--Shows current specializations on employee if any-->
+ 						<td>
 							<div>Nuværende mærker</div>
 							@foreach (var spec in item.Specializations)
 							{
@@ -76,24 +76,28 @@ else
 								</div>
 							}
 
-							<select @bind="selectedSpecialization" class="form-control">
-								<option value="" disabled selected>Vælg en specialisering</option>
-								@foreach (var brand in allSpecializations)
+							<!--Selection from all specialization on given employee-->
+							<div class="dropdown-specialization">
+								<button @onclick="() => ToggleDropdown(item.EmployeeId)">
+									Vælg en specialisering
+								</button>
+
+								@if (activeEmployeeId == item.EmployeeId)
 								{
-									<option value="@brand.SpecializationId">@brand.Brand</option>
+									<ul class="dropdown-menu-specialization">
+										@foreach (var brand in allSpecializations)
+										{
+											<li>
+												<a class="dropdown-item-specialization" @onclick="() => AddSpecialization(item, brand)">
+													@brand.Brand
+												</a>
+											</li>
+										}
+									</ul>
 								}
-							</select>
-
-
-
-
-														@foreach (var brand in allSpecializations)
-							{
-								@brand.Brand
-							}
-
-
-						</td> *@
+							</div>
+						</td>
+						
 					}
 				</tr>
 			}
@@ -110,7 +114,6 @@ else
 	private List<Employee> employees = new List<Employee>();
 	private List<Employee> filteredEmployees = new List<Employee>();
 	private List<Specialization> allSpecializations = new List<Specialization>();
-	private int? selectedSpecialization;
 	private int? editingEmployeeId = null;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch   //Bundet til input-feltet for søgning
@@ -122,6 +125,7 @@ else
 			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
+	private int? activeEmployeeId;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -131,13 +135,37 @@ else
 
 	}
 
-@* 	public async Task RemoveSpecialization(Employee employee, Specialization specialization)
+	private void ToggleDropdown(int employeeId)
+	{
+		if (activeEmployeeId == employeeId)
+		{
+			activeEmployeeId = null; //Close dropdown
+		}
+		else
+		{
+			activeEmployeeId = employeeId; //Open dropdown for given employee
+		}
+	}
+
+ 	public async Task RemoveSpecialization(Employee employee, Specialization specialization)
 	{
 		employee.Specializations.Remove(specialization);
 		await Service.UpdateEmployee(employee);
 		employees = (await Service.GetAllEmployees()).ToList();
 		StateHasChanged();
-	} *@
+	} 
+
+	public async Task AddSpecialization(Employee employee, Specialization specialization)
+	{
+		if (!employee.Specializations.Exists(s => s.SpecializationId == specialization.SpecializationId)) //If specialization already exist 
+		{
+			employee.Specializations.Add(specialization);
+			await Service.UpdateEmployee(employee);
+			employees = (await Service.GetAllEmployees()).ToList();
+			StateHasChanged();
+		}
+
+	}
 
 	private void EditEmployee(int employeeId)
 	{
