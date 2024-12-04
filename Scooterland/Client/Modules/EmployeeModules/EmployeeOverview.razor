@@ -66,7 +66,7 @@ else
 
 
 						<!--Shows current specializations on employee if any-->
- 						<td>
+						<td>
 							<div>Nuværende mærker</div>
 							@foreach (var spec in item.Specializations)
 							{
@@ -97,7 +97,7 @@ else
 								}
 							</div>
 						</td>
-						
+
 					}
 				</tr>
 			}
@@ -121,7 +121,7 @@ else
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			_nameSearch = value.ToLower();    //Opdaterer _nameSearch med den nye værdi og gør den til små bogstaver
 			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -147,17 +147,17 @@ else
 		}
 	}
 
- 	public async Task RemoveSpecialization(Employee employee, Specialization specialization)
+	public async Task RemoveSpecialization(Employee employee, Specialization specialization)
 	{
 		employee.Specializations.Remove(specialization);
 		await Service.UpdateEmployee(employee);
 		employees = (await Service.GetAllEmployees()).ToList();
 		StateHasChanged();
-	} 
+	}
 
 	public async Task AddSpecialization(Employee employee, Specialization specialization)
 	{
-		if (!employee.Specializations.Exists(s => s.SpecializationId == specialization.SpecializationId)) //If specialization already exist 
+		if (!employee.Specializations.Exists(s => s.SpecializationId == specialization.SpecializationId)) //If specialization already exist
 		{
 			employee.Specializations.Add(specialization);
 			await Service.UpdateEmployee(employee);
@@ -200,7 +200,10 @@ else
 		}
 		else
 		{
-			filteredEmployees = employees.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+			filteredEmployees = 
+			employees.Where(e => e.Name.ToLower().Contains(nameSearch) ||
+			(e.Role != null && e.Role.ToLower().Contains(nameSearch)) ||
+			(e.Specializations != null && e.Specializations.Any(s => s.Brand != null && s.Brand.ToLower().Contains(nameSearch)))).ToList();
 		}
 	}
 }

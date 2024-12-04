@@ -78,7 +78,7 @@ else
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			_nameSearch = value.ToLower();    //Opdaterer det pribate felt _nameSearch med den nye værdi
 			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -122,7 +122,10 @@ else
 		}
 		else
 		{
-			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+			filteredProducts = 
+			products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower()) ||
+			(p.Type.ToLower().Contains(nameSearch)) || 
+			(p.Price.ToString().Contains(nameSearch))).ToList();
 		}
 	}
 }
