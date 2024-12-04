@@ -30,6 +30,7 @@ else
 				<th>Kommentar</th>
 				<th>Start dato</th>
 				<th>Slut dato</th>
+				<th>Telefonnr.</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,6 +65,7 @@ else
 					}
 					<td class="cell">@item.StartDate</td>
 					<td class="cell">@item.EndDate</td>
+					<td class="cell">@item.Customer.Phonenumber</td>
 				</tr>
 				@if (showEmployeeDropdown && item.SaleId == currentSaleId)
 				{
@@ -84,6 +86,7 @@ else
 								<button class="employee-btn" @onclick="RemoveMekanikerFromSale">Fjern</button>
 							</div>
 						</td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
