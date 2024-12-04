@@ -54,15 +54,13 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 			//Remvoes specialization from EmployeeSpecialization table
 			if (employee.Specializations.Count() < foundEmployee.Specializations.Count())
 			{
-				var specializationsToRemove = foundEmployee.Specializations 
+				var specializationsToRemove = foundEmployee.Specializations
 							.Where(f => !employee.Specializations // Filter foundEmployee.Specializations to find those not in employee.Specializations
-                            .Any(employee => employee.SpecializationId == f.SpecializationId)) // Check if any Specialization in employee.Specializations has the same ID as foundEmployee.Specializations
-                            .ToList();
+							.Any(employee => employee.SpecializationId == f.SpecializationId)).Last(); // Check if any Specialization in employee.Specializations has the same ID as foundEmployee.Specializations
 
-				foreach (var specialization in specializationsToRemove)
-				{
-					foundEmployee.Specializations.Remove(specialization);
-				}
+				foundEmployee.Specializations.Remove(specializationsToRemove);
+				db.SaveChanges();
+				return true;
 			}
 
 			//Adds specialization from EmployeeSpecialization table
@@ -71,6 +69,8 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 				if (!foundEmployee.Specializations.Exists(s => s.SpecializationId == employee.Specializations.Last().SpecializationId)) //Extra validation, checks new specialization already exist/is assigned on employee from database
                 {
                     foundEmployee.Specializations.Add(employee.Specializations.Last());
+					db.SaveChanges();
+					return true;
                 }
             }
 
