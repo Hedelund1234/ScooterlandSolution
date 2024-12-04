@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Scooterland.Server.DataAccess;
-using Scooterland.Server.Migrations;
 using Scooterland.Shared.Models;
 using System.Linq;
 
@@ -77,8 +76,7 @@ namespace Scooterland.Server.Repositories.SaleRepository
 				return false;
 
 			foundSale.EndDate = sale.EndDate;
-			foundSale.Payment = sale.Payment;
-			foundSale.Kommentar = sale.Kommentar;
+			foundSale.Comment = sale.Comment;
 			foundSale.EmployeeId = sale.EmployeeId;
 			foundSale.SpecializationId = sale.SpecializationId;
 

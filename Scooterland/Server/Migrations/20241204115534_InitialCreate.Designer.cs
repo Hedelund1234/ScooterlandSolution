@@ -12,8 +12,8 @@ using Scooterland.Server.DataAccess;
 namespace Scooterland.Server.Migrations
 {
     [DbContext(typeof(ScooterlandDbContext))]
-    [Migration("20241202090553_SalePaymentChangedToBool")]
-    partial class SalePaymentChangedToBool
+    [Migration("20241204115534_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,9 @@ namespace Scooterland.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -138,12 +141,6 @@ namespace Scooterland.Server.Migrations
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Kommentar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Payment")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("SpecializationId")
                         .HasColumnType("int");
@@ -170,8 +167,8 @@ namespace Scooterland.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalesLineItemId"));
 
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");

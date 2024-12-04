@@ -30,7 +30,6 @@ else
 				<th>Kommentar</th>
 				<th>Start dato</th>
 				<th>Slut dato</th>
-				<th>Total beløb</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -55,17 +54,16 @@ else
 					{
 						<td class="cell">@item.Specialization.Brand</td>
 					}
-					@if (item.Kommentar is null)
+					@if (item.Comment is null)
 					{
 						<td class="cell"></td>
 					}
 					else
 					{
-						<td class="cell">@item.Kommentar</td>
+						<td class="cell">@item.Comment</td>
 					}
 					<td class="cell">@item.StartDate</td>
 					<td class="cell">@item.EndDate</td>
-					<td class="cell">@item.Payment</td>
 				</tr>
 			}
 		</tbody>

@@ -159,9 +159,9 @@
 	{
 		//Loading the current sale
 		currentSale = await SaleService.GetSale(SaleId);
-		if (currentSale?.Kommentar != null)
+		if (currentSale?.Comment != null)
 		{
-			noteInput = currentSale.Kommentar;
+			noteInput = currentSale.Comment;
 		}
 		//Loading all about specialization 
 		specializations = (await SpecializationService.GetAllSpecialization()).ToList();
@@ -270,7 +270,7 @@
 	public async Task SaveComment()
 	{
 		isSuccessBoxVisible = true;
-		currentSale.Kommentar = noteInput;
+		currentSale.Comment = noteInput;
 		await SaleService.UpdateSale(currentSale);
 		StateHasChanged();
 	}

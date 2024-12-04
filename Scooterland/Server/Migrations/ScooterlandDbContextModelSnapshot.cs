@@ -127,6 +127,9 @@ namespace Scooterland.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -135,12 +138,6 @@ namespace Scooterland.Server.Migrations
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Kommentar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Payment")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("SpecializationId")
                         .HasColumnType("int");

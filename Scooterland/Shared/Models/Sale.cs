@@ -16,12 +16,9 @@ namespace Scooterland.Shared.Models
 		public Employee? Employee { get; set; }
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
-		public bool? Payment { get; set; }
-		//public List<SalesLineItem>? SalesLineItem { get; set; } = new List<SalesLineItem>();
 		public int? SpecializationId { get; set; }
 		public Specialization? Specialization { get; set; }
-
-        public string? Kommentar { get; set; }
+        public string? Comment { get; set; }
 
 
         //Tom contructor til EF
