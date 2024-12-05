@@ -4,11 +4,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-	placeholder="Søg efter produkt"
-	id="navn"
-	type="text"
-	@bind="nameSearch"
-	@bind:event="oninput" />
+		   placeholder="Søg efter produkt"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
 
 @if (filteredProducts == null)
@@ -33,7 +33,7 @@ else
 				<tr @onclick="() => OnRowClicked(item)">
 					<td class="cell">@item.ProductId</td>
 					<td class="cell">@item.Name</td>
-					<td class="cell">@item.Type</td>	
+					<td class="cell">@item.Type</td>
 					<td class="cell">@item.Price</td>
 				</tr>
 			}
@@ -69,13 +69,13 @@ else
 	}
 
 	private async Task OnRowClicked(Product product)
-	{		
+	{
 		// Send valgt produkt tilbage til parent-komponenten
-		 if (product != null)
+		if (product != null)
 		{
 			await OnAddedProduct.InvokeAsync(product);
 		}
-	}	
+	}
 
 	private void FilterProducts()
 	{
@@ -85,7 +85,12 @@ else
 		}
 		else
 		{
-			filteredProducts = products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower())).ToList();
+			var nameSearchToLower = nameSearch.ToLower();
+
+			filteredProducts =
+			products.Where(p => p.Name.ToLower().Contains(nameSearchToLower) ||
+			(p.Type.ToLower().Contains(nameSearchToLower)) ||
+			(p.Price.ToString().Contains(nameSearchToLower))).ToList();
 		}
 	}
 }
