@@ -38,38 +38,6 @@
 }
 
 
-.search-bar {
-    width: 100%;
-    border-radius: 7px;
-    border-right-style: none;
-    border-left-style: none;
-    border: none;
-    border-block-color: lightgray;
-    background-color: lightgray;
-    padding: 8px;
-    padding-left: 30px;
-}
-
-.search-container {
-    position: relative; /* Establishes a positioning context for the `.search-icon` to align itself within this container */
-    margin-bottom: 25px; /*SPace between searchbar and our table data*/
-}
-
-.search-icon {
-    position: absolute; /* Positions the icon relative to the nearest positioned ancestor (the `search-container`) */
-    top: 50%; /* Moves the icon halfway down the height of the `search-container` */
-    left: 8px; /* Positions the icon 8px from the left edge of the `search-container` */
-    transform: translateY(-50%); /* Vertically centers the icon by shifting it up*/
-    font-size: 16px; /* Sets the size of the icon */
-    color: gray; /* Change the color of the icon */
-}
-
-.search-bar:focus {
-    background-color: white; /* Background changes to white, makes it clearer that it's in focus*/
-    outline: none; /*Needed for box-shadow*/
-    box-shadow: 0px 0px 7px black; /* Subtle black glow - [horizontal-offset] [vertical-offset] [blur-radius] */
-}
-
 
 
 .employee-dropdown {
