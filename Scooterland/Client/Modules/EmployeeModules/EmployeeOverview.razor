@@ -1,6 +1,7 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.EmployeeServices;
 @using Scooterland.Client.Services.SpecializationServices;
+@using Scooterland.Client.Services.SaleServices;
 
 
 @* Søgefelt-container, der inkluderer et ikon og et input-felt *@
@@ -105,16 +106,33 @@ else
 	</table>
 }
 
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Du kan ikke slette en ansat der indgår i en ordre</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
 
 @code {
 	[Inject]
 	public IEmployeeService Service { get; set; }
 	[Inject]
 	public ISpecializationService SpecializationService { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 	private List<Employee> employees = new List<Employee>();
 	private List<Employee> filteredEmployees = new List<Employee>();
 	private List<Specialization> allSpecializations = new List<Specialization>();
+	private List<Sale> allSales = new List<Sale>();
 	private int? editingEmployeeId = null;
+	private bool isErrorBoxVisible = false;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{
@@ -186,10 +204,19 @@ else
 
 	private async Task DeleteEmployee(int employeeId)
 	{
-		await Service.DeleteEmployee(employeeId);
-		employees = (await Service.GetAllEmployees()).ToList();
-		filteredEmployees = employees;
-		StateHasChanged();
+		allSales = (await SaleService.GetAllSales()).ToList();
+		if (!allSales.Any(x => x.EmployeeId == employeeId))
+		{
+			await Service.DeleteEmployee(employeeId);
+			employees = (await Service.GetAllEmployees()).ToList();
+			filteredEmployees = employees;
+			StateHasChanged();
+
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
 	}
 
 	private void FilterEmployees()
@@ -206,5 +233,11 @@ else
 			(e.Role != null && e.Role.ToLower().Contains(nameSearch)) ||
 			(e.Specializations != null && e.Specializations.Any(s => s.Brand != null && s.Brand.ToLower().Contains(nameSearch)))).ToList();
 		}
+	}
+
+	private void CloseMessageBox()
+	{
+		@* isSuccessBoxVisible = false; *@
+		isErrorBoxVisible = false;
 	}
 }
