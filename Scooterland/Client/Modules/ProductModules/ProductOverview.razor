@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.ProductServices;
+@using Scooterland.Client.Services.SalesLineItemServices;
 
 <h3>Alle produkter</h3>
 
@@ -64,14 +65,36 @@ else
 	</table>
 }
 
+
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Du kan ikke slette et produkt der indgår i en ordre</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
 @code {
 	[Parameter]
 	public Product ChosenProduct { get; set; } = new Product();
 	[Inject]
 	public IProductService Service { get; set; }
+
+	[Inject]
+	public ISalesLineItemService SaleLineItemService { get; set; }
+
 	private List<Product> products = new List<Product>(); 
 	private List<Product> filteredProducts = new List<Product>();
+	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 	private int? editingProductId = null;
+	private bool isSuccessBoxVisible = false;
+
+	private bool isErrorBoxVisible = false;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 
 	private string nameSearch   //Bundet til input-feltet for søgning
@@ -109,10 +132,18 @@ else
 
 	private async Task DeleteProduct(int productId)
 	{
-		await Service.DeleteProduct(productId);
-		products = (await Service.GetAllProducts()).ToList();
-		filteredProducts = products;
-		StateHasChanged();
+		allSalesLineItems = (await SaleLineItemService.GetAllSalesLineItem()).ToList();
+		if (!allSalesLineItems.Any(x => x.ProductId == productId))
+		{
+			await Service.DeleteProduct(productId);
+			products = (await Service.GetAllProducts()).ToList();
+			filteredProducts = products;
+			StateHasChanged();
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
 	}
 
 	private void FilterProducts()
@@ -130,5 +161,11 @@ else
 			(p.Type.ToLower().Contains(nameSearchToLower)) ||
 			(p.Price.ToString().Contains(nameSearchToLower))).ToList();
 		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isSuccessBoxVisible = false;
+		isErrorBoxVisible = false;
 	}
 }
