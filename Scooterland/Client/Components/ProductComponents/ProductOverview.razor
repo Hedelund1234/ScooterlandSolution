@@ -1,0 +1,171 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.ProductServices;
+@using Scooterland.Client.Services.SalesLineItemServices;
+
+<h3>Alle produkter</h3>
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" 
+	placeholder="Søg" 
+	id="navn" 
+	type="text" 
+	@bind="nameSearch"
+	@bind:event="oninput" />
+</div>
+
+@if (filteredProducts == null)
+{
+	<p><em>Ingen produkter fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Navn</th>
+				<th>Type</th>
+				<th>Pris</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredProducts)
+			{
+				<tr>
+					<td class="cell">@item.ProductId</td>
+					@if (editingProductId == item.ProductId)
+					{
+						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Type" /></td>
+						<td class="cell">
+							<input class="cell-input" @bind="item.Price" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveProduct(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Type</td>
+						<td class="cell">
+							@item.Price
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditProduct(item.ProductId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteProduct(item.ProductId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Du kan ikke slette et produkt der indgår i en ordre</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public Product ChosenProduct { get; set; } = new Product();
+	[Inject]
+	public IProductService Service { get; set; }
+
+	[Inject]
+	public ISalesLineItemService SaleLineItemService { get; set; }
+
+	private List<Product> products = new List<Product>(); 
+	private List<Product> filteredProducts = new List<Product>();
+	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
+	private int? editingProductId = null;
+	private bool isSuccessBoxVisible = false;
+
+	private bool isErrorBoxVisible = false;
+	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+
+	private string nameSearch   //Bundet til input-feltet for søgning
+	{
+		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		products = (await Service.GetAllProducts()).ToList();
+		filteredProducts = products;
+	}
+
+	private void EditProduct(int productId)
+	{
+		editingProductId = productId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveProduct(Product product)
+	{
+		await Service.UpdateProduct(product); // Opdater produktet i databasen
+		editingProductId = null; // Afslut redigering
+		products = (await Service.GetAllProducts()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingProductId = null; // Annuller redigering
+	}
+
+	private async Task DeleteProduct(int productId)
+	{
+		allSalesLineItems = (await SaleLineItemService.GetAllSalesLineItem()).ToList();
+		if (!allSalesLineItems.Any(x => x.ProductId == productId))
+		{
+			await Service.DeleteProduct(productId);
+			products = (await Service.GetAllProducts()).ToList();
+			filteredProducts = products;
+			StateHasChanged();
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
+	}
+
+	private void FilterProducts()
+	{
+		if (string.IsNullOrWhiteSpace(nameSearch))
+		{
+			filteredProducts = products; // Hvis søgningen er tom, vis alle produkter
+		}
+		else
+		{
+			var nameSearchToLower = nameSearch.ToLower();
+
+			filteredProducts = 
+			products.Where(p => p.Name.ToLower().Contains(nameSearchToLower) ||
+			(p.Type.ToLower().Contains(nameSearchToLower)) ||
+			(p.Price.ToString().Contains(nameSearchToLower))).ToList();
+		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isSuccessBoxVisible = false;
+		isErrorBoxVisible = false;
+	}
+}

@@ -1,0 +1,100 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.ProductServices
+
+<h3>Opret produkt</h3>
+
+
+<EditForm Model="@ProductModel"
+OnValidSubmit="@HandleValidSubmit"
+OnInvalidSubmit="@HandleInvalidSubmit"
+class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Name">Navn</label>
+        <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Name)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Type">Type</label>
+        <InputText id="Type" @bind-Value="ProductModel.Type" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Type)" />
+    </div>
+    <div class="col-md-2 mb-3">
+        <label for="Price">Pris</label>
+        <InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control" />
+        <ValidationMessage For="@(() => ProductModel.Price)" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
+
+</EditForm>
+
+@if (isSuccessBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Produkt oprettet</h4>
+            <p>@(ProductModel.Name) blev oprettet korrekt</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isErrorBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Fejl</h4>
+            <p>Produkt blev ikke oprettet</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Inject]
+    public IProductService Service { get; set; }
+
+    private int ErrorCode { get; set; } = 0;
+
+    private bool isSuccessBoxVisible = false;
+
+    private bool isErrorBoxVisible = false;
+
+    Product ProductModel = new Product();
+
+
+    private async Task HandleValidSubmit()
+    {
+        if (ProductModel.Name == null || ProductModel.Type == null || ProductModel.Price <= 0) //Har ændret product model til standard værdi på -1
+        {
+            isErrorBoxVisible = true;
+        }
+        else
+        {
+            ErrorCode = await Service.AddProduct(ProductModel);
+
+            Console.WriteLine("Product added: return code: " + ErrorCode);
+            isSuccessBoxVisible = true;
+            ProductModel = new Product();
+        }
+    }
+    private void HandleInvalidSubmit()
+    {
+
+    }
+
+    private void CloseMessageBox()
+    {
+        isSuccessBoxVisible = false;
+        isErrorBoxVisible = false;
+    }
+}

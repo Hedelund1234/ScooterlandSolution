@@ -1,0 +1,129 @@
+﻿@using Scooterland.Shared.Models;
+@using Scooterland.Client.Services.SaleServices;
+@using Scooterland.Client.Services.SalesLineItemServices;
+
+<h1>Faktura</h1>
+<div class="invoice-container">
+	<div class="header">
+		<div class="left">
+			<div>Scooterland</div>
+			<div>Scooterlandgade 23</div>
+			<div>Vejle 7100</div>
+			<div>22 00 99 00</div>
+			<div>scooterland@Scooterland.dk</div>
+		</div>
+		<div class="right">
+			<div>Startdato: @currentSale?.StartDate?.ToString("dd-MM-yyyy")</div>
+			<br />
+			<div>Slutdato: @currentSale?.EndDate?.ToString("dd-MM-yyyy")</div>
+		</div>
+	</div> 
+	<br />
+	<h3>Kunde oplysninger</h3>
+	<div class="divider"></div>
+	<div class="header">
+		<div class="left">
+			<div>@currentSale?.Customer?.Name</div>
+			<div>@currentSale?.Customer?.Address</div>
+			<div>@currentSale?.Customer?.Phonenumber</div>
+			<div>@currentSale?.Customer?.Email</div>
+		</div>
+		<div class="right">
+			<div>Kundenummer: @currentSale?.Customer?.CustomerId</div>
+			<div>Ordrenummer: @currentSale?.SaleId</div>
+		</div>
+	</div> 
+	<br />
+	<div class="product-container">
+		  <table class="table">
+			<thead>
+				<tr>
+					<th>Produkt id</th>
+					<th>Navn</th>
+					<th>Type</th>
+					<th>Antal</th>
+					<th>Rabat</th>
+					<th>Pris</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var salesLineItem in currentSalesLineItems)
+				{
+					<tr>
+						<td class="cell">@salesLineItem?.ProductId</td>
+						<td class="cell">@salesLineItem?.Product?.Name</td>
+						<td class="cell">@salesLineItem?.Product?.Type</td>
+						<td class="cell">@salesLineItem?.Quantity</td>
+						<td class="cell">@(salesLineItem?.Discount)%</td>
+						<td class="cell">@salesLineItem?.Product?.Price kr.</td>
+					</tr>
+				}
+			</tbody>
+		</table>  
+	</div>
+	<div class="right">
+		<table class="invoice-table">
+			<tr>
+				<td>Total før rabat:</td>
+				<td><span class="fixed-field">@TotalPrice() kr.</span></td>
+			</tr>
+			 <tr>
+				<td>Besparelse:</td>
+				<td><span class="fixed-field">@TotalSaved() kr.</span></td>
+			</tr> 
+			<tr>
+				<td>At betale:</td>
+				<td><span class="fixed-field">@TotalPriceAfterDiscount() kr.</span></td>
+			</tr>
+		</table>
+	</div> 
+</div>
+@code
+{
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
+
+	[Inject]
+	public ISaleService? SaleService { get; set; }
+	[Inject]
+	public ISalesLineItemService? SalesLineItemService { get; set; }
+
+	private Sale? currentSale;
+	private List<SalesLineItem>? currentSalesLineItems = new List<SalesLineItem>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		currentSalesLineItems = (await SalesLineItemService.GetAllSalesLineItem()).Where(x => x.SaleId == SaleId).ToList(); 
+		currentSale = await SaleService.GetSale(SaleId);
+	}
+
+	private decimal TotalPrice()
+	{
+		decimal totalPrice = 0;
+		foreach (var saleLineItem in currentSalesLineItems)
+		{
+			totalPrice += saleLineItem.Product.Price * saleLineItem.Quantity;
+		}
+		return totalPrice;
+	}
+
+	private decimal TotalSaved()
+	{
+		decimal totalSaved = 0;
+		return totalSaved = TotalPrice() - TotalPriceAfterDiscount();
+	}
+
+	private decimal TotalPriceAfterDiscount()
+	{
+		decimal totalPriceAfterDiscount = 0;
+		foreach (var saleLineItem in currentSalesLineItems)
+		{
+			decimal lineTotalPrice = saleLineItem.Product.Price * saleLineItem.Quantity;
+			lineTotalPrice -= lineTotalPrice * ((decimal)saleLineItem.Discount / 100); // Træk rabatten fra
+			totalPriceAfterDiscount += lineTotalPrice;
+		}
+		return Math.Round(totalPriceAfterDiscount, 2);
+	}
+}

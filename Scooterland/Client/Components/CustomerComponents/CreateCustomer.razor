@@ -1,0 +1,104 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.CustomerServices
+
+<h3>Opret ny kunde</h3>
+
+<EditForm Model="@CustomerModel"
+OnValidSubmit="@HandleValidSubmit"
+OnInvalidSubmit="@HandleInvalidSubmit"
+class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-6 mb-3">
+        <label for="Name">Navn</label>
+        <InputText id="Name" @bind-Value="CustomerModel.Name" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Name)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Email">Email</label>
+        <InputText id="Email" @bind-Value="CustomerModel.Email" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Email)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Phonenumber">Telefon nummer</label>
+        <InputText id="Phonenumber" @bind-Value="CustomerModel.Phonenumber" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Phonenumber)" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Address">Adresse</label>
+        <InputText id="Address" @bind-Value="CustomerModel.Address" class="form-control" />
+        <ValidationMessage For="@(() => CustomerModel.Address)" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Tilføj</button>
+    </div>
+
+</EditForm>
+
+@if (isSuccessBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Kunde oprettet</h4>
+            <p>@(CustomerModel.Name) blev oprettet korrekt</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isErrorBoxVisible)
+{
+    <div class="message-box">
+        <div class="message-content">
+            <h4>Fejl</h4>
+            <p>Kunde blev ikke oprettet</p>
+            <div class="message-success">
+                <button @onclick="CloseMessageBox">OK</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Customer CustomerModel { get; set; } = new Customer();
+
+    [Inject]
+    public ICustomerService Service { get; set; }
+
+    private int ErrorCode { get; set; } = 0;
+
+    private bool isSuccessBoxVisible = false;
+
+    private bool isErrorBoxVisible = false;
+
+    private async Task HandleValidSubmit()
+    {
+        if (CustomerModel.Name == null || CustomerModel.Phonenumber == null || CustomerModel.Email == null || CustomerModel.Address == null)
+        {
+            isErrorBoxVisible = true;
+        }
+        else
+        {
+            ErrorCode = await Service.AddCustomer(CustomerModel);
+
+            Console.WriteLine("Customer added: return code: " + ErrorCode);
+            isSuccessBoxVisible = true;
+            CustomerModel = new Customer();
+        }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+
+    }
+
+    private void CloseMessageBox()
+    {
+        isSuccessBoxVisible = false;
+        isErrorBoxVisible = false;
+    }
+}

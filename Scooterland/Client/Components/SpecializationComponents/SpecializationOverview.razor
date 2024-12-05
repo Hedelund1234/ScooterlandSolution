@@ -1,0 +1,158 @@
+﻿@using Scooterland.Shared.Models
+@using Scooterland.Client.Services.SpecializationServices
+@using Scooterland.Client.Services.SaleServices
+@using Scooterland.Client.Services.EmployeeServices
+
+<h3>Alle specialiseringer</h3>
+
+<div class="search-container">
+	<i class="search-icon fa fa-search"></i>
+	<input class="search-bar" 
+	placeholder="Søg" 
+	id="navn" 
+	type="text" 
+	@bind="brandSearch"
+	@bind:event="oninput" />
+</div>
+
+@if (filteredSpecializations == null)
+{
+	<p><em>Ingen specialiationer fundet.</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Brand</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredSpecializations)
+			{
+				<tr>
+					<td class="cell">@item.SpecializationId</td>
+					@if (editingSpecializationsId == item.SpecializationId)
+					{
+						<td class="cell">
+							<input class="cell-input" @bind="item.Brand" />
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveSpecialization(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">
+							@item.Brand
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditSpecialization(item.SpecializationId)"><i class="fa-solid fa-pencil"></i></button>
+								<button class="edit-button" @onclick="() => DeleteSpecialization(item.SpecializationId)"><i class="fa-regular fa-trash-can"></i></button>
+							</div>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Dette scooter brand bliver brugt hos en eller flere kunder eller ansatte!</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	private bool isErrorBoxVisible = false;
+	[Inject]
+	public ISpecializationService Service { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
+	[Inject]
+	public IEmployeeService EmployeeService { get; set; }
+
+	private List<Specialization> specializations = new List<Specialization>();
+	private List<Employee> employees = new List<Employee>();
+	private List<Specialization> filteredSpecializations = new List<Specialization>();
+	private List<Sale> sales = new List<Sale>();
+	private int? editingSpecializationsId = null;
+	private string _brandSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+	private string brandSearch   //Bundet til input-feltet for søgning
+	{
+		get => _brandSearch; //Henter den aktuelle værdi af det private felt _nameSearch
+		set
+		{
+			_brandSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			FilterSpecializations();      //Kalder FilterEmployees() for at opdatere listen med det samme
+		}
+	}
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		specializations = (await Service.GetAllSpecialization()).ToList();
+		filteredSpecializations = specializations;
+	}
+
+	private void EditSpecialization(int specializationId)
+	{
+		editingSpecializationsId = specializationId; // Sæt den aktuelle række i redigeringstilstand
+	}
+
+	private async Task SaveSpecialization(Specialization specialization)
+	{
+		await Service.UpdateSpecialization(specialization); // Opdater produktet i databasen
+		editingSpecializationsId = null; // Afslut redigering
+		specializations = (await Service.GetAllSpecialization()).ToList();
+	}
+
+	private void CancelEdit()
+	{
+		editingSpecializationsId = null; // Annuller redigering
+	}
+
+	private async Task DeleteSpecialization(int specializationId)
+	{
+		sales = (await SaleService.GetAllSales()).ToList();
+		employees = (await EmployeeService.GetAllEmployees()).ToList();
+		if (!sales.Any(x => x.SpecializationId == specializationId) || !employees.Any(e => e.Specializations.Any(s => s.SpecializationId == specializationId)))
+		{
+			await Service.DeleteSpecialization(specializationId);
+			specializations = (await Service.GetAllSpecialization()).ToList();
+			filteredSpecializations = specializations;
+			StateHasChanged();
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isErrorBoxVisible = false;
+	}
+
+	private void FilterSpecializations()
+	{
+		if (string.IsNullOrWhiteSpace(brandSearch))
+		{
+			filteredSpecializations = specializations; // Hvis søgningen er tom, vis alle specializations
+		}
+		else
+		{
+			filteredSpecializations = specializations.Where(p => p.Brand.ToLower().Contains(brandSearch.ToLower())).ToList();
+		}
+	}
+
+}

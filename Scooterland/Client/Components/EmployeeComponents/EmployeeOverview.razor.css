@@ -1,0 +1,79 @@
+﻿/* Gør cellen til en positioneringscontainer */
+.cell {
+    position: relative; /* Gør knapperne absolut positionerbare i forhold til cellen */
+    text-align: center; /* Sørg for, at teksten eller inputfeltet er centreret horisontalt */
+    vertical-align: middle; /* Sørg for vertikal centrering af tekst */
+    height: 40px; /* Fixer højden, så cellens dimensioner ikke ændres */
+}
+
+.cell-input {
+    text-align: center; /* Centrer tekst i inputfeltet */
+    width: auto; /* Sørg for, at input ikke overlapper knapperne */
+}
+
+.button-container {
+    position: absolute; /* Placér knapperne relativt til cellen */
+    top: 50%; /* Centrer knapperne vertikalt */
+    right: 5px; /* Placér knapperne tæt på cellens højre kant */
+    transform: translateY(-50%); /* Juster vertikalt for perfekt centrering */
+    flex-wrap:wrap;
+}
+
+/* Knap-styling */
+.edit-button, .btn {
+    border: none;
+    background: none;
+    font-size: 15px;
+}
+    .edit-button:hover {
+        transform: scale(1.3);
+        transition-duration: 0.5s;
+        border-color: none;
+        border-radius: 100px;
+        background-color: lightgray;
+        opacity: 0.9;
+    }
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+    padding: 3px 8px;
+}
+
+.btn-abort {
+    background-color: #dc3545;
+    color: white;
+    padding: 3px 8px;
+}
+
+
+
+
+/*Below is used for specialization dropdown menus*/
+.dropdown-specialization {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu-specialization {
+    display: block;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    border: 1px solid #ddd;
+}
+
+.dropdown-item-specialization {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+    .dropdown-item-specialization:hover {
+        background-color: #f1f1f1;
+    }
