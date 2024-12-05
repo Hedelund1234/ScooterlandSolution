@@ -6,11 +6,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar" 
-			placeholder="Søg efter produkt" 
-			id="navn" 
-			type="text" 
-			@bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg efter produkt" 
+	id="navn" 
+	type="text" 
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredProducts == null)
@@ -73,12 +73,13 @@ else
 	private List<Product> filteredProducts = new List<Product>();
 	private int? editingProductId = null;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value.ToLower();    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
 			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -122,10 +123,12 @@ else
 		}
 		else
 		{
+			var nameSearchToLower = nameSearch.ToLower();
+
 			filteredProducts = 
-			products.Where(p => p.Name.ToLower().Contains(nameSearch.ToLower()) ||
-			(p.Type.ToLower().Contains(nameSearch)) || 
-			(p.Price.ToString().Contains(nameSearch))).ToList();
+			products.Where(p => p.Name.ToLower().Contains(nameSearchToLower) ||
+			(p.Type.ToLower().Contains(nameSearchToLower)) ||
+			(p.Price.ToString().Contains(nameSearchToLower))).ToList();
 		}
 	}
 }

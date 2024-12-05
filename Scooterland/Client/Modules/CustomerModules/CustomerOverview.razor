@@ -6,11 +6,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-			placeholder="Søg efter produkt"
-			id="navn"
-			type="text" 
-			@bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg efter produkt"
+	id="navn"
+	type="text" 
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredCustomers == null)
@@ -78,7 +78,7 @@ else
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value.ToLower();    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
 			FilterCustomers();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -122,6 +122,8 @@ else
 		}
 		else
 		{
+			var nameSearchToLower = nameSearch.ToLower();
+
 			filteredCustomers = 
 			customers.Where(c => c.Name.ToLower().Contains(nameSearch) ||
 			(c.Email.ToLower().Contains(nameSearch)) ||

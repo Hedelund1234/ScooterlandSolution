@@ -121,7 +121,7 @@ else
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value.ToLower();    //Opdaterer _nameSearch med den nye værdi og gør den til små bogstaver
+			_nameSearch = value;    //Opdaterer _nameSearch med den nye værdi og gør den til små bogstaver
 			FilterEmployees();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -200,6 +200,7 @@ else
 		}
 		else
 		{
+			var nameSearchToLower = nameSearch.ToLower();
 			filteredEmployees = 
 			employees.Where(e => e.Name.ToLower().Contains(nameSearch) ||
 			(e.Role != null && e.Role.ToLower().Contains(nameSearch)) ||

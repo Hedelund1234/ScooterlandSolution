@@ -127,7 +127,7 @@ else
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
 		set
 		{
-			_nameSearch = value.ToLower();    //Opdaterer det pribate felt _nameSearch med den nye værdi
+			_nameSearch = value;    //Opdaterer det pribate felt _nameSearch med den nye værdi
 			FilterSales();      // Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
@@ -147,6 +147,8 @@ else
 		}
 		else
 		{
+			var nameSearchToLower = nameSearch.ToLower();
+
 			filteredSales = sales.Where(s =>
 			s.Customer.Name.ToLower().Contains(nameSearch) ||
 			(s.Specialization != null && s.Specialization.Brand.ToLower().Contains(nameSearch)) ||
