@@ -5,19 +5,11 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 {
 	public class SpecializationRepositoryEF : ISpecializationRepository
 	{
-		public bool AddSpecialization(Specialization specialization)
+		public void AddSpecialization(Specialization specialization)
 		{
 			var db = new ScooterlandDbContext();
-			int counterBefore = db.Specializations.Count();
 			db.Specializations.Add(specialization);
 			db.SaveChanges();
-			int counterAfter = db.Specializations.Count();
-
-			if (counterBefore < counterAfter)
-			{
-				return true;
-			}
-			return false;
         }
 
 		public bool DeleteSpecialization(int id)

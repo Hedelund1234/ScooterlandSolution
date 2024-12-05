@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 	{
 		List<Employee> GetAllEmployees();
 		Employee FindEmployee(int id);
-		bool AddEmployee(Employee employee);
+		void AddEmployee(Employee employee);
 		bool DeleteEmployee(int id);
 		bool UpdateEmployee(Employee employee);
 	}

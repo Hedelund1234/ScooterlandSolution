@@ -7,20 +7,11 @@ namespace Scooterland.Server.Repositories.SaleRepository
 {
 	public class SaleRepositoryEF : ISaleRepository
 	{
-		public bool AddSale(Sale sale)
+		public void AddSale(Sale sale)
 		{
 			var db = new ScooterlandDbContext();
-			int counterBefore = db.Sales.Count();
 			db.Sales.Add(sale);
 			db.SaveChanges();
-			int counterAfter = db.Sales.Count();
-
-			if (counterBefore < counterAfter)
-			{
-				return true;
-			}
-			return false;
-
 		}
 
 		public bool DeleteSale(int id)

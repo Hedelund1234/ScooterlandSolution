@@ -5,20 +5,11 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 {
 	public class CustomerRepositoryEF : ICustomerRepository
 	{
-		public bool AddCustomer(Customer customer)
+		public void AddCustomer(Customer customer)
 		{
 			var db = new ScooterlandDbContext();
-			int counterBefore = db.Customers.Count();
 			db.Customers.Add(customer);
 			db.SaveChanges();
-			int counterAfter = db.Customers.Count();
-
-			if (counterBefore < counterAfter)
-			{
-				return true;
-			}
-			return false;
-
 		}
 
 		public bool DeleteCustomer(int id)

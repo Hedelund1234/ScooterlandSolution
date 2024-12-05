@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 	{
 		List<Customer> GetAllCustomers();
 		Customer FindCustomer(int id);
-		bool AddCustomer(Customer customer);
+		void AddCustomer(Customer customer);
 		bool DeleteCustomer(int id);
 		bool UpdateCustomer(Customer customer);
 	}

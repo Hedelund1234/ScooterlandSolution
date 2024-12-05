@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.SaleRepository
 	{
         List<Sale> GetAllSales();
         Sale FindSale(int id);
-        bool AddSale(Sale sale);
+        void AddSale(Sale sale);
         bool DeleteSale(int id);
         bool UpdateSale(Sale sale);
     }

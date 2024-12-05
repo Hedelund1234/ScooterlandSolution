@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 	{
 		List<SalesLineItem> GetAllSalesLineItem();
 		SalesLineItem FindSalesLineItem(int id);
-		bool AddSalesLineItem(SalesLineItem salesLineItem);
+		void AddSalesLineItem(SalesLineItem salesLineItem);
 		bool DeleteSalesLineItem(int id);
 		bool UpdateSalesLineItem(SalesLineItem salesLineItem);
 	}

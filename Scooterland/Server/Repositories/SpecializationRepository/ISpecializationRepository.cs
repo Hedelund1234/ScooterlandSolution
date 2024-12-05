@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 	{
 		List<Specialization> GetAllSpecialization();
 		Specialization FindSpecialization(int id);
-		bool AddSpecialization(Specialization specialization);
+		void AddSpecialization(Specialization specialization);
 		bool DeleteSpecialization(int id);
 		bool UpdateSpecialization(Specialization specialization);
 	}

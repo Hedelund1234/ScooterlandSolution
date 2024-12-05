@@ -6,20 +6,11 @@ namespace Scooterland.Server.Repositories.EmployeeRepository
 {
 	public class EmployeeRepositoryEF : IEmployeeRepository
 	{
-		public bool AddEmployee(Employee employee)
+		public void AddEmployee(Employee employee)
 		{
 			var db = new ScooterlandDbContext();
-			int counterBefore = db.Employees.Count();
 			db.Employees.Add(employee);
 			db.SaveChanges();
-			int counterAfter = db.Employees.Count();
-
-			if (counterBefore < counterAfter)
-			{
-				return true;
-			}
-			return false;
-
 		}
 
 		public bool DeleteEmployee(int id)

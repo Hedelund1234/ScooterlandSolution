@@ -13,9 +13,8 @@ namespace Scooterland.Server.Repositories.ProductRepository
 			ConnectionHandlerSQLClient connectionHandler = new ConnectionHandlerSQLClient();
 			connStrings = connectionHandler.GetConnectionString();
 		}
-        public bool AddProduct(Product product)
+        public void AddProduct(Product product)
 		{
-			return false;
 		}
 
 		public bool DeleteProduct(int id)

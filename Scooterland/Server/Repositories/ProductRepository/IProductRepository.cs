@@ -6,7 +6,7 @@ namespace Scooterland.Server.Repositories.ProductRepository
 	{
         List<Product> GetAllProducts();
         Product FindProduct(int id);
-        bool AddProduct(Product product);
+        void AddProduct(Product product);
         bool DeleteProduct(int id);
         bool UpdateProduct(Product product);
     }

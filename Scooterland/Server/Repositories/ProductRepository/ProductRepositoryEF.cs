@@ -6,20 +6,11 @@ namespace Scooterland.Server.Repositories.ProductRepository
 {
 	public class ProductRepositoryEF : IProductRepository
 	{
-        public bool AddProduct(Product product)
+        public void AddProduct(Product product)
         {
             var db = new ScooterlandDbContext();
-            int counterBefore = db.Products.Count();
             db.Products.Add(product);
             db.SaveChanges();
-            int counterAfter = db.Products.Count();
-
-            if (counterBefore < counterAfter)
-            {
-                return true;
-            }
-            return false;
-
         }
 
         public bool DeleteProduct(int id)
