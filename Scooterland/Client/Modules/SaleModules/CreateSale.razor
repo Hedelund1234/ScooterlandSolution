@@ -115,8 +115,7 @@
 		{
 			try
 			{
-				customers = (await CustomerService.GetAllCustomers()).ToList();
-				Customer dbCustomer = customers.FirstOrDefault(c => c.Phonenumber == selectedCustomer.Phonenumber);
+				Customer dbCustomer = await CustomerService.GetCustomer(selectedCustomer.CustomerId);
 
 				currentSale.CustomerId = dbCustomer.CustomerId;
 				currentSale.StartDate = DateTime.Now;
