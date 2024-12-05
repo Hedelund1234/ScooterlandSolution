@@ -6,7 +6,7 @@ namespace Scooterland.Server.DataAccess.SQLClient
 	{
 		public string GetConnectionString()
 		{
-			return System.Configuration.ConfigurationManager.ConnectionStrings["Frederik"].ToString();
+			return System.Configuration.ConfigurationManager.ConnectionStrings["Nikolas"].ToString();
 		}
 	}
 }
