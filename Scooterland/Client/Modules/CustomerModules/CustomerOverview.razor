@@ -1,5 +1,6 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.CustomerServices;
+@using Scooterland.Client.Services.SaleServices;
 
 <h3>Alle kunder</h3>
 
@@ -66,12 +67,29 @@ else
 	</table>
 }
 
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p>Du kan ikke slette en kunde som indgår i en ordre</p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
+
 @code {
 	[Inject]
 	public ICustomerService Service { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomers = new List<Customer>();
+	private List<Sale> allSales = new List<Sale>();
 	private int? editingCustomerId = null;
+	private bool isErrorBoxVisible = false;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{
@@ -108,10 +126,19 @@ else
 
 	private async Task DeleteCustomer(int customerId)
 	{
-		await Service.DeleteCustomer(customerId);
-		customers = (await Service.GetAllCustomers()).ToList();
-		filteredCustomers = customers;
-		StateHasChanged();
+		allSales = (await SaleService.GetAllSales()).ToList();
+		if (!allSales.Any(x => x.CustomerId == customerId))
+		{
+			await Service.DeleteCustomer(customerId);
+			customers = (await Service.GetAllCustomers()).ToList();
+			filteredCustomers = customers;
+			StateHasChanged();
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
+
 	}
 
 	private void FilterCustomers()
@@ -130,5 +157,10 @@ else
 			(c.Address.ToLower().Contains(nameSearch)) || 
 			(c.Phonenumber.Contains(nameSearch))).ToList();
 		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isErrorBoxVisible = false;
 	}
 }
