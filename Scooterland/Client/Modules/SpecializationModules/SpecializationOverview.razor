@@ -1,6 +1,7 @@
 ﻿@using Scooterland.Shared.Models
 @using Scooterland.Client.Services.SpecializationServices
 @using Scooterland.Client.Services.SaleServices
+@using Scooterland.Client.Services.EmployeeServices
 
 <h3>Alle specialiseringer</h3>
 
@@ -77,11 +78,14 @@ else
 	public ISpecializationService Service { get; set; }
 	[Inject]
 	public ISaleService SaleService { get; set; }
+	[Inject]
+	public IEmployeeService EmployeeService { get; set; }
+
 	private List<Specialization> specializations = new List<Specialization>();
+	private List<Employee> employees = new List<Employee>();
 	private List<Specialization> filteredSpecializations = new List<Specialization>();
 	private List<Sale> sales = new List<Sale>();
 	private int? editingSpecializationsId = null;
-	private bool isUsed = false;
 	private string _brandSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string brandSearch   //Bundet til input-feltet for søgning
 	{
@@ -117,30 +121,23 @@ else
 		editingSpecializationsId = null; // Annuller redigering
 	}
 
-	private async Task DeleteSpecialization(int specializationId)
+	@* private async Task DeleteSpecialization(int specializationId)
 	{
 		sales = (await SaleService.GetAllSales()).ToList();
-		foreach (var item in sales)
-		{
-			if (item.SpecializationId == specializationId)
-			{
-				isUsed = true;
+		employees = (await EmployeeService.GetAllEmployees()).ToList();
+		if (!sales.Any(x => x.SpecializationId == specializationId) || employees.Where(e => e.Specializations.Contains(specializationId));
 
-			}
-		}
-
-		if (!isUsed)
 		{
 			await Service.DeleteSpecialization(specializationId);
 			specializations = (await Service.GetAllSpecialization()).ToList();
 			filteredSpecializations = specializations;
 			StateHasChanged();
-			return;
 		}
-		
-		isErrorBoxVisible = true;
-		isUsed = false;
-	}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
+	} *@
 
 	private void CloseMessageBox()
 	{
