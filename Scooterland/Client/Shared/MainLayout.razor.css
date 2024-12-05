@@ -37,8 +37,7 @@ main {
         }
 
 .main-content {
-    padding: 20px;
-    margin-top: 50px; /* Tilføj margin for at undgå overlap med navbar */
+    margin-top: 20px; /* Tilføj margin for at undgå overlap med navbar */
 }
 
 @media (max-width: 640.98px) {

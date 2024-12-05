@@ -31,6 +31,7 @@
     padding: 10px 15px; /* Adds spacing inside each link */
     display: block; /* Ensures the link takes up the full width of the list item */
     transition: background-color 0.3s; /* Smooth transition for hover effect */
+    border-radius: 10px;
 }
 
     .top-nav-bar a:hover {

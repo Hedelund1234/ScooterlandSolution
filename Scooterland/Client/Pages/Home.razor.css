@@ -1,34 +1,19 @@
-﻿.flex-container {
+﻿.image-container {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-/* Komponent, der fylder 2/3 af bredden */
-.two-thirds-width {
-    width: 66.66%;
-    margin-right: 16px; /* Lille mellemrum til højre */
+.picture {
+    max-width: 90%;
+    object-fit: contain;
 }
 
-/* Komponent, der fylder 1/3 af bredden */
-.one-third-width {
-    width: 33.33%;
-
+.header-section {
+    text-align: center; /* Centrerer teksten horisontalt */
+    margin: 1rem 0; /* Tilføjer lidt afstand over og under teksten */
+    font-size: 2rem; /* Justerer tekststørrelsen */
+    color: #333; /* Valgfri tekstfarve */
+    font-family: Arial, sans-serif; /* Valgfri skrifttype */
 }
-
-.breadcrumbs {
-    display: inline; /* Ensures breadcrumbs stay on the same line */
-    font-size: 14px; /* Adjust size to make it smaller */
-    font-weight: normal; /* Makes the text less bold if needed */
-}
-
-.breadcrumb-link {
-    text-decoration: none; /* Removes underline for links */
-    color: #007bff; /* Bootstrap blue for links, or adjust to your preference */
-    margin: 0 5px; /* Adds spacing around the separators */
-}
-
-    .breadcrumb-link:hover {
-        text-decoration: underline; /* Adds underline on hover for clarity */
-    }
-
