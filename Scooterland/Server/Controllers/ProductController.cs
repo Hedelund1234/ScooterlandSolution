@@ -11,6 +11,7 @@ namespace Scooterland.Server.Controllers
 	public class ProductController : ControllerBase
 	{
         private readonly IProductRepository Repository = new ProductRepositoryEF();
+        private readonly IProductRepository SQLRepository = new ProductRepositorySQLClient(); //Bliver kun brugt ved GetAllProducts
 
 
         public ProductController(IProductRepository productRepository)
@@ -23,10 +24,11 @@ namespace Scooterland.Server.Controllers
         }
 
 
-        [HttpGet]
+		[HttpGet]
         public IEnumerable<Product> GetAllProducts()
         {
-            return Repository.GetAllProducts();
+            //return Repository.GetAllProducts();
+            return SQLRepository.GetAllProducts(); //Her blive SQLRepository brugt istedet
         }
 
         [HttpDelete("{id:int}")]
