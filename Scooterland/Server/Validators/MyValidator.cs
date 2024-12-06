@@ -8,7 +8,24 @@ namespace Scooterland.Server.Validators
 {
     public class MyValidator
     {
-        internal bool CustomerValidation(Customer customer)
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                                                                                                 //
+        //                                                           This Page contains all validators for repositories                                                    //
+        //                                              Does Not contains client side validation (only server side / the api calls                                         //
+        //                                                                                                                                                                 //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                       Customers                                       //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating a customer 
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool CustomerCreateValidation(Customer customer)
         {
             if (customer.CustomerId != 0)
             {
@@ -42,8 +59,51 @@ namespace Scooterland.Server.Validators
             }
             return true;
         }
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when updating a customer 
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool CustomerUpdateValidation(Customer customer)
+        {
+            if (customer == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - Customer is null");
+                return false;
+            }
+            if (customer.Name.Length > 70)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Name too long for database: is {customer.Name.Length} max length is 70");
+                return false;
+            }
+            if (customer.Email.Length > 100)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Email too long for database: is {customer.Email.Length} max length is 100");
+                return false;
+            }
+            if (customer.Phonenumber.Length > 20)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Phonenumber too long for database: is {customer.Phonenumber.Length} max length is 20");
+                return false;
+            }
+            if (customer.Address.Length > 150)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Address too long for database: is {customer.Address.Length} max length is 150");
+                return false;
+            }
+            return true;
+        }
 
-        internal bool EmployeeValidation(Employee employee)
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                       Employees                                       //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating an employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool EmployeeCreateValidation(Employee employee)
         {
             if (employee.EmployeeId != 0)
             {
@@ -73,7 +133,43 @@ namespace Scooterland.Server.Validators
             return true;
         }
 
-        internal bool ProductValidation(Product product)
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when updating an employee 
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool EmployeeUpdateValidation(Employee employee)
+        {
+            if (employee == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - Employee is null");
+                return false;
+            }
+            if (employee.Name.Length > 70)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Name too long for database: is {employee.Name.Length} max length is 70");
+                return false;
+            }
+            if (employee.Role.Length > 30)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Role too long for database: is {employee.Role.Length} max length is 30");
+                return false;
+            }
+            return true;
+        }
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                       Products                                        //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating a product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool ProductCreateValidation(Product product)
         {
             if (product.ProductId != 0)
             {
@@ -103,7 +199,47 @@ namespace Scooterland.Server.Validators
             return true;
         }
 
-        internal bool SaleValidation(Sale sale)
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when updating a product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool ProductUpdateValidation(Product product)
+        {
+            if (product == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - Product is null");
+                return false;
+            }
+            if (product.Name.Length > 70)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Name too long for database: is {product.Name.Length} max length is 70");
+                return false;
+            }
+            if (product.Type.Length > 30)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Type too long for database: is {product.Type.Length} max length is 30");
+                return false;
+            }
+            if (product.Price < 0 || product.Price > int.MaxValue)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Price too long or negative for database: is {product.Type.Length} should be between 0 - {int.MaxValue}");
+                return false;
+            }
+            return true;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                       Sales                                           //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating a sale
+        /// </summary>
+        /// <param name="sale"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool SaleCreateValidation(Sale sale)
         {
             if (sale.SaleId != 0)
             {
@@ -148,7 +284,16 @@ namespace Scooterland.Server.Validators
             return true;
         }
 
-        internal bool SalesLineItemValidation(SalesLineItem salesLineItem)
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                     SalesLineItems                                    //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating a salesLineItem
+        /// </summary>
+        /// <param name="salesLineItem"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool SalesLineItemCreateValidation(SalesLineItem salesLineItem)
         {
             if (salesLineItem.SalesLineItemId != 0)
             {
@@ -193,7 +338,41 @@ namespace Scooterland.Server.Validators
             return true;
         }
 
-        internal bool SpecializationValidation(Specialization specialization)
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when updating a salesLineItem
+        /// </summary>
+        /// <param name="salesLineItem"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool SalesLineItemUpdateValidation(SalesLineItem salesLineItem)
+        {
+            if (salesLineItem == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - SalesLineItem is null");
+                return false;
+            }
+            if (salesLineItem.Quantity <= 0 || salesLineItem.Quantity > int.MaxValue || salesLineItem.Quantity == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - SalesLineItem must have a quantity over 0 to be updated");
+                return false;
+            }
+            if (salesLineItem.Discount > 100 || salesLineItem.Discount < 0)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - Discount can't be greater than 100%");
+                return false;
+            }
+            return true;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //                                    Specializations                                    //
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when creating a specialization
+        /// </summary>
+        /// <param name="specialization"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool SpecializationCreateValidation(Specialization specialization)
         {
             if (specialization.SpecializationId != 0)
             {
@@ -218,8 +397,25 @@ namespace Scooterland.Server.Validators
             return true;
         }
 
+        /// <summary>
+        /// This method checks if entity matches Logic and database requirements when updating a specialization
+        /// </summary>
+        /// <param name="specialization"></param>
+        /// <returns>Returns true if success</returns>
+        internal bool SpecializationUpdateValidation(Specialization specialization)
+        {
+            if (specialization == null)
+            {
+                Console.WriteLine("SOMETHING WENT WRONG - Specialization can't be null");
+                return false;
+            }
+            if (specialization.Brand.Length > 30)
+            {
+                Console.WriteLine($"SOMETHING WENT WRONG - Brand too long for database: is {specialization.Brand.Length} max length is 30");
+                return false;
+            }
+            return true;
+        }
 
-        //[JsonIgnore]
-        //public List<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

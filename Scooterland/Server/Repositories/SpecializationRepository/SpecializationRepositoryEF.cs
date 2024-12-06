@@ -9,7 +9,7 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 		public void AddSpecialization(Specialization specialization)
 		{
             var validation = new MyValidator();
-            bool isValid = validation.SpecializationValidation(specialization);
+            bool isValid = validation.SpecializationCreateValidation(specialization);
             if (isValid)
 			{
 				try
@@ -29,19 +29,16 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 		{
 			try
 			{
-				int counterBefore = 0;
-				int counterAfter = 0;
+				int changed = 0;
 				var db = new ScooterlandDbContext();
 				Specialization specialization;
 				specialization = db.Specializations.Where(x => x.SpecializationId == id).FirstOrDefault();
 				if (id == specialization.SpecializationId)
 				{
-					counterBefore = db.Specializations.Count();
 					db.Specializations.Remove(specialization);
-					db.SaveChanges();
-					counterAfter = db.Specializations.Count();
+					changed = db.SaveChanges();
 				}
-				if (counterBefore < counterAfter)
+				if (changed > 0)
 				{
 					return true;
 				}
@@ -57,30 +54,42 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 
 		public bool UpdateSpecialization(Specialization specialization)
 		{
-			try
+            var validation = new MyValidator();
+            bool isValid = validation.SpecializationUpdateValidation(specialization);
+            if (isValid)
 			{
-				var db = new ScooterlandDbContext();
-				Specialization foundSpecialization = db.Specializations.Where(x => x.SpecializationId == specialization.SpecializationId).FirstOrDefault();
+                try
+                {
+                    var db = new ScooterlandDbContext();
+                    Specialization foundSpecialization = db.Specializations.Where(x => x.SpecializationId == specialization.SpecializationId).FirstOrDefault();
 
-				var originalSpecialization = foundSpecialization;
 
-				foundSpecialization.Brand = specialization.Brand;
-				db.SaveChanges();
+                    if (specialization == null)
+                    {
+                        return false;
+                    }
 
-				if (originalSpecialization.Brand != foundSpecialization.Brand)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			catch (Exception ex)
-			{
-                
-				return false;
-			}
+                    if (specialization.Brand == foundSpecialization.Brand)
+                    {
+                        return true;
+                    }
+
+                    foundSpecialization.Brand = specialization.Brand;
+                    int changed = db.SaveChanges();
+
+                    if (changed > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+            }
+			return false;
 		}
 
 

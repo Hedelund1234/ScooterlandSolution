@@ -10,7 +10,7 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 		public void AddSalesLineItem(SalesLineItem salesLineItem)
 		{
             var validation = new MyValidator();
-            bool isValid = validation.SalesLineItemValidation(salesLineItem);
+            bool isValid = validation.SalesLineItemCreateValidation(salesLineItem);
             if (isValid)
 			{
 				try
@@ -21,7 +21,6 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 				}
 				catch (Exception ex)
 				{
-                    
 				}
 			}
 		}
@@ -30,19 +29,16 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 		{
 			try
 			{
-				int counterBefore = 0;
-				int counterAfter = 0;
+				int changed = 0;
 				var db = new ScooterlandDbContext();
 				SalesLineItem salesLineItem;
 				salesLineItem = db.SalesLineItems.Where(x => x.SalesLineItemId == id).FirstOrDefault();
 				if (id == salesLineItem.SalesLineItemId)
 				{
-					counterBefore = db.SalesLineItems.Count();
 					db.SalesLineItems.Remove(salesLineItem);
-					db.SaveChanges();
-					counterAfter = db.SalesLineItems.Count();
+					changed = db.SaveChanges();
 				}
-				if (counterBefore < counterAfter)
+				if (changed > 0)
 				{
 					return true;
 				}
@@ -58,26 +54,42 @@ namespace Scooterland.Server.Repositories.SalesLineItemRepository
 
 		public bool UpdateSalesLineItem(SalesLineItem salesLineItem)
 		{
-			try
+            var validation = new MyValidator();
+            bool isValid = validation.SalesLineItemUpdateValidation(salesLineItem);
+            if (isValid)
 			{
-				var db = new ScooterlandDbContext();
-				SalesLineItem foundSalesLineItem = db.SalesLineItems.Where(x => x.SalesLineItemId == salesLineItem.SalesLineItemId).FirstOrDefault();
+                try
+                {
+                    var db = new ScooterlandDbContext();
+                    SalesLineItem foundSalesLineItem = db.SalesLineItems.Where(x => x.SalesLineItemId == salesLineItem.SalesLineItemId).FirstOrDefault();
 
-				if (foundSalesLineItem == null)
-				{
-					return false;
-				}
+                    if (foundSalesLineItem == null)
+                    {
+                        return false;
+                    }
 
-				foundSalesLineItem.Quantity = salesLineItem.Quantity;
-				foundSalesLineItem.Discount = salesLineItem.Discount;
-				db.SaveChanges();
-				return true;
-			}
-			catch (Exception ex)
-			{
-               
-				return false;
-			}
+                    if (salesLineItem.Quantity == foundSalesLineItem.Quantity &&
+                        salesLineItem.Discount == foundSalesLineItem.Discount)
+                    {
+                        return true;
+                    }
+
+                    foundSalesLineItem.Quantity = salesLineItem.Quantity;
+                    foundSalesLineItem.Discount = salesLineItem.Discount;
+                    int changed = db.SaveChanges();
+                    if (changed > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+            }
+			return false;
 		}
 
 

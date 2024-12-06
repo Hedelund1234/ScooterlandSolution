@@ -10,7 +10,7 @@ namespace Scooterland.Server.Repositories.ProductRepository
         public void AddProduct(Product product)
         {
             var validation = new MyValidator();
-            bool isValid = validation.ProductValidation(product);
+            bool isValid = validation.ProductCreateValidation(product);
             if (isValid)
             {
                 try
@@ -30,19 +30,16 @@ namespace Scooterland.Server.Repositories.ProductRepository
         {
             try
             {
-                int counterBefore = 0;
-                int counterAfter = 0;
+                int changed = 0;
                 var db = new ScooterlandDbContext();
                 Product product;
                 product = db.Products.Where(x => x.ProductId == id).FirstOrDefault();
                 if (id == product.ProductId)
                 {
-                    counterBefore = db.Products.Count();
                     db.Products.Remove(product);
-                    db.SaveChanges();
-                    counterAfter = db.Products.Count();
+                    changed = db.SaveChanges();
                 }
-                if (counterBefore < counterAfter)
+                if (changed > 0)
                 {
                     return true;
                 }
@@ -58,34 +55,45 @@ namespace Scooterland.Server.Repositories.ProductRepository
 
         public bool UpdateProduct(Product product)
         {
-            try
+            var validation = new MyValidator();
+            bool isValid = validation.ProductUpdateValidation(product);
+            if (isValid)
             {
-                var db = new ScooterlandDbContext();
-                Product foundProduct = db.Products.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
-
-                var originalProduct = foundProduct;
-
-                foundProduct.Name = product.Name;
-                foundProduct.Price = product.Price;
-                foundProduct.Type = product.Type;
-                db.SaveChanges();
-
-                if (originalProduct.Name != foundProduct.Name ||
-                    originalProduct.Price != foundProduct.Price ||
-                    originalProduct.Type != foundProduct.Type)
+                try
                 {
-                    return true;
+                    var db = new ScooterlandDbContext();
+                    Product foundProduct = db.Products.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
+
+                    if (foundProduct == null)
+                    {
+                        return false;
+                    }
+
+                    if (product.Name == foundProduct.Name &&
+                        product.Price == foundProduct.Price &&
+                        product.Type == foundProduct.Type)
+                    {
+                        return true;
+                    }
+
+                    foundProduct.Name = product.Name;
+                    foundProduct.Price = product.Price;
+                    foundProduct.Type = product.Type;
+                    int changed = db.SaveChanges();
+
+                    if (changed > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
-                else
+                catch (Exception ex)
                 {
+
                     return false;
                 }
             }
-            catch (Exception ex)
-            {
-                
-                return false;
-            }
+            return false;
         }
 
 

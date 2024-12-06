@@ -11,7 +11,7 @@ namespace Scooterland.Server.Repositories.SaleRepository
 		public void AddSale(Sale sale)
 		{
             var validation = new MyValidator();
-            bool isValid = validation.SaleValidation(sale);
+            bool isValid = validation.SaleCreateValidation(sale);
             if (isValid)
 			{
 				try
@@ -22,7 +22,6 @@ namespace Scooterland.Server.Repositories.SaleRepository
 				}
 				catch (Exception ex)
 				{
-                    
 				}
 			}
 		}
@@ -31,19 +30,16 @@ namespace Scooterland.Server.Repositories.SaleRepository
 		{
 			try
 			{
-				int counterBefore = 0;
-				int counterAfter = 0;
+				int changed = 0;
 				var db = new ScooterlandDbContext();
 				Sale sale;
 				sale = db.Sales.Where(x => x.SaleId == id).FirstOrDefault();
 				if (id == sale.SaleId)
 				{
-					counterBefore = db.Sales.Count();
 					db.Sales.Remove(sale);
-					db.SaveChanges();
-					counterAfter = db.Sales.Count();
+					changed = db.SaveChanges();
 				}
-				if (counterBefore < counterAfter)
+				if (changed > 0)
 				{
 					return true;
 				}
@@ -51,7 +47,6 @@ namespace Scooterland.Server.Repositories.SaleRepository
 			}
 			catch (Exception ex)
 			{
-                
 				return false;
 			}
 		}
@@ -69,18 +64,30 @@ namespace Scooterland.Server.Repositories.SaleRepository
 					return false;
 				}
 
+				if (sale.StartDate == foundSale.StartDate &&
+					sale.EndDate == foundSale.EndDate &&
+					sale.Comment == foundSale.Comment &&
+					sale.EmployeeId == foundSale.EmployeeId &&
+					sale.SpecializationId == foundSale.SpecializationId)
+				{
+					return true;
+				}
+
 				foundSale.EndDate = sale.EndDate;
 				foundSale.Comment = sale.Comment;
 				foundSale.EmployeeId = sale.EmployeeId;
 				foundSale.SpecializationId = sale.SpecializationId;
 
-				db.SaveChanges();  //Hvis save lykkedes, returner true. 
+				int changed = db.SaveChanges(); 
 
-				return true;
+				if (changed > 0)
+				{
+					return true;
+				}
+				return false;
 			}
 			catch (Exception ex)
 			{
-                
 				return false;
 			}
 		}
