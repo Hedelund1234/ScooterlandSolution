@@ -1,4 +1,5 @@
 ﻿using Scooterland.Server.DataAccess;
+using Scooterland.Server.Validators;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.CustomerRepository
@@ -7,55 +8,76 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 	{
 		public void AddCustomer(Customer customer)
 		{
-			var db = new ScooterlandDbContext();
-			db.Customers.Add(customer);
-			db.SaveChanges();
+			var validation = new MyValidator();
+			bool isValid = validation.CustomerValidation(customer);
+			if (isValid)
+			{
+                var db = new ScooterlandDbContext();
+                db.Customers.Add(customer);
+                db.SaveChanges();
+            }
 		}
 
 		public bool DeleteCustomer(int id)
 		{
-			int counterBefore = 0;
-			int counterAfter = 0;
-			var db = new ScooterlandDbContext();
-			Customer customer;
-			customer = db.Customers.Where(x => x.CustomerId == id).FirstOrDefault();
-			if (id == customer.CustomerId)
+			try
 			{
-				counterBefore = db.Customers.Count();
-				db.Customers.Remove(customer);
-				db.SaveChanges();
-				counterAfter = db.Customers.Count();
+				int counterBefore = 0;
+				int counterAfter = 0;
+				var db = new ScooterlandDbContext();
+				Customer customer;
+				customer = db.Customers.Where(x => x.CustomerId == id).FirstOrDefault();
+				if (id == customer.CustomerId)
+				{
+					counterBefore = db.Customers.Count();
+					db.Customers.Remove(customer);
+					db.SaveChanges();
+					counterAfter = db.Customers.Count();
+				}
+				if (counterBefore < counterAfter)
+				{
+					return true;
+				}
+				return false;
 			}
-			if (counterBefore < counterAfter)
+			catch (Exception ex)
 			{
-				return true;
+                Console.WriteLine(ex.Message);
+				return false;
 			}
-			return false;
 		}
 
 
 		public bool UpdateCustomer(Customer customer)
 		{
-			var db = new ScooterlandDbContext();
-			Customer foundCustomer = db.Customers.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
-
-			var originalCustomer = foundCustomer;
-
-			foundCustomer.Name = customer.Name;
-			foundCustomer.Email = customer.Email;
-			foundCustomer.Phonenumber = customer.Phonenumber;
-			foundCustomer.Address = customer.Address;
-			db.SaveChanges();
-
-			if (originalCustomer.Name != foundCustomer.Name ||
-				originalCustomer.Email != foundCustomer.Email ||
-				originalCustomer.Phonenumber != foundCustomer.Phonenumber ||
-				originalCustomer.Address != foundCustomer.Address)
+			try
 			{
-				return true;
+				var db = new ScooterlandDbContext();
+				Customer foundCustomer = db.Customers.Where(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
+
+				var originalCustomer = foundCustomer;
+
+				foundCustomer.Name = customer.Name;
+				foundCustomer.Email = customer.Email;
+				foundCustomer.Phonenumber = customer.Phonenumber;
+				foundCustomer.Address = customer.Address;
+				db.SaveChanges();
+
+				if (originalCustomer.Name != foundCustomer.Name ||
+					originalCustomer.Email != foundCustomer.Email ||
+					originalCustomer.Phonenumber != foundCustomer.Phonenumber ||
+					originalCustomer.Address != foundCustomer.Address)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
+                Console.WriteLine(ex.Message);
 				return false;
 			}
 		}
