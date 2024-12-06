@@ -64,3 +64,9 @@
     .employee-btn:hover {
         background-color: darkgray;
     }
+
+td[colspan="2"] {
+    text-align: left; /* Sørg for venstrejustering */
+    max-width: 4px; /* Sæt en passende maksimal bredde */
+    white-space: nowrap; /* Forhindrer line breaks i dropdown-menuen */
+}

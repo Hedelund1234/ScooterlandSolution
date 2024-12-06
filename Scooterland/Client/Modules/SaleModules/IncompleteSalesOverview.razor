@@ -9,11 +9,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-		   placeholder="Søg"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredSales == null)
@@ -27,12 +27,12 @@ else
 			<tr>
 				<th>Id</th>
 				<th>Kunde navn</th>
+				<th>Telefonnr.</th>
 				<th>Mekaniker</th>
 				<th>Scooter mærke</th>
 				<th>Kommentar</th>
 				<th>Start dato</th>
 				<th>Slut dato</th>
-				<th>Telefonnr.</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,7 +40,8 @@ else
 			{
 				<tr @ondblclick="() => HandleRowClick(item)">
 					<td class="cell">@item.SaleId</td>
-					<td class="cell">@item.Customer.Name</td>
+					<td class="cell">@item.Customer?.Name</td>
+					<td class="cell">@item.Customer?.Phonenumber</td>
 					<td>
 						@if (item.Employee is null)
 						{
@@ -68,8 +69,15 @@ else
 						<td class="cell">@item.Comment</td>
 					}
 					<td class="cell">@item.StartDate</td>
-					<td class="cell">@item.EndDate</td>
-					<td class="cell">@item.Customer.Phonenumber</td>
+					@if (item.EndDate == null)
+					{
+						<td><button class="delete-button" @onclick="() => DeleteSale(item.SaleId)"><i class="fa-regular fa-trash-can"></i></button></td>
+
+					}
+					else
+					{
+						<td class="cell">@item.EndDate</td>
+					}
 				</tr>
 
 				@if (showEmployeeDropdown && item.SaleId == currentSaleId)
@@ -79,16 +87,15 @@ else
 						<td></td>
 						<td colspan="2">
 							<div class="employee-dropdown">
-								<select class="employee-dropdown" @bind="selectedEmployeeId">
+								<select class="employee-dropdown" @onchange="(e) => HandleEmployeeChange(e, item.SaleId)">
 									<option value="">-- Vælg mekaniker --</option>
 									@foreach (var emp in employeeList)
 									{
 										<option value="@emp.EmployeeId">@emp.Name</option>
 									}
 								</select>
-								<button class="employee-btn" @onclick="UpdateSaleWithMekaniker">Gem</button>
 								<button class="employee-btn" @onclick="CancelAssignEmployee">Annuller</button>
-								<button class="employee-btn" @onclick="RemoveMekanikerFromSale">Fjern</button>
+								<button class="employee-btn" @onclick="RemoveMekanikerFromSale">Fjern mekaniker</button>
 							</div>
 						</td>
 						<td></td>
@@ -103,7 +110,18 @@ else
 	</table>
 }
 
-
+@if (isErrorBoxVisible)
+{
+	<div class="message-box">
+		<div class="message-content">
+			<h4>Fejl</h4>
+			<p></p>
+			<div class="message-success">
+				<button @onclick="CloseMessageBox">OK</button>
+			</div>
+		</div>
+	</div>
+}
 
 @code {
 	[Inject]
@@ -111,6 +129,7 @@ else
 	[Inject]
 	public IEmployeeService EmployeeService { get; set; }
 	private bool showEmployeeDropdown = false;
+	private bool isErrorBoxVisible = false;
 	private int? selectedEmployeeId = null;
 	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
 	private Sale? currentSale;
@@ -179,8 +198,28 @@ else
 		if (employeeList.Any())
 		{
 			currentSale = sale;         // Sætter det Sale, som dropdown-menuen relaterer til.
-			showEmployeeDropdown = true; // Viser vores dropdown menu hvor vi kan assign en mekaniker
+			OpenCloseDropdown(); // Viser vores dropdown menu hvor vi kan assign en mekaniker
 			StateHasChanged();
+		}
+	}
+
+	private void OpenCloseDropdown()
+	{
+		showEmployeeDropdown = !showEmployeeDropdown;
+	}
+
+	private void HandleEmployeeChange(ChangeEventArgs e, int saleId)
+	{
+		// Hent den valgte værdi fra dropdown
+		var selectedValue = e.Value?.ToString();
+
+		if (!string.IsNullOrEmpty(selectedValue))
+		{
+			selectedEmployeeId = int.Parse(selectedValue);
+			currentSaleId = saleId;
+
+			// Kald opdateringsmetoden
+			UpdateSaleWithMekaniker();
 		}
 	}
 
@@ -216,12 +255,32 @@ else
 	{
 		if (currentSale != null)
 		{
-			currentSale.EmployeeId = null; // Fjerner mekaniker fra Sale
+			currentSale.Employee = null; // Fjerner mekaniker fra Sale
 			await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
 			sales = (await Service.GetAllSales()).ToList();
 		}
 		CancelAssignEmployee();
+	}
+	private async Task DeleteSale(int saleId)
+	{
+		sales = (await Service.GetAllSales()).ToList();
+		if (sales.Any(x => x.SaleId == saleId))
+		{
+			await Service.DeleteSale(saleId);
+			sales = (await Service.GetAllSales()).ToList();
+			filteredSales = sales;
+			StateHasChanged();
+		}
+		else
+		{
+			isErrorBoxVisible = true;
+		}
+	}
+
+	private void CloseMessageBox()
+	{
+		isErrorBoxVisible = false;
 	}
 }

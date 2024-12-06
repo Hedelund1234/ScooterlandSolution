@@ -7,11 +7,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-	placeholder="Søg"
-	id="navn"
-	type="text" 
-	@bind="nameSearch"
-	@bind:event="oninput" />
+		   placeholder="Søg"
+		   id="navn"
+		   type="text"
+		   @bind="nameSearch"
+		   @bind:event="oninput" />
 </div>
 
 @if (filteredCustomers == null)
@@ -21,50 +21,56 @@
 else
 {
 	<table class="table">
-		<thead>
-			<tr>
-				<th>Kundenr.</th>
-				<th>Navn</th>
-				<th>Email</th>
-				<th>Telefonnummer</th>
-				<th>Adresse</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in filteredCustomers)
-			{
-				<tr>
-					<td class="cell">@item.CustomerId</td>
-					@if (editingCustomerId == item.CustomerId)
-					{
-						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
-						<td class="cell"><input class="cell-input" @bind="item.Email" /></td>
-						<td class="cell"><input class="cell-input" @bind="item.Phonenumber" /></td>
-						<td class="cell">
-							<input class="cell-input" @bind="item.Address" />
-							<div class="button-container">
-								<button class="btn btn-save" @onclick="() => SaveCustomer(item)">Gem</button>
-								<button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
-							</div>
-						</td>
-					}
-					else
-					{
-						<td class="cell">@item.Name</td>
-						<td class="cell">@item.Email</td>
-						<td class="cell">@item.Phonenumber</td>
-						<td class="cell">
-							@item.Address
-							<div class="button-container">
-								<button class="edit-button" @onclick="() => EditCustomer(item.CustomerId)"><i class="fa-solid fa-pencil"></i></button>
-								<button class="edit-button" @onclick="() => DeleteCustomer(item.CustomerId)"><i class="fa-regular fa-trash-can"></i></button>
-							</div>
-						</td>
-					}
-				</tr>
-			}
-		</tbody>
-	</table>
+    <thead>
+        <tr>
+            <th>Kundenr.</th>
+            <th>Navn</th>
+            <th>Telefonnummer</th>
+            <th>Email</th>
+            <th colspan="2">Adresse</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in filteredCustomers)
+        {
+            <tr>
+                <td class="cell">@item.CustomerId</td>
+                @if (editingCustomerId == item.CustomerId)
+                {
+                    <td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+                    <td class="cell"><input class="cell-input" @bind="item.Phonenumber" /></td>
+                    <td class="cell"><input class="cell-input" @bind="item.Email" /></td>
+                    <td class="cell">
+                        <input class="cell-input" @bind="item.Address" />
+                    </td>
+						<td>
+                        <div class="button-container">
+                            <button class="btn btn-save" @onclick="() => SaveCustomer(item)">Gem</button>
+                            <button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td class="cell">@item.Name</td>
+                    <td class="cell">@item.Phonenumber</td>
+                    <td class="cell">@item.Email</td>
+                    <td class="cell">@item.Address</td>
+						<td>
+                        <div class="button-container">
+                            <button class="edit-button" @onclick="() => EditCustomer(item.CustomerId)">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                            <button class="edit-button" @onclick="() => DeleteCustomer(item.CustomerId)">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
 }
 
 @if (isErrorBoxVisible)
@@ -151,7 +157,7 @@ else
 		{
 			var nameSearchToLower = nameSearch.ToLower();
 
-			filteredCustomers = 
+			filteredCustomers =
 			customers.Where(c => c.Name.ToLower().Contains(nameSearchToLower) ||
 			(c.Email.ToLower().Contains(nameSearchToLower)) ||
 			(c.Address.ToLower().Contains(nameSearchToLower)) ||

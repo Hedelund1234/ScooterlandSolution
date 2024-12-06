@@ -25,6 +25,7 @@ else
 			<tr>
 				<th>Id</th>
 				<th>Kunde navn</th>
+				<th>Telefonnr.</th>
 				<th>Mekaniker</th>
 				<th>Scooter mærke</th>
 				<th>Kommentar</th>
@@ -37,7 +38,8 @@ else
 			{
 				<tr @ondblclick="() => HandleRowClick(item)">
 					<td class="cell">@item.SaleId</td>
-					<td class="cell">@item.Customer.Name</td>
+					<td class="cell">@item.Customer?.Name</td>
+					<td class="cell">@item.Customer?.Phonenumber</td>
 					@if (item.Employee is null)
 					{
 						<td class="cell"></td>

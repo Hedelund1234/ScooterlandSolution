@@ -39,6 +39,6 @@
 		Sale currentSale = await SaleService.GetSale(SaleId);
 		currentSale.EndDate = DateTime.Now;
 		await SaleService.UpdateSale(currentSale);
-		Navigation.NavigateTo($"/");
+		Navigation.NavigateTo($"/sales/invoice");
 	}
 }
