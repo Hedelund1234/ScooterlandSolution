@@ -152,10 +152,10 @@ else
 			var nameSearchToLower = nameSearch.ToLower();
 
 			filteredCustomers = 
-			customers.Where(c => c.Name.ToLower().Contains(nameSearch) ||
-			(c.Email.ToLower().Contains(nameSearch)) ||
-			(c.Address.ToLower().Contains(nameSearch)) || 
-			(c.Phonenumber.Contains(nameSearch))).ToList();
+			customers.Where(c => c.Name.ToLower().Contains(nameSearchToLower) ||
+			(c.Email.ToLower().Contains(nameSearchToLower)) ||
+			(c.Address.ToLower().Contains(nameSearchToLower)) ||
+			(c.Phonenumber.Contains(nameSearchToLower))).ToList();
 		}
 	}
 

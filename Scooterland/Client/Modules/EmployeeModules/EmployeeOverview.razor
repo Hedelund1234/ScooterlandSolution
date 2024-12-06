@@ -229,9 +229,9 @@ else
 		{
 			var nameSearchToLower = nameSearch.ToLower();
 			filteredEmployees = 
-			employees.Where(e => e.Name.ToLower().Contains(nameSearch) ||
-			(e.Role != null && e.Role.ToLower().Contains(nameSearch)) ||
-			(e.Specializations != null && e.Specializations.Any(s => s.Brand != null && s.Brand.ToLower().Contains(nameSearch)))).ToList();
+			employees.Where(e => e.Name.ToLower().Contains(nameSearchToLower) ||
+			(e.Role != null && e.Role.ToLower().Contains(nameSearchToLower)) ||
+			(e.Specializations != null && e.Specializations.Any(s => s.Brand != null && s.Brand.ToLower().Contains(nameSearchToLower)))).ToList();
 		}
 	}
 

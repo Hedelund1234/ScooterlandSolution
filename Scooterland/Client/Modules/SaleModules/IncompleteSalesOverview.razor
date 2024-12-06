@@ -150,9 +150,9 @@ else
 			var nameSearchToLower = nameSearch.ToLower();
 
 			filteredSales = sales.Where(s =>
-			s.Customer.Name.ToLower().Contains(nameSearch) ||
-			(s.Specialization != null && s.Specialization.Brand.ToLower().Contains(nameSearch)) ||
-			(s.Employee != null && s.Employee.Name.ToLower().Contains(nameSearch))).ToList();
+			s.Customer.Name.ToLower().Contains(nameSearchToLower) ||
+			(s.Specialization != null && s.Specialization.Brand.ToLower().Contains(nameSearchToLower)) ||
+			(s.Employee != null && s.Employee.Name.ToLower().Contains(nameSearchToLower))).ToList();
 		}
 	}
 
