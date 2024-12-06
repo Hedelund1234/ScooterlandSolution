@@ -97,11 +97,11 @@ namespace Scooterland.Server.Repositories.SaleRepository
 		public List<Sale> GetAllSales()
 		{
 			var db = new ScooterlandDbContext();
-			List<Sale> sale;
+			List<Sale> sales;
 			try
 			{
 				//sale = db.Sales.ToList();
-				sale = db.Sales.Include(s => s.Customer)
+				sales = db.Sales.Include(s => s.Customer)
 								.Include(s => s.Employee)
 								.Include(s => s.Specialization)
 								.ToList();
@@ -110,9 +110,9 @@ namespace Scooterland.Server.Repositories.SaleRepository
 			}
 			catch
 			{
-				sale = new List<Sale>();
+				sales = new List<Sale>();
 			}
-			return sale;
+			return sales;
 		}
 	}
 }
