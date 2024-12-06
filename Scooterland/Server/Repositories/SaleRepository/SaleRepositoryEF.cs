@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Scooterland.Server.DataAccess;
+using Scooterland.Server.Validators;
 using Scooterland.Shared.Models;
 using System.Linq;
 
@@ -9,71 +10,79 @@ namespace Scooterland.Server.Repositories.SaleRepository
 	{
 		public void AddSale(Sale sale)
 		{
-			var db = new ScooterlandDbContext();
-			db.Sales.Add(sale);
-			db.SaveChanges();
+            var validation = new MyValidator();
+            bool isValid = validation.SaleValidation(sale);
+            if (isValid)
+			{
+				try
+				{
+					var db = new ScooterlandDbContext();
+					db.Sales.Add(sale);
+					db.SaveChanges();
+				}
+				catch (Exception ex)
+				{
+                    
+				}
+			}
 		}
 
 		public bool DeleteSale(int id)
 		{
-			int counterBefore = 0;
-			int counterAfter = 0;
-			var db = new ScooterlandDbContext();
-			Sale sale;
-			sale = db.Sales.Where(x => x.SaleId == id).FirstOrDefault();
-			if (id == sale.SaleId)
+			try
 			{
-				counterBefore = db.Sales.Count();
-				db.Sales.Remove(sale);
-				db.SaveChanges();
-				counterAfter = db.Sales.Count();
+				int counterBefore = 0;
+				int counterAfter = 0;
+				var db = new ScooterlandDbContext();
+				Sale sale;
+				sale = db.Sales.Where(x => x.SaleId == id).FirstOrDefault();
+				if (id == sale.SaleId)
+				{
+					counterBefore = db.Sales.Count();
+					db.Sales.Remove(sale);
+					db.SaveChanges();
+					counterAfter = db.Sales.Count();
+				}
+				if (counterBefore < counterAfter)
+				{
+					return true;
+				}
+				return false;
 			}
-			if (counterBefore < counterAfter)
+			catch (Exception ex)
 			{
-				return true;
+                
+				return false;
 			}
-			return false;
 		}
 
 
 		public bool UpdateSale(Sale sale)
 		{
-			//var db = new ScooterlandDbContext();
-			//Sale foundSale = db.Sales.Where(x => x.SaleId == sale.SaleId).FirstOrDefault();
+			try
+			{
+				var db = new ScooterlandDbContext();
+				Sale foundSale = db.Sales.Where(x => x.SaleId == sale.SaleId).FirstOrDefault();
 
-			//var originalSale = foundSale;
+				if (foundSale == null)
+				{
+					return false;
+				}
 
-			//foundSale.EndDate = sale.EndDate;
-			//foundSale.Payment = sale.Payment;
-			//foundSale.Kommentar = sale.Kommentar;
-			//db.SaveChanges();
+				foundSale.EndDate = sale.EndDate;
+				foundSale.Comment = sale.Comment;
+				foundSale.EmployeeId = sale.EmployeeId;
+				foundSale.SpecializationId = sale.SpecializationId;
 
-			//if (originalSale.EndDate != foundSale.EndDate ||
-			//	originalSale.Payment != foundSale.Payment || originalSale.Kommentar != foundSale.Kommentar)
-			//{
-			//	return true;
-			//}
-			//else
-			//{
-			//	return false;
-			//}
+				db.SaveChanges();  //Hvis save lykkedes, returner true. 
 
-			// Fik en fejl kode fra SaleController linje 81 selvom metoden virker, men som jeg ser det er vores problem vores OR checks.
-			// originalSale og foundSale vil altid have de samme data, så vå får altid en false retur
-			var db = new ScooterlandDbContext();
-			Sale foundSale = db.Sales.Where(x => x.SaleId == sale.SaleId).FirstOrDefault();
-
-			if (foundSale == null)
+				return true;
+			}
+			catch (Exception ex)
+			{
+                
 				return false;
-
-			foundSale.EndDate = sale.EndDate;
-			foundSale.Comment = sale.Comment;
-			foundSale.EmployeeId = sale.EmployeeId;
-			foundSale.SpecializationId = sale.SpecializationId;
-
-			db.SaveChanges();  //Hvis save lykkedes, returner true. 
-
-			return true;
+			}
 		}
 
 

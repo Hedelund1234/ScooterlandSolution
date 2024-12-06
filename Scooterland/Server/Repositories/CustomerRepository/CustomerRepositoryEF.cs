@@ -12,10 +12,17 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 			bool isValid = validation.CustomerValidation(customer);
 			if (isValid)
 			{
-                var db = new ScooterlandDbContext();
-                db.Customers.Add(customer);
-                db.SaveChanges();
-            }
+				try
+				{
+					var db = new ScooterlandDbContext();
+					db.Customers.Add(customer);
+					db.SaveChanges();
+				}
+				catch (Exception ex)
+				{
+                    
+				}
+			}
 		}
 
 		public bool DeleteCustomer(int id)
@@ -42,7 +49,7 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 			}
 			catch (Exception ex)
 			{
-                Console.WriteLine(ex.Message);
+                
 				return false;
 			}
 		}
@@ -77,7 +84,7 @@ namespace Scooterland.Server.Repositories.CustomerRepository
 			}
 			catch (Exception ex)
 			{
-                Console.WriteLine(ex.Message);
+                
 				return false;
 			}
 		}

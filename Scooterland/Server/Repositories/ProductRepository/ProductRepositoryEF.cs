@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Scooterland.Server.DataAccess;
+using Scooterland.Server.Validators;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.ProductRepository
@@ -8,53 +9,81 @@ namespace Scooterland.Server.Repositories.ProductRepository
 	{
         public void AddProduct(Product product)
         {
-            var db = new ScooterlandDbContext();
-            db.Products.Add(product);
-            db.SaveChanges();
+            var validation = new MyValidator();
+            bool isValid = validation.ProductValidation(product);
+            if (isValid)
+            {
+                try
+                {
+                    var db = new ScooterlandDbContext();
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }
         }
 
         public bool DeleteProduct(int id)
         {
-            int counterBefore = 0;
-            int counterAfter = 0;
-            var db = new ScooterlandDbContext();
-            Product product;
-            product = db.Products.Where(x => x.ProductId == id).FirstOrDefault();
-            if (id == product.ProductId)
+            try
             {
-                counterBefore = db.Products.Count();
-                db.Products.Remove(product);
-                db.SaveChanges();
-                counterAfter = db.Products.Count();
+                int counterBefore = 0;
+                int counterAfter = 0;
+                var db = new ScooterlandDbContext();
+                Product product;
+                product = db.Products.Where(x => x.ProductId == id).FirstOrDefault();
+                if (id == product.ProductId)
+                {
+                    counterBefore = db.Products.Count();
+                    db.Products.Remove(product);
+                    db.SaveChanges();
+                    counterAfter = db.Products.Count();
+                }
+                if (counterBefore < counterAfter)
+                {
+                    return true;
+                }
+                return false;
             }
-            if (counterBefore < counterAfter)
+            catch (Exception ex)
             {
-                return true;
+                
+                return false;
             }
-            return false;
         }
 
 
         public bool UpdateProduct(Product product)
         {
-            var db = new ScooterlandDbContext();
-            Product foundProduct = db.Products.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
-
-            var originalProduct = foundProduct;
-
-            foundProduct.Name = product.Name;
-            foundProduct.Price = product.Price;
-            foundProduct.Type = product.Type;
-            db.SaveChanges();
-
-            if (originalProduct.Name != foundProduct.Name ||
-                originalProduct.Price != foundProduct.Price ||
-                originalProduct.Type != foundProduct.Type)
+            try
             {
-                return true;
+                var db = new ScooterlandDbContext();
+                Product foundProduct = db.Products.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
+
+                var originalProduct = foundProduct;
+
+                foundProduct.Name = product.Name;
+                foundProduct.Price = product.Price;
+                foundProduct.Type = product.Type;
+                db.SaveChanges();
+
+                if (originalProduct.Name != foundProduct.Name ||
+                    originalProduct.Price != foundProduct.Price ||
+                    originalProduct.Type != foundProduct.Type)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                
                 return false;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Scooterland.Server.DataAccess;
+using Scooterland.Server.Validators;
 using Scooterland.Shared.Models;
 
 namespace Scooterland.Server.Repositories.SpecializationRepository
@@ -7,49 +8,77 @@ namespace Scooterland.Server.Repositories.SpecializationRepository
 	{
 		public void AddSpecialization(Specialization specialization)
 		{
-			var db = new ScooterlandDbContext();
-			db.Specializations.Add(specialization);
-			db.SaveChanges();
-        }
+            var validation = new MyValidator();
+            bool isValid = validation.SpecializationValidation(specialization);
+            if (isValid)
+			{
+				try
+				{
+					var db = new ScooterlandDbContext();
+					db.Specializations.Add(specialization);
+					db.SaveChanges();
+				}
+				catch (Exception ex)
+				{
+                    
+				}
+			}
+		}
 
 		public bool DeleteSpecialization(int id)
 		{
-			int counterBefore = 0;
-			int counterAfter = 0;
-			var db = new ScooterlandDbContext();
-			Specialization specialization;
-			specialization = db.Specializations.Where(x => x.SpecializationId == id).FirstOrDefault();
-			if (id == specialization.SpecializationId)
+			try
 			{
-				counterBefore = db.Specializations.Count();
-				db.Specializations.Remove(specialization);
-				db.SaveChanges();
-				counterAfter = db.Specializations.Count();
+				int counterBefore = 0;
+				int counterAfter = 0;
+				var db = new ScooterlandDbContext();
+				Specialization specialization;
+				specialization = db.Specializations.Where(x => x.SpecializationId == id).FirstOrDefault();
+				if (id == specialization.SpecializationId)
+				{
+					counterBefore = db.Specializations.Count();
+					db.Specializations.Remove(specialization);
+					db.SaveChanges();
+					counterAfter = db.Specializations.Count();
+				}
+				if (counterBefore < counterAfter)
+				{
+					return true;
+				}
+				return false;
 			}
-			if (counterBefore < counterAfter)
+			catch (Exception ex)
 			{
-				return true;
+				
+				return false;
 			}
-			return false;
 		}
 
 
 		public bool UpdateSpecialization(Specialization specialization)
 		{
-			var db = new ScooterlandDbContext();
-			Specialization foundSpecialization = db.Specializations.Where(x => x.SpecializationId == specialization.SpecializationId).FirstOrDefault();
-
-			var originalSpecialization = foundSpecialization;
-
-			foundSpecialization.Brand = specialization.Brand;
-			db.SaveChanges();
-
-			if (originalSpecialization.Brand != foundSpecialization.Brand)
+			try
 			{
-				return true;
+				var db = new ScooterlandDbContext();
+				Specialization foundSpecialization = db.Specializations.Where(x => x.SpecializationId == specialization.SpecializationId).FirstOrDefault();
+
+				var originalSpecialization = foundSpecialization;
+
+				foundSpecialization.Brand = specialization.Brand;
+				db.SaveChanges();
+
+				if (originalSpecialization.Brand != foundSpecialization.Brand)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
+                
 				return false;
 			}
 		}
