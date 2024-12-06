@@ -23,7 +23,7 @@
 				<span class="product-mrp">Ordrenr.:</span>
 				<span class="customer-name">@currentSale.SaleId</span>
 				<span class="product-mrp">Kunde:</span>
-				<span class="product-mrp">@currentSale.Customer.Name</span>
+				<span class="product-mrp">@currentSale?.Customer?.Name</span>
 			</div>
 		}
 
@@ -34,8 +34,8 @@
 				{
 					<div class="product-card">
 						<div class="product-info">
-							<p class="product-name">@item.Product.Name</p>
-							<p class="product-mrp">@item.Product.Price</p>
+							<p class="product-name">@item.Product?.Name</p>
+							<p class="product-mrp">@item.Product?.Price</p>
 						</div>
 
 						<div class="product-price">
@@ -48,11 +48,11 @@
 								<div class="input-container">
 									<label for="discount">Rabat:</label>
 									<input id="discount" type="number"
-									@bind="item.Discount"
-									@bind:event="oninput"
-									@onchange="() => UpdateDiscount(item)"
-									inputmode="numeric"
-									min="0" max="100" step="1" />
+										   @bind="item.Discount"
+										   @bind:event="oninput"
+										   @onchange="() => UpdateDiscount(item)"
+										   inputmode="numeric"
+										   min="0" max="100" step="1" />
 									<span class="percentage-symbol">%</span>
 								</div>
 							</div>
