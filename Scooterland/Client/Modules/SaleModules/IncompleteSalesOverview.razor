@@ -71,8 +71,20 @@ else
 					<td class="cell">@item.StartDate</td>
 					@if (item.EndDate == null)
 					{
-						<td><button class="delete-button" @onclick="() => DeleteSale(item.SaleId)"><i class="fa-regular fa-trash-can"></i></button></td>
-
+						<td><button class="delete-button" @onclick="OpenCloseDeleteBox"><i class="fa-regular fa-trash-can"></i></button></td>
+						@if (isSureBoxVisible)
+						{
+							<div class="message-box">
+								<div class="message-content">
+									<h4>Slet salg</h4>
+									<p>Er du sikker på at du vil slette dette salg?</p>
+									<div class="message-success">
+										<button @onclick="() => ConfirmDelete(item.SaleId)">Ja</button>
+										<button @onclick="CancelDelete">Nej</button>
+									</div>
+								</div>
+							</div>
+						}
 					}
 					else
 					{
@@ -129,6 +141,7 @@ else
 	[Inject]
 	public IEmployeeService EmployeeService { get; set; }
 	private bool showEmployeeDropdown = false;
+	private bool isSureBoxVisible = false;
 	private bool isErrorBoxVisible = false;
 	private int? selectedEmployeeId = null;
 	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
@@ -283,5 +296,18 @@ else
 	private void CloseMessageBox()
 	{
 		isErrorBoxVisible = false;
+	}
+	private void OpenCloseDeleteBox()
+	{
+		isSureBoxVisible = !isSureBoxVisible;
+	}
+	private async Task ConfirmDelete(int saleId)
+	{
+		await DeleteSale(saleId);
+		isSureBoxVisible = false; // Luk boksen
+	}
+	private void CancelDelete()
+	{
+		isSureBoxVisible = false;
 	}
 }
