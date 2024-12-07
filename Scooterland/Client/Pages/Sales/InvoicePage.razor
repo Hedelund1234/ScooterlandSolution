@@ -36,9 +36,13 @@
 
 	private async Task EndSale()
 	{
-		Sale currentSale = await SaleService.GetSale(SaleId);
-		currentSale.EndDate = DateTime.Now;
-		await SaleService.UpdateSale(currentSale);
-		Navigation.NavigateTo($"/sales/invoice");
+
+		// Sale currentSale = await SaleService.GetSale(SaleId);
+		// currentSale.EndDate = DateTime.Now;
+		sale.EndDate = DateTime.Now;
+		await SaleService.UpdateSale(sale);
+		// Navigation.NavigateTo($"/sales/invoice");
+		Navigation.NavigateTo($"/sales/completedsales");
+	
 	}
 }
