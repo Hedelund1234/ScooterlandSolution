@@ -256,6 +256,7 @@ else
 		if (currentSale != null)
 		{
 			currentSale.Employee = null; // Fjerner mekaniker fra Sale
+			currentSale.EmployeeId = null;
 			await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.

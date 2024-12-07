@@ -32,7 +32,7 @@ else
 				<th>Id</th>
 				<th>Navn</th>
 				<th>Rolle</th>
-				<th>Mærke specialitioner</th>
+				<th>Specialiseringer</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -68,14 +68,7 @@ else
 
 						<!--Shows current specializations on employee if any-->
 						<td>
-							<div>Nuværende mærker</div>
-							@foreach (var spec in item.Specializations)
-							{
-								<div>
-									@spec.Brand
-									<button class="edit-button" @onclick="() => RemoveSpecialization(item, spec)"><i class="fa-regular fa-trash-can"></i></button>
-								</div>
-							}
+							
 
 							<!--Selection from all specialization on given employee-->
 							<div class="dropdown-specialization">
@@ -97,6 +90,13 @@ else
 									</ul>
 								}
 							</div>
+							@foreach (var spec in item.Specializations)
+							{
+								<div>
+									@spec.Brand
+									<button class="edit-button" @onclick="() => RemoveSpecialization(item, spec)"><i class="fa-regular fa-trash-can"></i></button>
+								</div>
+							}
 						</td>
 
 					}

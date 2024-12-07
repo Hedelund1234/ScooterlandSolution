@@ -38,8 +38,8 @@ else
 			{
 				<tr @ondblclick="() => HandleRowClick(item)">
 					<td class="cell">@item.SaleId</td>
-					<td class="cell">@item.Customer.Name</td>
-					<td class="cell">@item.Customer.Phonenumber</td>
+					<td class="cell">@item.Customer?.Name</td>
+					<td class="cell">@item.Customer?.Phonenumber</td>
 					@if (item.Employee is null)
 					{
 						<td @onclick="()=>AssignMekanikerToSale(item)" class="cell"></td>
@@ -275,6 +275,7 @@ else
 		if (currentSale != null)
 		{
 			currentSale.Employee = null; // Fjerner mekaniker fra Sale
+			currentSale.EmployeeId = null;
 			await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
