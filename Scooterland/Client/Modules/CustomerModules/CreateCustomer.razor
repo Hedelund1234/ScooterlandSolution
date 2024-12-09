@@ -55,6 +55,7 @@ class="row p-3">
         <div class="message-content">
             <h4>Fejl</h4>
             <p>Kunde blev ikke oprettet</p>
+            <p>@errorMessage</p>
             <div class="message-success">
                 <button @onclick="CloseMessageBox">OK</button>
             </div>
@@ -75,10 +76,26 @@ class="row p-3">
 
     private bool isErrorBoxVisible = false;
 
+    private string? errorMessage;
+
+    private List<Customer> allCustomers = new List<Customer>();
+
     private async Task HandleValidSubmit()
     {
+        allCustomers = (await Service.GetAllCustomers()).ToList();
         if (CustomerModel.Name == null || CustomerModel.Phonenumber == null || CustomerModel.Email == null || CustomerModel.Address == null)
         {
+            errorMessage = "Alle felter skal udfyldes";
+            isErrorBoxVisible = true;
+        }
+        else if (allCustomers.Any(x => x.Email == CustomerModel.Email))
+        {
+            errorMessage = $"Der findes allerede en kunde med email: {CustomerModel.Email}";
+            isErrorBoxVisible = true;
+        }
+        else if (allCustomers.Any(x => x.Phonenumber == CustomerModel.Phonenumber))
+        {
+            errorMessage = $"Der findes allerede en kunde med telefonnummer: {CustomerModel.Phonenumber}";
             isErrorBoxVisible = true;
         }
         else
