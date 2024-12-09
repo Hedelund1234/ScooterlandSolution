@@ -1,4 +1,5 @@
-﻿using Scooterland.Server.Repositories.EmployeeRepository;
+﻿using Scooterland.Server.Repositories.CustomerRepository;
+using Scooterland.Server.Repositories.EmployeeRepository;
 using Scooterland.Shared.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -57,7 +58,19 @@ namespace Scooterland.Server.Validators
                 Console.WriteLine($"SOMETHING WENT WRONG - Address too long for database: is {customer.Address.Length} max length is 150");
                 return false;
             }
-            return true;
+			CustomerRepositoryEF repo = new CustomerRepositoryEF();
+			List<Customer> allCustomers = repo.GetAllCustomers();
+			if (allCustomers.Any(x => x.Email == customer.Email))
+			{
+				Console.WriteLine($"SOMETHING WENT WRONG - Email already exist in database");
+				return false;
+			}
+			if (allCustomers.Any(x => x.Phonenumber == customer.Phonenumber))
+			{
+				Console.WriteLine($"SOMETHING WENT WRONG - Phonenumber already exist in database");
+				return false;
+			}
+			return true;
         }
         /// <summary>
         /// This method checks if entity matches Logic and database requirements when updating a customer 
@@ -91,7 +104,27 @@ namespace Scooterland.Server.Validators
                 Console.WriteLine($"SOMETHING WENT WRONG - Address too long for database: is {customer.Address.Length} max length is 150");
                 return false;
             }
-            return true;
+			CustomerRepositoryEF repo = new CustomerRepositoryEF();
+			
+            Customer customerOriginal = repo.FindCustomer(customer.CustomerId);
+			List<Customer> allCustomers = repo.GetAllCustomers();
+			if (customerOriginal.Phonenumber != customer.Phonenumber)
+            {
+				if (allCustomers.Any(x => x.Phonenumber == customer.Phonenumber))
+				{
+					Console.WriteLine($"SOMETHING WENT WRONG - Phonenumber already exist in database");
+					return false;
+				}
+			}
+			if (customerOriginal.Email != customer.Email)
+			{
+				if (allCustomers.Any(x => x.Email == customer.Email))
+				{
+					Console.WriteLine($"SOMETHING WENT WRONG - Email already exist in database");
+					return false;
+				}
+			}
+			return true;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +163,7 @@ namespace Scooterland.Server.Validators
                 Console.WriteLine("SOMETHING WENT WRONG - Can't create employee with specializations (must be added later)");
                 return false;
             }
-            return true;
+			return true;
         }
 
         /// <summary>
