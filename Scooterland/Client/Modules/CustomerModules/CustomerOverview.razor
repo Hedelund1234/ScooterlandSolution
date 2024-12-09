@@ -7,11 +7,11 @@
 <div class="search-container">
 	<i class="search-icon fa fa-search"></i>
 	<input class="search-bar"
-		   placeholder="Søg"
-		   id="navn"
-		   type="text"
-		   @bind="nameSearch"
-		   @bind:event="oninput" />
+	placeholder="Søg"
+	id="navn"
+	type="text"
+	@bind="nameSearch"
+	@bind:event="oninput" />
 </div>
 
 @if (filteredCustomers == null)
@@ -21,56 +21,56 @@
 else
 {
 	<table class="table">
-    <thead>
-        <tr>
-            <th>Kundenr.</th>
-            <th>Navn</th>
-            <th>Telefonnummer</th>
-            <th>Email</th>
-            <th colspan="2">Adresse</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in filteredCustomers)
-        {
-            <tr>
-                <td class="cell">@item.CustomerId</td>
-                @if (editingCustomerId == item.CustomerId)
-                {
-                    <td class="cell"><input class="cell-input" @bind="item.Name" /></td>
-                    <td class="cell"><input class="cell-input" @bind="item.Phonenumber" /></td>
-                    <td class="cell"><input class="cell-input" @bind="item.Email" /></td>
-                    <td class="cell">
-                        <input class="cell-input" @bind="item.Address" />
-                    </td>
+		<thead>
+			<tr>
+				<th>Kundenr.</th>
+				<th>Navn</th>
+				<th>Telefonnummer</th>
+				<th>Email</th>
+				<th colspan="2">Adresse</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in filteredCustomers)
+			{
+				<tr>
+					<td class="cell">@item.CustomerId</td>
+					@if (editingCustomerId == item.CustomerId)
+					{
+						<td class="cell"><input class="cell-input" @bind="item.Name" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Phonenumber" /></td>
+						<td class="cell"><input class="cell-input" @bind="item.Email" /></td>
+						<td class="cell">
+							<input class="cell-input" @bind="item.Address" />
+						</td>
 						<td>
-                        <div class="button-container">
-                            <button class="btn btn-save" @onclick="() => SaveCustomer(item)">Gem</button>
-                            <button class="btn btn-abort" @onclick="CancelEdit">Fortryd</button>
-                        </div>
-                    </td>
-                }
-                else
-                {
-                    <td class="cell">@item.Name</td>
-                    <td class="cell">@item.Phonenumber</td>
-                    <td class="cell">@item.Email</td>
-                    <td class="cell">@item.Address</td>
+							<div class="button-container">
+								<button class="btn btn-save" @onclick="() => SaveCustomer(item)">Gem</button>
+								<button class="btn btn-abort" @onclick="() => CancelEdit(item)">Fortryd</button>
+							</div>
+						</td>
+					}
+					else
+					{
+						<td class="cell">@item.Name</td>
+						<td class="cell">@item.Phonenumber</td>
+						<td class="cell">@item.Email</td>
+						<td class="cell">@item.Address</td>
 						<td>
-                        <div class="button-container">
-                            <button class="edit-button" @onclick="() => EditCustomer(item.CustomerId)">
-                                <i class="fa-solid fa-pencil"></i>
-                            </button>
-                            <button class="edit-button" @onclick="() => DeleteCustomer(item.CustomerId)">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+							<div class="button-container">
+								<button class="edit-button" @onclick="() => EditCustomer(item.CustomerId)">
+									<i class="fa-solid fa-pencil"></i>
+								</button>
+								<button class="edit-button" @onclick="() => DeleteCustomer(item.CustomerId)">
+									<i class="fa-regular fa-trash-can"></i>
+								</button>
+							</div>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
 }
 
 @if (isErrorBoxVisible)
@@ -78,7 +78,7 @@ else
 	<div class="message-box">
 		<div class="message-content">
 			<h4>Fejl</h4>
-			<p>Du kan ikke slette en kunde som indgår i en ordre</p>
+			<p>@errorMessage</p>
 			<div class="message-success">
 				<button @onclick="CloseMessageBox">OK</button>
 			</div>
@@ -95,6 +95,7 @@ else
 	private List<Customer> filteredCustomers = new List<Customer>();
 	private List<Sale> allSales = new List<Sale>();
 	private int? editingCustomerId = null;
+	private string errorMessage;
 	private bool isErrorBoxVisible = false;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch   //Bundet til input-feltet for søgning
@@ -120,13 +121,37 @@ else
 
 	private async Task SaveCustomer(Customer customer)
 	{
+		Customer originalCustomer = await Service.GetCustomer(customer.CustomerId);
+
+		if (originalCustomer?.Email != customer.Email)
+		{
+			if (customers.Any(x => x.Email == customer.Email))
+			{
+				errorMessage = $"Der findes allerede en kunde med email: {customer?.Email}";
+				isErrorBoxVisible = true;
+				return;
+			}
+		}
+
+		if (originalCustomer?.Phonenumber != customer.Phonenumber)
+		{
+			if (customers.Any(x => x.Phonenumber == customer.Phonenumber))
+			{
+				errorMessage = $"Der findes allerede en kunde med telefonnummer: {customer?.Phonenumber}";
+				isErrorBoxVisible = true;
+				return;
+			}
+		}
 		await Service.UpdateCustomer(customer); // Opdater produktet i databasen
 		editingCustomerId = null; // Afslut redigering
 		customers = (await Service.GetAllCustomers()).ToList();
 	}
 
-	private void CancelEdit()
+	private async Task CancelEdit(Customer customer)
 	{
+@* 		Customer originalCustomer = await Service.GetCustomer(customer.CustomerId);
+		customer = originalCustomer;
+		StateHasChanged(); *@
 		editingCustomerId = null; // Annuller redigering
 	}
 
@@ -142,6 +167,7 @@ else
 		}
 		else
 		{
+			errorMessage = "Du kan ikke slette en kunde som indgår i en ordre";
 			isErrorBoxVisible = true;
 		}
 
