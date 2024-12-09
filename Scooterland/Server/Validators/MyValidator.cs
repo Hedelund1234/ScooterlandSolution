@@ -25,7 +25,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="customer"></param>
         /// <returns>Returns true if success</returns>
-        internal bool CustomerCreateValidation(Customer customer)
+        public bool CustomerCreateValidation(Customer customer)
         {
             if (customer.CustomerId != 0)
             {
@@ -64,7 +64,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="customer"></param>
         /// <returns>Returns true if success</returns>
-        internal bool CustomerUpdateValidation(Customer customer)
+        public bool CustomerUpdateValidation(Customer customer)
         {
             if (customer == null)
             {
@@ -103,7 +103,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="employee"></param>
         /// <returns>Returns true if success</returns>
-        internal bool EmployeeCreateValidation(Employee employee)
+        public bool EmployeeCreateValidation(Employee employee)
         {
             if (employee.EmployeeId != 0)
             {
@@ -138,7 +138,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="employee"></param>
         /// <returns>Returns true if success</returns>
-        internal bool EmployeeUpdateValidation(Employee employee)
+        public bool EmployeeUpdateValidation(Employee employee)
         {
             if (employee == null)
             {
@@ -169,7 +169,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="product"></param>
         /// <returns>Returns true if success</returns>
-        internal bool ProductCreateValidation(Product product)
+        public bool ProductCreateValidation(Product product)
         {
             if (product.ProductId != 0)
             {
@@ -204,7 +204,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="product"></param>
         /// <returns>Returns true if success</returns>
-        internal bool ProductUpdateValidation(Product product)
+        public bool ProductUpdateValidation(Product product)
         {
             if (product == null)
             {
@@ -239,7 +239,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="sale"></param>
         /// <returns>Returns true if success</returns>
-        internal bool SaleCreateValidation(Sale sale)
+        public bool SaleCreateValidation(Sale sale)
         {
             if (sale.SaleId != 0)
             {
@@ -293,7 +293,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="salesLineItem"></param>
         /// <returns>Returns true if success</returns>
-        internal bool SalesLineItemCreateValidation(SalesLineItem salesLineItem)
+        public bool SalesLineItemCreateValidation(SalesLineItem salesLineItem)
         {
             if (salesLineItem.SalesLineItemId != 0)
             {
@@ -343,7 +343,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="salesLineItem"></param>
         /// <returns>Returns true if success</returns>
-        internal bool SalesLineItemUpdateValidation(SalesLineItem salesLineItem)
+        public bool SalesLineItemUpdateValidation(SalesLineItem salesLineItem)
         {
             if (salesLineItem == null)
             {
@@ -372,7 +372,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="specialization"></param>
         /// <returns>Returns true if success</returns>
-        internal bool SpecializationCreateValidation(Specialization specialization)
+        public bool SpecializationCreateValidation(Specialization specialization)
         {
             if (specialization.SpecializationId != 0)
             {
@@ -402,7 +402,7 @@ namespace Scooterland.Server.Validators
         /// </summary>
         /// <param name="specialization"></param>
         /// <returns>Returns true if success</returns>
-        internal bool SpecializationUpdateValidation(Specialization specialization)
+        public bool SpecializationUpdateValidation(Specialization specialization)
         {
             if (specialization == null)
             {
