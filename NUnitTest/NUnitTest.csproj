@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Scooterland\Server\Scooterland.Server.csproj" />
+    <ProjectReference Include="..\Scooterland\Shared\Scooterland.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
