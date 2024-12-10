@@ -116,8 +116,9 @@ else
 		specializations = (await Service.GetAllSpecialization()).ToList();
 	}
 
-	private void CancelEdit()
+	private async Task CancelEdit()
 	{
+		filteredSpecializations = (await Service.GetAllSpecialization()).ToList();
 		editingSpecializationsId = null; // Annuller redigering
 	}
 

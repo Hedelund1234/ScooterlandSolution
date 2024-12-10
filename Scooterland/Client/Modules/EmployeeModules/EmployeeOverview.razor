@@ -68,7 +68,7 @@ else
 
 						<!--Shows current specializations on employee if any-->
 						<td>
-							
+
 
 							<!--Selection from all specialization on given employee-->
 							<div class="dropdown-specialization">
@@ -185,8 +185,9 @@ else
 
 	}
 
-	private void EditEmployee(int employeeId)
+	private async Task EditEmployee(int employeeId)
 	{
+		filteredEmployees = (await Service.GetAllEmployees()).ToList();
 		editingEmployeeId = employeeId; // Sæt den aktuelle række i redigeringstilstand
 	}
 
@@ -197,8 +198,9 @@ else
 		employees = (await Service.GetAllEmployees()).ToList();
 	}
 
-	private void CancelEdit()
+	private async Task CancelEdit()
 	{
+		filteredEmployees = (await Service.GetAllEmployees()).ToList();
 		editingEmployeeId = null; // Annuller redigering
 	}
 

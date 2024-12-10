@@ -125,8 +125,9 @@ else
 		products = (await Service.GetAllProducts()).ToList();
 	}
 
-	private void CancelEdit()
+	private async Task CancelEdit()
 	{
+		filteredProducts = (await Service.GetAllProducts()).ToList();
 		editingProductId = null; // Annuller redigering
 	}
 

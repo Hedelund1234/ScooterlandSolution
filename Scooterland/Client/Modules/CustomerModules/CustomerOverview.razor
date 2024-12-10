@@ -149,9 +149,7 @@ else
 
 	private async Task CancelEdit(Customer customer)
 	{
-@* 		Customer originalCustomer = await Service.GetCustomer(customer.CustomerId);
-		customer = originalCustomer;
-		StateHasChanged(); *@
+		filteredCustomers = (await Service.GetAllCustomers()).ToList();
 		editingCustomerId = null; // Annuller redigering
 	}
 
