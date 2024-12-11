@@ -249,7 +249,7 @@ else
 				await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 				// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
-				sales = (await Service.GetAllSales()).ToList();
+				sales = (await Service.GetAllSales()).Where(x => x.EndDate == null).ToList();
 				filteredSales = sales;
 			}
 		}
@@ -273,17 +273,17 @@ else
 			await Service.UpdateSale(currentSale); // Gem opdateringen i databasen.
 
 			// Opdater Sale-listen og den filtrerede liste, så ændringerne kan ses i vores UI.
-			sales = (await Service.GetAllSales()).ToList();
+			sales = (await Service.GetAllSales()).Where(x => x.EndDate == null).ToList();
 		}
 		CancelAssignEmployee();
 	}
 	private async Task DeleteSale(int saleId)
 	{
-		sales = (await Service.GetAllSales()).ToList();
+		sales = (await Service.GetAllSales()).Where(x => x.EndDate == null).ToList();
 		if (sales.Any(x => x.SaleId == saleId))
 		{
 			await Service.DeleteSale(saleId);
-			sales = (await Service.GetAllSales()).ToList();
+			sales = (await Service.GetAllSales()).Where(x => x.EndDate == null).ToList();
 			filteredSales = sales;
 			StateHasChanged();
 		}
