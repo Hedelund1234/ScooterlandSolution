@@ -113,23 +113,27 @@
 	{
 		if (selectedCustomer != null)
 		{
-			try
-			{
-				Customer dbCustomer = await CustomerService.GetCustomer(selectedCustomer.CustomerId);
 
-				currentSale.CustomerId = dbCustomer.CustomerId;
-				currentSale.StartDate = DateTime.Now;
-				await SaleService.AddSale(currentSale);
-				isSuccessBoxVisible = true;
-			}
-			catch
-			{
-				isErrorBoxVisible = true;
-			}
+@* 			Customer dbCustomer = customers.Where(x => x.Name == selectedCustomer.Name)
+											.Where(x => x.Email == selectedCustomer.Email)
+											.Where(x => x.Phonenumber == selectedCustomer.Email)
+											.Last(); *@
+			
+			@* Customer dbCustomer = await CustomerService.GetCustomer(selectedCustomer.CustomerId); *@
+
+			customers = (await CustomerService.GetAllCustomers()).ToList();
+			Customer dbCustomer = customers.Last();
+
+			currentSale.CustomerId = dbCustomer.CustomerId;
+			currentSale.StartDate = DateTime.Now;
+			await SaleService.AddSale(currentSale);
+			isSuccessBoxVisible = true;
+
+
 		}
 		else
 		{
-			
+			isErrorBoxVisible = true;
 		}
 	}
 
