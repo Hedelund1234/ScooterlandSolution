@@ -30,7 +30,7 @@ namespace NUnitTest
 		[Test]
 		public async Task CustomerGetAllRepoTest()
 		{
-            CustomerRepositoryEF repo = new CustomerRepositoryEF();
+            ICustomerRepository repo = new CustomerRepositoryEF();
 			var customers = repo.GetAllCustomers();
             Assert.That(customers, Is.Not.Empty);
 		}
@@ -55,7 +55,7 @@ namespace NUnitTest
 		[Test]
 		public async Task EmployeeGetAllRepoTest()
 		{
-			EmployeeRepositoryEF repo = new EmployeeRepositoryEF();
+			IEmployeeRepository repo = new EmployeeRepositoryEF();
 			var employee = repo.GetAllEmployees();
 			Assert.That(employee, Is.Not.Empty);
 		}
