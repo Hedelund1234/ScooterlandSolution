@@ -9,13 +9,13 @@
 	<div class="main-search">
 		Kunde email
 	</div>
-	<input placeholder="Indtast email" @bind="emailSearch" @bind:event="oninput" />
+	<input class="existing-input" placeholder="Indtast eksisterende email" @bind="emailSearch" @bind:event="oninput" />
 	<div class="main-search">
 		Kunde telefonnummer
 	</div>
-	<input placeholder="Indtast telefonnummer" @bind="phoneNumSearch" @bind:event="oninput" />
+	<input class="existing-input" placeholder="Indtast eksisterende telefonnummer" @bind="phoneNumSearch" @bind:event="oninput" />
 </div>
-
+<br/>
 <CreateCustomer CustomerModel="@selectedCustomer" />
 
 <div class="flex-box">

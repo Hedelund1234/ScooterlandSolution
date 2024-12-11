@@ -16,3 +16,7 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.existing-input {
+    width: 300px;
+}
