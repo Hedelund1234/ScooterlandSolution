@@ -93,7 +93,7 @@
     align-items: center;
     text-align: center;
     gap: 0px;
-    margin-right: 7rem; /* Lidt afstand mellem kontrolboks og totalpris */
+    margin-right: 7rem; /* Afstand mellem antalboks og totalpris */
 }
 
 .quantity-btn {
@@ -152,6 +152,11 @@
         transform: scale(0.98); /* Slight shrink when clicked */
     }
 
+.discount {
+    border: 1px solid #ddd;
+}
+
+
 .discount-input {
     width: 70px;
     text-align: left;
@@ -167,7 +172,6 @@
         -moz-appearance: textfield; /* Firefox */
         -webkit-appearance: none; /* Chrome, Safari */
         appearance: none; /* Standard */
-        border: 1px solid #ddd; /* Add a border for visual clarity */
         border-radius: 4px;
         padding-right: 20px; /* Adjust padding for the % symbol */
         padding-left: 5px; /* Optional: Add padding for better readability */
@@ -182,7 +186,6 @@
     display: flex;
     flex-direction: column; /* Stack label and input vertically */
     align-items: flex-start; /* Align everything to the left */
-    gap: 2px; /* Add spacing between label and input */
     width: auto;
 }
 
@@ -191,10 +194,7 @@
         min-width: 70px; /* Minimum width to prevent shrinking too much */
         padding-right: 28px; /* Adjust padding to ensure space for % symbol */
         text-align: right; /* Align text to the right */
-        border: none;
         border-radius: 4px;
-        font-size: 14px;
-        outline: none;
         font-weight: bold;
     }
 
@@ -202,7 +202,7 @@
         position: absolute;
         top: 50%;
         right: 5px; /* Adjust the right position to keep the % aligned */
-        transform: translateY(5%);
+        transform: translateY(11%);
         font-size: 14px;
         color: black;
         pointer-events: none;
