@@ -113,16 +113,8 @@
 	{
 		if (selectedCustomer != null)
 		{
-
-@* 			Customer dbCustomer = customers.Where(x => x.Name == selectedCustomer.Name)
-											.Where(x => x.Email == selectedCustomer.Email)
-											.Where(x => x.Phonenumber == selectedCustomer.Email)
-											.Last(); *@
-			
-			@* Customer dbCustomer = await CustomerService.GetCustomer(selectedCustomer.CustomerId); *@
-
 			customers = (await CustomerService.GetAllCustomers()).ToList();
-			Customer dbCustomer = customers.Last();
+			Customer dbCustomer = customers.Where(x => x.Phonenumber == selectedCustomer.Phonenumber).Last();
 
 			currentSale.CustomerId = dbCustomer.CustomerId;
 			currentSale.StartDate = DateTime.Now;
