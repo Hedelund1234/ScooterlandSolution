@@ -51,6 +51,12 @@
 }
 
 @code {
+	[Inject]
+	public NavigationManager Navigation { get; set; }
+	[Inject]
+	public ICustomerService CustomerService { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
 	private List<Customer> customers = new List<Customer>();
 	private List<Customer> filteredCustomer = new List<Customer>();
 	private List<Sale> saleList = new List<Sale>();
@@ -60,13 +66,6 @@
 	private string _emailSearch;
 	private bool isErrorBoxVisible = false;
 	private bool isSuccessBoxVisible = false;
-	[Inject]
-	public NavigationManager Navigation { get; set; }
-	[Inject]
-	public ICustomerService CustomerService { get; set; }
-
-	[Inject]
-	public ISaleService SaleService { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{

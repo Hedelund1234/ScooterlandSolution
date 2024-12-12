@@ -62,6 +62,7 @@ else
 			FilterProducts();      //Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
+
 	protected override async Task OnInitializedAsync()
 	{
 		products = (await Service.GetAllProducts()).ToList();

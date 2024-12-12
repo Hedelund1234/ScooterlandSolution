@@ -76,12 +76,11 @@ else
 @code {
 	[Inject]
 	public ISaleService Service { get; set; }
-	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
-	private Sale? currentSale;
 	[Inject]
 	public NavigationManager Navigation { get; set; }
 	private List<Sale> sales = new List<Sale>();
 	private List<Sale> filteredSales = new List<Sale>();
+	private Sale? currentSale; // Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{

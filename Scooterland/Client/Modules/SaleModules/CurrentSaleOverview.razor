@@ -123,13 +123,24 @@
 
 
 @code {
-	private Sale currentSale;
-	public Product product { get; set; }
+	[Inject]
+	public ICustomerService CustomerService { get; set; }
+	[Inject]
+	public ISalesLineItemService SalesLineItemService { get; set; }
+	[Inject]
+	public ISaleService SaleService { get; set; }
+	[Inject]
+	public ISpecializationService SpecializationService { get; set; }
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int SaleId { get; set; }
 	private List<Product> products = new List<Product>();
 	private List<Specialization> specializations = new List<Specialization>();
 	private List<SalesLineItem> totalSalesLineItems = new List<SalesLineItem>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 	private Specialization currentSpecialization = new Specialization();
+	private Sale currentSale;
+	public Product product { get; set; }
 	private bool isSuccessBoxVisible = false;
 	private int? _brandId;
 	public int? brandId
@@ -143,17 +154,7 @@
 	}
 	private string noteInput;
 
-	[Inject]
-	public ICustomerService CustomerService { get; set; }
-	[Inject]
-	public ISalesLineItemService SalesLineItemService { get; set; }
-	[Inject]
-	public ISaleService SaleService { get; set; }
-	[Inject]
-	public ISpecializationService SpecializationService { get; set; }
-	[Parameter]
-	[SupplyParameterFromQuery]
-	public int SaleId { get; set; }
+
 
 	protected override async Task OnInitializedAsync()
 	{

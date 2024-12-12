@@ -84,14 +84,12 @@
 	[Parameter]
 	[SupplyParameterFromQuery]
 	public int SaleId { get; set; }
-
 	[Inject]
 	public ISaleService? SaleService { get; set; }
 	[Inject]
 	public ISalesLineItemService? SalesLineItemService { get; set; }
-
-	private Sale? currentSale;
 	private List<SalesLineItem>? currentSalesLineItems = new List<SalesLineItem>();
+	private Sale? currentSale;
 
 	protected override async Task OnInitializedAsync()
 	{

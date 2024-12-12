@@ -15,16 +15,12 @@
 @code {
 	[Inject]
 	public ISaleService SaleService { get; set; }
-
 	[Inject]
 	public NavigationManager Navigation { get; set; }
-
 	[Parameter]
 	[SupplyParameterFromQuery]
 	public int SaleId { get; set; }
-
 	private Sale sale;
-
 	private bool isVisible = false;
 
 	protected override async Task OnInitializedAsync()
@@ -36,13 +32,8 @@
 
 	private async Task EndSale()
 	{
-
-		// Sale currentSale = await SaleService.GetSale(SaleId);
-		// currentSale.EndDate = DateTime.Now;
 		sale.EndDate = DateTime.Now;
 		await SaleService.UpdateSale(sale);
-		// Navigation.NavigateTo($"/sales/invoice");
 		Navigation.NavigateTo($"/sales/completedsales");
-	
 	}
 }

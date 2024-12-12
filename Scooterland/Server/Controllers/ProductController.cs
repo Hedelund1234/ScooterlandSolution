@@ -13,7 +13,6 @@ namespace Scooterland.Server.Controllers
         private readonly IProductRepository Repository = new ProductRepositoryEF();
         private readonly IProductRepository SQLRepository = new ProductRepositorySQLClient(); //Bliver kun brugt ved GetAllProducts
 
-
         public ProductController(IProductRepository productRepository)
         {
             if (Repository == null && productRepository != null)
@@ -22,7 +21,6 @@ namespace Scooterland.Server.Controllers
                 Console.WriteLine("Repository initialized");
             }
         }
-
 
 		[HttpGet]
         public IEnumerable<Product> GetAllProducts()
@@ -57,8 +55,6 @@ namespace Scooterland.Server.Controllers
             Console.WriteLine("Add product called: " + product.ToString());
             Repository.AddProduct(product);
         }
-
-
 
         [HttpGet("{id:int}")]
         public Product FindProduct(int id)

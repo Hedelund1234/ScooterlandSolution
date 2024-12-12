@@ -15,13 +15,11 @@ namespace Scooterland.Shared.Models
 		[MaxLength(30)]
 		public string Role { get; set; }
 		public List<Specialization> Specializations { get; set; } = new List<Specialization>();
-		 
 		//Tom contructor til EF
 		public Employee()
         {
             
         }
-
 		public Employee(int id)
 		{
 			this.EmployeeId = id;

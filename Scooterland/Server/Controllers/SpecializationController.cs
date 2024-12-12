@@ -12,7 +12,6 @@ namespace Scooterland.Server.Controllers
 	{
 		private readonly ISpecializationRepository Repository = new SpecializationRepositoryEF();
 
-
 		public SpecializationController(ISpecializationRepository specializationRepository)
 		{
 			if (Repository == null && specializationRepository != null)
@@ -21,7 +20,6 @@ namespace Scooterland.Server.Controllers
 				Console.WriteLine("Repository initialized");
 			}
 		}
-
 
 		[HttpGet]
 		public IEnumerable<Specialization> GetAllSpecializations()
@@ -55,8 +53,6 @@ namespace Scooterland.Server.Controllers
 			Console.WriteLine("Add specialization called: " + specialization.ToString());
 			Repository.AddSpecialization(specialization);
         }
-
-
 
 		[HttpGet("{id:int}")]
 		public Specialization FindSpecialization(int id)

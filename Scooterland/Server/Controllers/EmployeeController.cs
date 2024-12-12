@@ -22,7 +22,6 @@ namespace Scooterland.Server.Controllers
             }
         }
 
-
         [HttpGet]
         public IEnumerable<Employee> GetAllEmployees()
         {
@@ -55,8 +54,6 @@ namespace Scooterland.Server.Controllers
             Console.WriteLine("Add employee called: " + employee.ToString());
             Repository.AddEmployee(employee);
         }
-
-
 
         [HttpGet("{id:int}")]
         public Employee FindEmployee(int id)

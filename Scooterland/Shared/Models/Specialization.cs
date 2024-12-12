@@ -10,8 +10,6 @@ namespace Scooterland.Shared.Models
 		public string Brand { get; set; }
 		[JsonIgnore]
 		public List<Employee> Employees { get; set; } = new List<Employee>();
-
-
 		//Tom contructor til EF
 		public Specialization()
         {

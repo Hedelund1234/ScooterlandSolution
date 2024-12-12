@@ -73,19 +73,18 @@ else
 }
 
 @code {
-	private bool isErrorBoxVisible = false;
 	[Inject]
 	public ISpecializationService Service { get; set; }
 	[Inject]
 	public ISaleService SaleService { get; set; }
 	[Inject]
 	public IEmployeeService EmployeeService { get; set; }
-
 	private List<Specialization> specializations = new List<Specialization>();
 	private List<Employee> employees = new List<Employee>();
 	private List<Specialization> filteredSpecializations = new List<Specialization>();
 	private List<Sale> sales = new List<Sale>();
 	private int? editingSpecializationsId = null;
+	private bool isErrorBoxVisible = false;
 	private string _brandSearch; //Private felt som gemmer værdien af inputtet fra søgningen
 	private string brandSearch   //Bundet til input-feltet for søgning
 	{

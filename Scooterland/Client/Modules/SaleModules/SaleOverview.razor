@@ -133,23 +133,24 @@ else
 
 @code {
 	[Inject]
+	public NavigationManager Navigation { get; set; }
+	[Inject]
 	public ISaleService Service { get; set; }
 	[Inject]
 	public IEmployeeService EmployeeService { get; set; }
-	private bool showEmployeeDropdown = false;
-	private bool isErrorBoxVisible = false;
-	private bool isSureBoxVisible = false;
-	private int? selectedEmployeeId = null;
-	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
-	private Sale? currentSale;
-	[Inject]
-	public NavigationManager Navigation { get; set; }
 	private List<Sale> sales = new List<Sale>();
 	private List<Sale> filteredSales = new List<Sale>();
 	// Indeholder listen over ansatte med rollen "Mekaniker," som vises i dropdown-menuen til tildeling af mekanikere til et Sale.
 	private List<Employee> employeeList = new List<Employee>();
-	private int? editingSaleId = null;
+	// Repræsenterer det aktuelle Sale, der skal tildeles en mekaniker via dropdown-menuen.
+	private Sale? currentSale;
+	private bool showEmployeeDropdown = false;
+	private bool isErrorBoxVisible = false;
+	private bool isSureBoxVisible = false;
+	private int? selectedEmployeeId = null;
+	private int currentSaleId;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
+
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch
@@ -159,7 +160,7 @@ else
 			FilterSales();      // Kalder FilterEmployees() for at opdatere listen med det samme
 		}
 	}
-	private int currentSaleId;
+	
 
 	protected override async Task OnInitializedAsync()
 	{

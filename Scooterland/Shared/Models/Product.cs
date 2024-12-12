@@ -19,13 +19,11 @@ namespace Scooterland.Shared.Models
 		[Range(minimum:0,maximum:System.Int32.MaxValue, ErrorMessage = "Prisen skal være positiv!")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
-
 		//Tom contructor til EF
 		public Product()
         {
             
         }
-
         public Product(int id)
         {
 			this.ProductId = id;

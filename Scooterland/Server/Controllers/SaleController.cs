@@ -13,7 +13,6 @@ namespace Scooterland.Server.Controllers
 	{
         private readonly ISaleRepository Repository = new SaleRepositoryEF();
 
-
         public SaleController(ISaleRepository saleRepository)
         {
             if (Repository == null && saleRepository != null)
@@ -22,7 +21,6 @@ namespace Scooterland.Server.Controllers
                 Console.WriteLine("Repository initialized");
             }
         }
-
 
         [HttpGet]
         public IEnumerable<Sale> GetAllSales()
@@ -56,8 +54,6 @@ namespace Scooterland.Server.Controllers
             Console.WriteLine("Add sale called: " + sale.ToString());
             Repository.AddSale(sale);
         }
-
-
 
         [HttpGet("{id:int}")]
         public Sale FindSale(int id)

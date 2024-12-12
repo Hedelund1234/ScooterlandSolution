@@ -66,20 +66,14 @@ class="row p-3">
 @code {
     [Parameter]
     public Customer CustomerModel { get; set; } = new Customer();
-
     [Inject]
     public ICustomerService Service { get; set; }
-
-    private int ErrorCode { get; set; } = 0;
-
-    private bool isSuccessBoxVisible = false;
-
-    private bool isErrorBoxVisible = false;
-
-    private string? errorMessage;
-
     private List<Customer> allCustomers = new List<Customer>();
-
+    private int ErrorCode { get; set; } = 0;
+    private bool isSuccessBoxVisible = false;
+    private bool isErrorBoxVisible = false;
+    private string? errorMessage;
+    
     private async Task HandleValidSubmit()
     {
         allCustomers = (await Service.GetAllCustomers()).ToList();
@@ -104,7 +98,6 @@ class="row p-3">
 
             Console.WriteLine("Customer added: return code: " + ErrorCode);
             isSuccessBoxVisible = true;
-            // CustomerModel = new Customer();
         }
     }
 

@@ -84,19 +84,15 @@ else
 	public Product ChosenProduct { get; set; } = new Product();
 	[Inject]
 	public IProductService Service { get; set; }
-
 	[Inject]
 	public ISalesLineItemService SaleLineItemService { get; set; }
-
 	private List<Product> products = new List<Product>(); 
 	private List<Product> filteredProducts = new List<Product>();
 	private List<SalesLineItem> allSalesLineItems = new List<SalesLineItem>();
 	private int? editingProductId = null;
 	private bool isSuccessBoxVisible = false;
-
 	private bool isErrorBoxVisible = false;
 	private string _nameSearch; //Private felt som gemmer værdien af inputtet fra søgningen
-
 	private string nameSearch   //Bundet til input-feltet for søgning
 	{
 		get => _nameSearch; //Henter den aktuelle værdi af det private felt _nameSearch

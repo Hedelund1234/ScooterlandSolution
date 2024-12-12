@@ -20,13 +20,11 @@ namespace Scooterland.Shared.Models
 		public Specialization? Specialization { get; set; }
         public string? Comment { get; set; }
 
-
         //Tom contructor til EF
         public Sale()
         {
             
         }
-
         public Sale(int id)
         {
             this.SaleId = id;

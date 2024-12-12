@@ -22,7 +22,6 @@ namespace Scooterland.Server.Controllers
 			}
 		}
 
-
 		[HttpGet]
 		public IEnumerable<Customer> GetAllCustomers()
 		{
@@ -55,8 +54,6 @@ namespace Scooterland.Server.Controllers
 			Console.WriteLine("Add customer called: " + customer.ToString());
 			Repository.AddCustomer(customer);
 		}
-
-
 
 		[HttpGet("{id:int}")]
 		public Customer FindCustomer(int id)
