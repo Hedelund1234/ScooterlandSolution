@@ -32,7 +32,7 @@ namespace Scooterland.Server.Repositories.ProductRepository
 		//return item with id = -1 if not found
 		public Product FindProduct(int id)
 		{
-			Product product = new Product();
+			Product product = new Product(-1);
 			return product;
 		}
 
