@@ -25,7 +25,6 @@ namespace Scooterland.Server.Repositories.ProductRepository
                 }
             }
         }
-
         public bool DeleteProduct(int id)
         {
             try
@@ -51,8 +50,6 @@ namespace Scooterland.Server.Repositories.ProductRepository
                 return false;
             }
         }
-
-
         public bool UpdateProduct(Product product)
         {
             var validation = new MyValidator();
@@ -95,12 +92,9 @@ namespace Scooterland.Server.Repositories.ProductRepository
             }
             return false;
         }
-
-
-        //return item with id = -1 if not found
         public Product FindProduct(int id)
-        {
-            var db = new ScooterlandDbContext();
+		{ //return item with id = -1 if not found
+			var db = new ScooterlandDbContext();
             Product product;
             try
             {
@@ -113,7 +107,6 @@ namespace Scooterland.Server.Repositories.ProductRepository
 
             return product;
         }
-
         public List<Product> GetAllProducts()
         {
             var db = new ScooterlandDbContext();
@@ -130,3 +123,4 @@ namespace Scooterland.Server.Repositories.ProductRepository
         }
     }
 }
+

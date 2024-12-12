@@ -16,26 +16,19 @@ namespace Scooterland.Server.Repositories.ProductRepository
         public void AddProduct(Product product)
 		{
 		}
-
 		public bool DeleteProduct(int id)
 		{
 			return false;
 		}
-
-
 		public bool UpdateProduct(Product product)
 		{
 			return false;
 		}
-
-
-		//return item with id = -1 if not found
 		public Product FindProduct(int id)
-		{
+		{ //return item with id = -1 if not found
 			Product product = new Product(-1);
 			return product;
 		}
-
 		public List<Product> GetAllProducts()
 		{
 			List<Product> productList = new List<Product>();
